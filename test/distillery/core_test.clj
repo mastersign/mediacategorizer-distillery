@@ -1,6 +1,6 @@
-(ns destillery.core-test
+(ns distillery.core-test
   (:require [clojure.test :refer :all]
-            [destillery.core :refer :all]))
+            [distillery.core :refer :all]))
 
 (deftest a-test
   (testing "FIXME, I fail."

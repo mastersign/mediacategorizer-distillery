@@ -1,4 +1,4 @@
-(ns destillery.core
+(ns distillery.core
   (:import [java.lang.Character])
   (:import [java.io.PushbackReader])
   (:require [clojure.java.io :refer (reader)])

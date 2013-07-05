@@ -1,4 +1,4 @@
-# destillery
+# distillery
 
 A Clojure application to filter the most relevant words from speech recognition results.
 
