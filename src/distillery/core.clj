@@ -28,9 +28,21 @@
 (def results (load-data path))
 
 ;; group the words and compute stastics
-(def grouped-nouns (grouped-words results [noun?]))
+(def word-groups (grouped-words results [noun?]))
 
-;(def w (first grouped-nouns))
+;; map of words with lexical form as key
+(def index (apply hash-map (apply concat (map #(vector (:lexical-form %) %) word-groups))))
+
+;; words ordered by relevance
+(def hitlist
+  (->> word-groups
+       (sort-by :squared-sum)
+       (reverse)))
+
+;; most relevant word
+(def w (first hitlist))
+(pprint w)
 
 ;; Print the head of the resulting list
-(println (string/join "\n" (map format-word-stat (take 20 grouped-nouns))))
+(println (string/join "\n" (map format-word-stat (take 20 hitlist))))
+

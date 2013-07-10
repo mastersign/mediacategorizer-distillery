@@ -30,22 +30,22 @@
          (mapcat :words)
          (filter predicate))))
 
+(defn word-group-stats
+  "Returns a map with statistics for a grouped word."
+  [word-group]
+  (->> word-group
+       (map-group-items :confidence)
+       (map-pair-value (fn [xs] {:squared-sum (squared-sum xs) :appearance (count xs)}))
+       (apply merge)))
+
 (defn grouped-words
   "Returns ordered statistics over a sequence of phrases."
   [results filters]
-  (let
-    [source      (words results :best-phrases true :filters filters)
-     groups      (group-by
-                  #(dissoc % :confidence)
-                  source) ;; Group words by text
-     confidences (map
-                  (partial map-group-items :confidence)
-                  groups) ;; Reject additional text per confidence
-     squaresums  (map
-                  (partial map-pair-value (fn [xs] {:squared-sum (squared-sum xs) :appearance (count xs)}))
-                  confidences)] ;; Build square sums of confidence per word
-    (reverse (sort-by #(:squared-sum (get % 1)) squaresums)))) ;; Sort the words by sum of squared confidence
+  (->> (words results :best-phrases true :filters filters)
+       (group-by #(dissoc % :confidence))
+       (map word-group-stats)))
 
 (defn format-word-stat
-  [[{:keys [lexical-form pronunciation]} {:keys [appearance squared-sum]}]]
+  [{:keys [lexical-form pronunciation appearance squared-sum]}]
   (format "%4d %8.3f: %s (%s)" appearance squared-sum lexical-form pronunciation))
+
