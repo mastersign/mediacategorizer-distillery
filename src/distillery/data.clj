@@ -1,13 +1,20 @@
 (ns distillery.data
   (:require [clojure.java.io :refer (reader)])
+  (:require [clojure.string :as string])
   (:require [clojure.edn :as edn]))
 
 (defn load-data
   "Loads the content of a file as EDN formatted data structure."
-  [path]
+  [path & opts]
   (with-open
-    [r (java.io.PushbackReader. (reader path))]
+    [r (java.io.PushbackReader. (apply reader (cons path opts)))]
     (edn/read r)))
+
+(defn load-list
+  "Loads the content of a file as word list. Whitespace and commas are word separators."
+  [path & opts]
+  (let [text (apply slurp (cons path opts))]
+    (string/split text #"[\s,]+")))
 
 (defn map-group-items
   "Applies a function to the items of the group collection."

@@ -1,6 +1,7 @@
 (ns distillery.core
   (:require [clojure.string :as string])
   (:require [clojure.pprint :refer (pprint)])
+  (:require [clojure.java.io :refer (resource)])
   (:require [distillery.data :refer :all])
   (:require [distillery.processing :refer :all]))
 
@@ -24,25 +25,32 @@
 
 (def path (nth paths 3))
 
-;; Load the recgnition results
+(def blacklist
+  (set (take 3000 (load-list (resource "top10000de.txt")))))
+
+(defn not-in-bl?
+  [word]
+  (not (contains? blacklist word)))
+
+;; Load the recognition results
 (def results (load-data path))
 
-;; group the words and compute stastics
-(def word-groups (grouped-words results [noun?]))
+;; Group the words and compute stastics
+(def word-groups (grouped-words results [not-in-bl? not-short?]))
 
-;; map of words with lexical form as key
+;; Map of words with lexical form as key
 (def index (apply hash-map (apply concat (map #(vector (:lexical-form %) %) word-groups))))
 
-;; words ordered by relevance
+;; Words ordered by relevance
 (def hitlist
   (->> word-groups
        (sort-by :squared-sum)
        (reverse)))
 
-;; most relevant word
 (def w (first hitlist))
-(pprint w)
 
-;; Print the head of the resulting list
-(println (string/join "\n" (map format-word-stat (take 20 hitlist))))
+;; Print head of hitlist
+(println (string/join "\n" (map format-word-stat (take 10 hitlist))))
+;; Print tail of hitlist
+(println (string/join "\n" (map format-word-stat (take-last 10 hitlist))))
 

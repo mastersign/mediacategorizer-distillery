@@ -1,27 +1,37 @@
 (ns distillery.processing
-  (:import [java.lang.Character])
   (:require [distillery.data :refer :all]))
 
+
+(defn word-text
+  "Returns the text of a word. The word can be a string or a map with a the key :lexical-form."
+  [word]
+  (if (map? word) (:lexical-form word) word))
+
+(defn no-point?
+  "Checks whether the given string ends with a colon."
+  [^String word]
+  (= \. (last word)))
+
+(defn not-short?
+  "Checks whether a word is long enough to be relevant."
+  [^String word]
+  (not (or (nil? word) (< (count word) 3))))
+
+(defn noun?
+  "Checks whether the given word is a noun."
+  [^String word]
+  (java.lang.Character/isUpperCase (or (first word) \a)))
 
 (defn best-alternate
   "Return the best alternate phrase of a recgnition result."
   [result]
   (apply max-key :confidence (:alternates result)))
 
-(defn noun?
-  "Checks wheter the given word is a noun.
-  The given word can be the word map from a recognition result with key :text
-  or can be a plain string."
-  [word]
-  (let [word (if (map? word) (:text word) word)]
-    (if (or (nil? word) (< (count word) 3))
-      false
-      (Character/isUpperCase (first word)))))
-
 (defn words
   "Returns words from a result sequence."
   [results & {:keys [filters best-phrases]}]
-  (let [predicate    (partial multi-filter (vec filters))
+  (let [filters      (map #(comp % word-text) filters)
+        predicate    (partial multi-filter (vec filters))
         phrase-src   (if best-phrases
                        (partial map best-alternate)
                        (partial mapcat :alternates))]
