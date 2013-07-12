@@ -32,8 +32,14 @@
     (every? true? ((apply juxt predicates) x))))
 
 (defn sum
-  "Computes the sum of a sequence."
+  "Computes the sum of a numeric sequence."
   [xs] (apply + xs))
+
+(defn mean
+  "Computes the mean value of a numeric sequence."
+  [xs]
+  (let [cnt (count xs)]
+    (if (> cnt 0) (/ (apply + xs) cnt) 0)))
 
 (defn squared-sum
   "Computes the sum of the squared items of a sequence."

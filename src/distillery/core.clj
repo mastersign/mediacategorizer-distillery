@@ -1,8 +1,9 @@
 (ns distillery.core
   (:require [clojure.string :as string])
   (:require [clojure.pprint :refer (pprint)])
-  (:require [clojure.java.io :refer (resource)])
+  (:require [distillery.config :as cfg])
   (:require [distillery.data :refer :all])
+  (:require [distillery.blacklist :refer :all])
   (:require [distillery.processing :refer :all]))
 
 (def paths
@@ -23,34 +24,41 @@
         "Makroökonomie online lernen - VWL Tutorium (360)"
         "Parabeln_Quadratische Funktion_en Übersicht (Scheitelpunkt,Stauchung,Streckung,etc.) (720)"]))
 
-(def path (nth paths 3))
-
-(def blacklist
-  (set (take 3000 (load-list (resource "top10000de.txt")))))
-
-(defn not-in-bl?
-  [word]
-  (not (contains? blacklist word)))
+(def path (nth paths 14))
 
 ;; Load the recognition results
 (def results (load-data path))
 
+;; The appearance of the most frequent word at all
+(def ma (-> results most-frequent-word (get 1)))
+
+;; Filter predicates:
+;; Words:        not-short? noun? not-in-blacklist? no-punctuation?
+;; Words groups: min-confidence?
+
 ;; Group the words and compute stastics
-(def word-groups (grouped-words results [not-in-bl? not-short?]))
+(def relevant-words (grouped-words results [not-short? noun? no-punctuation?] [min-confidence?]))
+
+;; Frequent words which may be recognized fasley
+(def correction-list (correction-candidates relevant-words))
 
 ;; Map of words with lexical form as key
-(def index (apply hash-map (apply concat (map #(vector (:lexical-form %) %) word-groups))))
+(def index (apply hash-map (apply concat (map #(vector (:lexical-form %) %) relevant-words))))
 
 ;; Words ordered by relevance
 (def hitlist
-  (->> word-groups
-       (sort-by :squared-sum)
+  (->> relevant-words
+       (sort-by :scs)
        (reverse)))
 
+;; The most relevant word
 (def w (first hitlist))
 
 ;; Print head of hitlist
-(println (string/join "\n" (map format-word-stat (take 10 hitlist))))
-;; Print tail of hitlist
-(println (string/join "\n" (map format-word-stat (take-last 10 hitlist))))
+(print-word-list (take 10 hitlist))
 
+;; Print tail of hitlist
+(print-word-list (take-last 10 hitlist))
+
+;; Print correction list
+(print-word-list correction-list)
