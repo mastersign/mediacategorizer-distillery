@@ -3,5 +3,6 @@
   :url "http://informatik.fh-brandenburg.de/~kiertsch/"
   :license {:name "None"
             :url ""}
-  :dependencies [[org.clojure/clojure "1.5.1"]]
+  :dependencies [[org.clojure/clojure "1.5.1"]
+                 [enlive "1.1.1"]]
   :warn-on-reflection true)
