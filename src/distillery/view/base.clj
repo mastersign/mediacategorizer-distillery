@@ -2,8 +2,7 @@
   (:require [net.cgrand.enlive-html :as eh])
   (:require [distillery.files :refer :all])
   (:require [distillery.view.defaults :as defaults])
-  (:require [distillery.view.html :refer :all])
-  (:require [distillery.view.dependencies :refer (save-dependencies)]))
+  (:require [distillery.view.html :refer :all]))
 
 (defn render
   "Renders the layout template."
