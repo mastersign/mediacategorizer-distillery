@@ -47,7 +47,7 @@
       :confidence
       (>= cfg/good-confidence)))
 
-(defn- best-alternate-phrase
+(defn best-alternate-phrase
   "Returns the best alternate phrase of a recgnition result."
   [result]
   (apply max-key :confidence (:alternates result)))
