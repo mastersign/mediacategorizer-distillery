@@ -1,0 +1,171 @@
+body {
+	/*text-align: center;*/
+	margin: 0;
+	padding: 0;
+	background-color: #F0F0F0;
+}
+
+#frame {
+	text-align: left;
+	padding: 1em;
+	background-color: #FFFFFF;
+	-moz-box-shadow:    0 0 12px #808080;
+	-chrome-box-shadow: 0 0 12px #808080;
+	box-shadow:         0 0 12px #808080;
+}
+
+header {
+	padding-bottom: 1em;
+}
+
+/*** NAV ***/
+
+nav ul {
+	list-style: none;
+	margin-top: 0px;
+	padding-top: 0px;
+	margin-left: 0px;
+	padding-left: 0px;
+}
+
+nav .menu-title {
+	font-weight: bold;
+}
+
+/*** NAV HORIZONTAL ***/
+
+nav.horizontal {
+	border-bottom: 1px solid #AAA;
+	width: auto;
+	float: none;
+	padding: 0.25em;
+}
+
+nav.horizontal .menu-title, nav.horizontal ul {
+	display: inline-block;
+}
+
+nav.horizontal .menu-title {
+	padding: 0 0.5em 0 0.25em;
+}
+
+nav.horizontal li {
+	display: inline-block;
+	padding: 0 0.5em 0 0.5em;
+}
+
+/*** NAV VERTICAL ***/
+
+nav.vertical {
+	border-bottom: none;
+	width: 100px;
+	float: left;
+	padding: 1em 1em 1em 0.5em;
+}
+
+nav.vertical .menu-title, nav.vertical ul {
+	display: block;
+}
+
+nav.vertical .menu-title {
+	padding: 0 0 0.5em 0;
+}
+
+nav.vertical li {
+	display: block;
+	padding: 0 0 0.25em 0;
+}
+
+#page {
+	margin: 1em 0.5em 1em 120px;
+	padding-left: 1em;
+	/*border-left: 1px solid #AAA;*/
+}
+
+footer {
+	border-top: 1px solid #AAA;
+	clear: both;
+}
+
+@media screen and (min-width: 960px) and (min-device-width: 1024px) {
+	#frame {
+		width: 920px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+}
+
+@media screen and (max-width: 720px) {
+	nav.vertical {
+		width: auto;
+		float: none;
+		margin: 0;
+		padding: 0.25em;
+	}
+
+	nav.vertical {
+		border-bottom: 1px solid #AAA;
+		width: auto;
+		float: none;
+		padding: 0.25em;
+	}
+
+	nav.vertical .menu-title, nav.vertical ul {
+		display: inline-block;
+	}
+
+	nav.vertical .menu-title {
+		padding: 0 0.5em 0 0.25em;
+	}
+
+	nav.vertical li {
+		display: inline-block;
+		padding: 0 0.5em 0 0.5em;
+	}
+
+	#page {
+		margin: 1em 0.5em;
+		padding: 0;
+	}
+}
+
+@media screen and (max-width: 480px) {
+	header {
+		padding-bottom: 0;
+	}
+	#frame {
+		padding: 0.25em;
+	}
+	h1 {
+		margin: 0;
+		padding-bottom: 0.25em;
+		font-size: 1.8em;
+		border-bottom: 1px solid #AAA;
+		text-align: center;
+	}
+	/*
+	nav.vertical .menu-title, nav.horizontal .menu-title {
+		display: none;
+	}
+	*/
+	nav.vertical, nav.horizontal {
+		border-bottom: 1px solid #AAA;
+		width: auto;
+		float: none;
+		padding: 0.5em 0em;
+		text-align: center;
+	}
+
+	nav.vertical .menu-title, nav.vertical ul, nav.horizontal .menu-title {
+		display: block;
+	}
+
+	nav.vertical .menu-title, nav.horizontal .menu-title {
+		padding: 0 0 0.5em 0;
+	}
+
+	nav.vertical li, nav.horizontal li {
+		display: block;
+		padding: 0 0 0.25em 0;
+	}
+}
