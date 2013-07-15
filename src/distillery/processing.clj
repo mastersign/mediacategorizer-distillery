@@ -57,7 +57,7 @@
   [results & {:keys [predicate best-phrases]}]
   (let [predicate    (or predicate (fn [x] true))
         phrase-src   (if best-phrases
-                       (partial map best-alternate)
+                       (partial map best-alternate-phrase)
                        (partial mapcat :alternates))]
     (->> results
          (phrase-src)
