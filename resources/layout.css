@@ -18,6 +18,11 @@ header {
 	padding-bottom: 1em;
 }
 
+figure {
+  margin-left: 0;
+  margin-right: 0;
+}
+
 /*** NAV ***/
 
 nav ul {
@@ -58,7 +63,7 @@ nav.horizontal li {
 
 nav.vertical {
 	border-bottom: none;
-	width: 100px;
+	width: 10em;
 	float: left;
 	padding: 1em 1em 1em 0.5em;
 }
@@ -77,7 +82,7 @@ nav.vertical li {
 }
 
 #page {
-	margin: 1em 0.5em 1em 120px;
+	margin: 1em 0.5em 1em 11em;
 	padding-left: 1em;
 	/*border-left: 1px solid #AAA;*/
 }
@@ -87,7 +92,7 @@ footer {
 	clear: both;
 }
 
-@media screen and (min-width: 960px) and (min-device-width: 1024px) {
+@media screen and (min-width: 960px) and (min-device-width: 960px) {
 	#frame {
 		width: 920px;
 		margin-left: auto;
@@ -95,7 +100,11 @@ footer {
 	}
 }
 
-@media screen and (max-width: 720px) {
+@media screen and (max-width: 720px), screen and (max-device-height: 720px) and (orientation: landscape) {
+  #frame {
+    max-width: 720px;
+  }
+
 	nav.vertical {
 		width: auto;
 		float: none;
@@ -129,16 +138,18 @@ footer {
 	}
 }
 
-@media screen and (max-width: 480px) {
-	header {
-		padding-bottom: 0;
-	}
+@media screen and (max-width: 480px) and (orientation: portrait) {
 	#frame {
+    max-width: 480px;
 		padding: 0.25em;
 	}
-	h1 {
+  header {
+		padding-bottom: 0;
+	}
+	header h1 {
 		margin: 0;
 		padding-bottom: 0.25em;
+    padding-top: 0.25em;
 		font-size: 1.8em;
 		border-bottom: 1px solid #AAA;
 		text-align: center;
