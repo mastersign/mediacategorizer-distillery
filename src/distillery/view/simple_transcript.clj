@@ -3,7 +3,7 @@
   (:require [distillery.files :refer :all])
   (:require [distillery.view.html :refer :all]))
 
-(defn render-video
+(defn render-video-page
   [{ :keys [job-name, video-file-name] :as args }]
   [ :title job-name
     :js-code

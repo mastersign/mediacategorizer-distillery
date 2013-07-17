@@ -32,4 +32,12 @@
     :output-dir "S:\\Temp\\distillery_out"
   })
 
+(def job-descr
+  { :job-name "12.01.1 Datenstrukturen"
+    :video-file "D:\\Repository\\Projekte\\Arbeit\\FHB\\OLL\\Media\\Video\\12.01.1 Datenstrukturen, Array, Queue, Stack.mp4"
+    :audio-file "D:\\Repository\\Projekte\\Arbeit\\FHB\\OLL\\Media\\Audio\\12.01.1 Datenstrukturen, Array, Queue, Stack.wav"
+    :results-file "D:\\Repository\\Projekte\\Arbeit\\FHB\\OLL\\Media\\Audio\\transcript\\12.01.1 Datenstrukturen, Array, Queue, Stack.clj"
+    :output-dir "D:\\Repository\\Projekte\\Arbeit\\FHB\\OLL\\Output"
+  })
+
 (transcript-page job-descr)
