@@ -8,36 +8,40 @@
   (:require [distillery.view.html :refer (save-page)])
   (:require [distillery.view.dependencies :refer (save-dependencies)])
   (:require [distillery.view.base :refer (render)])
-  (:require [distillery.view.simple-transcript :as v-simple-t]))
+  (:require [distillery.view.video :as v-video]))
 
-(defn transcript-page
-  [{:keys [output-dir job-name video-file results-file] :as args}]
-  (let [results (load-data results-file)
+(defn prepare-output-dir
+  "Prepares the output directory by creating a number of sub directories and copying site dependencies."
+  [{:keys [output-dir]}]
+  (create-dir output-dir)
+  (create-dir output-dir "categories")
+  (create-dir output-dir "videos")
+  (create-dir output-dir "words")
+  (save-dependencies output-dir))
+
+(defn create-index-page
+  "Creates the main page for the site."
+  [{:keys [output-dir job-name job-description]
+    :as args}]
+
+  )
+
+(defn create-video-page
+  "Create the main page for a certain video."
+  [{:keys [output-dir video]
+    :as args}]
+
+  (let [results (load-data (:results-file video))
+        video-id (:id video)
         phrases (map best-alternate-phrase results)
-        target-file (combine-path output-dir (str job-name ".transcript.htm"))
-        video-file-name (str job-name ".mp4")
-        args (assoc args :video-file-name video-file-name)]
-    (save-dependencies output-dir)
-    (copy-file (get-path video-file) (get-path output-dir video-file-name))
+        target-file (combine-path output-dir "videos" video-id "index.html")
+        video-target-file (combine-path output-dir "videos" video-id (str video-id ".mp4"))]
+
+    (create-dir output-dir "videos" video-id)
+    (when (not (file-exists? video-target-file))
+      (copy-file (get-path (:video-file video)) (get-path video-target-file)))
+
     (->> args
-        v-simple-t/render-video
-        (apply render)
-        (save-page target-file))))
-
-(def job-descr
-  { :job-name "Binomialverteilung"
-    :video-file "D:\\Daten\\FH\\OLL\\Media\\Video\\Binomialverteilung_Formel von Bernoulli, Stochastik, Nachhilfe online, Hilfe in Mathe (720).mp4"
-    :audio-file "D:\\Daten\\FH\\OLL\\Media\\Audio\\de-DE\\Binomialverteilung_Formel von Bernoulli, Stochastik, Nachhilfe online, Hilfe in Mathe (720).wav"
-    :results-file "D:\\Daten\\FH\\OLL\\Media\\Audio\\de-DE\\transcript\\Binomialverteilung_Formel von Bernoulli, Stochastik, Nachhilfe online, Hilfe in Mathe (720).clj"
-    :output-dir "S:\\Temp\\distillery_out"
-  })
-
-(def job-descr
-  { :job-name "12.01.1 Datenstrukturen"
-    :video-file "D:\\Repository\\Projekte\\Arbeit\\FHB\\OLL\\Media\\Video\\12.01.1 Datenstrukturen, Array, Queue, Stack.mp4"
-    :audio-file "D:\\Repository\\Projekte\\Arbeit\\FHB\\OLL\\Media\\Audio\\12.01.1 Datenstrukturen, Array, Queue, Stack.wav"
-    :results-file "D:\\Repository\\Projekte\\Arbeit\\FHB\\OLL\\Media\\Audio\\transcript\\12.01.1 Datenstrukturen, Array, Queue, Stack.clj"
-    :output-dir "D:\\Repository\\Projekte\\Arbeit\\FHB\\OLL\\Output"
-  })
-
-(transcript-page job-descr)
+         v-video/render-video-page
+         (apply render)
+         (save-page target-file))))
