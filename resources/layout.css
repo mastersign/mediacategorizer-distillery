@@ -63,7 +63,7 @@ nav.horizontal li {
 
 nav.vertical {
 	border-bottom: none;
-	width: 10em;
+	width: 90px;
 	float: left;
 	padding: 1em 1em 1em 0.5em;
 }
@@ -82,7 +82,7 @@ nav.vertical li {
 }
 
 #page {
-	margin: 1em 0.5em 1em 11em;
+	margin: 1em 0.5em 1em 110px;
 	padding-left: 1em;
 	/*border-left: 1px solid #AAA;*/
 }
