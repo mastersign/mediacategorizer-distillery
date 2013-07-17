@@ -2,3 +2,27 @@ figure {
   padding: 0;
   border: none;
 }
+
+div.transcript {
+  padding: 0.33em;
+  background-color: #F0F0F0;
+}
+
+div.transcript div.phrase {
+  margin-bottom: 0.25em;
+}
+
+div.transcript span.tc {
+  display: block;
+  padding: 0.33em;
+  float: left;
+  width: 4em;
+  color: #888;
+}
+
+div.transcript span.pt {
+  display: block;
+  margin-left: 5em;
+  padding: 0.33em;
+  background-color: #FFF;
+}
