@@ -63,6 +63,16 @@
   [text]
   {:tag :code :content [{:tag :pre :content text}]})
 
+(defn div
+  "Creates a div container with a given CSS class and some content."
+  [css-class content]
+  {:tag :div :attrs {:class css-class} :content (vec (flatten content))})
+
+(defn span
+  "Creates a span container with a given CSS class and some text."
+  [css-class content]
+  {:tag :span :attrs {:class css-class} :content content})
+
 (defn menu
   "Builds a menu structure from a menu title and a sequence of label/url pairs."
   [items & {:keys [title]}]

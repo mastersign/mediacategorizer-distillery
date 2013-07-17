@@ -6,7 +6,9 @@
 
 (def main-menu
   {"Start" "index.html"
-   "Glossar" "glossar.html"})
+   "Kategorien" "categories.html"
+   "Videos" "videos.html"
+   "Glossar" "glossary.html"})
 
 (def copyright
   {:tag :p
