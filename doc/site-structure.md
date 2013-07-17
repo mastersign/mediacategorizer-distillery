@@ -43,7 +43,8 @@ Path: `/categories/<category>/index.html`
 	* Videos (subset) -> Video
 
 ## Video*
-Path: `/videos/<video>/index.html`
+Path: `/videos/<video>/index.html`  
+Video-Path: `/video/<video>/<video>.mp4`
 ### Context
 * Single Video
 * Multiple Categories (subset)
