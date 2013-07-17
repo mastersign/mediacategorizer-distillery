@@ -19,6 +19,7 @@ The content is a vector of speech recognition results.
 	                    :words [ ... ] }
 	                  ... ] }
 	  ... ]
+
 ### Speech Recognition Result
 A speech recognition result describes the result yielded by the speech
 recognition engine, analyzing a section of an audio stream. 
@@ -86,7 +87,8 @@ in a phrase can be combined to an overall confidence for a phrase.
 * **lexical-form**  
   _string_ the lexical form of the word
 * **pronunciation**  
-  _string_ the pronunciation of the word in the context of the phrase
+  _string_ the [IPA](http://en.wikipedia.org/wiki/International_Phonetic_Alphabet)
+  pronunciation of the word in the context of the phrase
 #### Example
 	{ :no 2
 	  :confidence 0.6443
