@@ -1,10 +1,11 @@
 (ns distillery.jobs
   (:require [clojure.string :as string])
+  (:require [clojure.pprint :as pp])
   (:require [distillery.config :as cfg])
   (:require [distillery.data :refer :all])
   (:require [distillery.files :refer :all])
   (:require [distillery.blacklist :refer :all])
-  (:require [distillery.processing :refer :all])
+  (:require [distillery.processing :as proc])
   (:require [distillery.view.html :refer (save-page)])
   (:require [distillery.view.dependencies :refer (save-dependencies)])
   (:require [distillery.view.base :refer (render)])
@@ -53,3 +54,8 @@
          v-video/render-video-page
          (apply render)
          (save-page target-file))))
+
+(defn print-reverse-indexed-results
+  [{:keys [video]}]
+  (let [results (load-data (:results-file video))]
+    (pp/pprint (proc/reverse-index-results [(first results)]))))
