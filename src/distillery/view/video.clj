@@ -71,8 +71,7 @@
   [{:keys [job-name video] :as args}]
   [:base-path "../../"
    :title job-name
-   :js-code
-     "/*videojs.options.flash.swf = 'video-js.swf';*/"
+;   :js-code "videojs.options.flash.swf = 'video-js.swf';"
    :secondary-menu {"Übersicht" ""
                     "Transcript" ""
                     "Glossar" ""

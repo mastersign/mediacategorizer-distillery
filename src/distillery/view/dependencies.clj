@@ -9,14 +9,15 @@
    "distillery.css"
    "jquery.js"
    "distillery.js"
-   "video.js"
-   "video-js.min.css"
-   "video-js.png"
-   "video-js.swf"
-   "vjs.eot"
-   "vjs.woff"
-   "vjs.ttf"
-   "vjs.svg"])
+;   "video.js"
+;   "video-js.min.css"
+;   "video-js.png"
+;   "video-js.swf"
+;   "vjs.eot"
+;   "vjs.woff"
+;   "vjs.ttf"
+;   "vjs.svg"
+   ])
 
 (defn save-dependency
   "Saves a static resource dependency relative to the given HTML file path."
