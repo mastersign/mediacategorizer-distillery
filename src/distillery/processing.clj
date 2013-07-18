@@ -3,6 +3,26 @@
   (:require [distillery.config :as cfg])
   (:require [distillery.data :refer :all]))
 
+(defn reverse-index-results
+  "Annotates the result data structures with indices pointing upwards."
+  [results]
+  (let [t-rword (fn [word result]
+                  (assoc word
+                    :result-no (:no result)))
+        t-pword (fn [word alt result]
+                  (assoc word
+                    :alt-no (:no alt)
+                    :result-no (:no result)))
+        t-alt (fn [alt result]
+                   (assoc alt
+                     :result-no (:no result)
+                     :words (vec (map #(t-pword % alt result) (:words alt)))))
+        t-result (fn [result]
+                   (-> result
+                       (assoc :words (vec (map #(t-rword % result) (:words result))))
+                       (assoc :alternates (vec (map #(t-alt % result) (:alternates result))))))]
+
+    (vec (map t-result results))))
 
 (defn word-text
   "Returns the text of a word. The word can be a string or a map with a the key :lexical-form."
