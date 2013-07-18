@@ -33,10 +33,20 @@
       (update-in element [:attrs attr] f)
       element)))
 
+(defn- safe-content
+  [content]
+  (if (or (string? content) (vector? content))
+    content
+    (if (and (map? content) (:tag content))
+      [content]
+      (if (coll? content)
+        (vec (flatten content))
+        (str content)))))
+
 (defn paragraph
   "Wrappes the given content into a paragraph."
   [content]
-  {:tag :p :content content})
+  {:tag :p :content (safe-content content)})
 
 (defn headline
   "Wrappes the given content into a headline. Headline levels from 1 to 8 are supported."
@@ -51,7 +61,7 @@
           (= level 6) :h6
           (= level 7) :h7
           (= level 8) :h8)]
-    {:tag head-sym :content content}))
+    {:tag head-sym :content (safe-content content)}))
 
 (defn preformatted
   "Wrappes the given text into a pre element."
@@ -66,12 +76,18 @@
 (defn div
   "Creates a div container with a given CSS class and some content."
   [css-class content]
-  {:tag :div :attrs {:class css-class} :content (vec (flatten content))})
+  {:tag :div :attrs {:class css-class} :content (safe-content content)})
 
 (defn span
   "Creates a span container with a given CSS class and some text."
   [css-class content]
-  {:tag :span :attrs {:class css-class} :content content})
+  {:tag :span :attrs {:class css-class} :content (safe-content content)})
+
+(defn jslink
+  "Creates a link tag with the given javascript command and some content.
+   The javascript code must not contain double quotes."
+  [js content]
+  {:tag :a :attrs {:href (str "javascript:" js )} :content (safe-content content)})
 
 (defn menu
   "Builds a menu structure from a menu title and a sequence of label/url pairs."

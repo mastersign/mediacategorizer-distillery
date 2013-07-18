@@ -1,14 +1,15 @@
 (ns distillery.view.video
+  (:require [clojure.string :as string])
   (:require [net.cgrand.enlive-html :as eh])
   (:require [distillery.files :refer :all])
   (:require [distillery.view.html :refer :all]))
 
-(defn render-headline
+(defn- render-headline
   "Creates the headline for the video page."
   [{:keys [video]}]
   (headline 2 (:name video)))
 
-(defn render-video
+(defn- render-video
   "Creates the HTML for the video display box."
   [{:keys [video]}]
   {:tag :figure
@@ -19,7 +20,7 @@
          {:id "main_video"
           :class "video-js vjs-default-skin"
           :controls "controls"
-          :preload "none"
+          :preload "auto"
           :width "540"
           :height "360" }
        :content
@@ -28,12 +29,38 @@
              {:src (str (:id video) ".mp4")
               :type "video/mp4" }}]}]})
 
-(defn format-result
+(defn- format-time
+  [seconds]
+  (let [h (int (/ seconds (* 60 60)))
+        m (int (mod (/ seconds 60) 60))
+        s (int (mod seconds 60))]
+    (if (> h 0)
+      (format "%d:%02d:%02d" h m s)
+      (format "%02d:%02d" m s))))
+
+(defn- confidence-color
+  [confidence]
+  (let [v (int (* (- 1 confidence) 192))]
+    (format "#%02X%02X%02X" v v v)))
+
+(defn- format-word
+  [{:keys [text confidence pronunciation]}]
+  {:tag :span
+   :attrs {:style (str "color:" (confidence-color confidence))
+          :title pronunciation}
+   :content (str text " ")})
+
+(defn- format-phrase
+  [{:keys [words]}]
+  (map format-word words))
+
+(defn- format-result
   "Creates the HTML for a single phrase."
   [result]
-  (div "phrase" [(span "tc" (:start result)) (span "pt" (:text result))]))
+  (div "phrase" [(span "tc" (jslink (format "video_jump(%f)" (:start result)) (format-time (:start result))))
+                 (span "pt" (format-phrase result))]))
 
-(defn render-transcript
+(defn- render-transcript
   "Creates the HTML for the transcript with all phrases."
   [{:keys [results] :as args}]
   [(headline 3 "Transkript")
@@ -45,7 +72,7 @@
   [:base-path "../../"
    :title job-name
    :js-code
-     "videojs.options.flash.swf = 'video-js.swf';"
+     "/*videojs.options.flash.swf = 'video-js.swf';*/"
    :secondary-menu {"Übersicht" ""
                     "Transcript" ""
                     "Glossar" ""

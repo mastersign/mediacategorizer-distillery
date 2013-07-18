@@ -8,6 +8,7 @@
    "layout.css"
    "distillery.css"
    "jquery.js"
+   "distillery.js"
    "video.js"
    "video-js.min.css"
    "video-js.png"

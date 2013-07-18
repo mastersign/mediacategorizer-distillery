@@ -3,9 +3,16 @@ figure {
   border: none;
 }
 
+video#main_video {
+  margin-left: auto;
+  margin-right: auto;
+}
+
 div.transcript {
   padding: 0.33em;
   background-color: #F0F0F0;
+  height: 15em;
+  overflow: auto;
 }
 
 div.transcript div.phrase {
@@ -16,13 +23,17 @@ div.transcript span.tc {
   display: block;
   padding: 0.33em;
   float: left;
-  width: 4em;
+  width: 3.5em;
+  text-align: right;
+}
+
+div.transcript span.tc a {
   color: #888;
 }
 
 div.transcript span.pt {
   display: block;
-  margin-left: 5em;
+  margin-left: 4.5em;
   padding: 0.33em;
   background-color: #FFF;
 }
