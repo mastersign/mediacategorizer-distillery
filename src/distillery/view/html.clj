@@ -83,11 +83,16 @@
   [css-class content]
   {:tag :span :attrs {:class css-class} :content (safe-content content)})
 
+(defn jshref
+  "Creates a URI referencing a JavaScript call."
+  [js]
+  (str "javascript:" js ))
+
 (defn jslink
   "Creates a link tag with the given javascript command and some content.
    The javascript code must not contain double quotes."
   [js content]
-  {:tag :a :attrs {:href (str "javascript:" js )} :content (safe-content content)})
+  {:tag :a :attrs {:href (jshref js)} :content (safe-content content)})
 
 (defn menu
   "Builds a menu structure from a menu title and a sequence of label/url pairs."
@@ -106,3 +111,15 @@
    {:tag :ul
     :content (map menu-item items)}])
 
+(defn innerpage
+  "Builds the block structure for an inner page.
+   Inner pages can be shown without loading content from the server."
+  [id title active content]
+  {:tag :article
+   :attrs {:id id :class "innerpage" :style (str "display: " (if active "inherit" "none"))}
+   :content [(headline 3 title)
+             {:tag :div
+              :attrs {:class "innerpage"}
+              :content (safe-content content)}]})
+
+(defn TODO [text] {:tag :div :attrs {:class "todo"} :content text})

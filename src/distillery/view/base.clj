@@ -4,19 +4,30 @@
   (:require [distillery.view.defaults :as defaults])
   (:require [distillery.view.html :refer :all]))
 
-(defn fix-rel-urls
-  "Fixes all relative URLs in the template by suffixing with base path from the config file."
+(defn fix-url
+  [base-path url]
+  (let [uri (java.net.URI. url)]
+    (if (or (= (.getScheme uri) "javascript") (.isAbsolute uri))
+      url
+      (str base-path url))))
+
+(defn fix-urls
+  "Fixes all relative URLs in the template by suffixing with the given base path."
   [base-path template]
-  (defn fix-url [url]
-    (let [uri (java.net.URI. url)]
-      (if (.isAbsolute uri) url (str base-path url))))
-  (def fix-href (attr-transformer :href fix-url))
-  (def fix-src (attr-transformer :src fix-url))
-  (eh/at template
-         [:head :link] fix-href
-         [:script] fix-src
-         [:a] fix-href
-         [:img] fix-href))
+  (let [fix-url (partial fix-url base-path)
+        fix-href (attr-transformer :href fix-url)
+        fix-src (attr-transformer :src fix-url)]
+    (eh/at template
+           [:head :link] fix-href
+           [:script] fix-src
+           [:a] fix-href
+           [:img] fix-href)))
+
+(defn fix-menu-urls
+  "Fixes all relative URLs in the menu by suffixing with the given base path."
+  [base-path menu]
+  (let [map-map (fn [f m] (into {} (for [[k v] m] [k (f v)])))]
+    (map-map (partial fix-url base-path) menu)))
 
 (defn render
   "Renders the layout template."
@@ -35,10 +46,16 @@
         js-code (if js-code (str "$(function () { " js-code " });") nil)
         head (or head (headline 1 title))
         foot (or foot defaults/copyright)
-        main-menu (menu (or main-menu defaults/main-menu) :title (or main-menu-title defaults/main-menu-title))
-        secondary-menu (if secondary-menu (menu secondary-menu :title (or secondary-menu-title defaults/secondary-menu-title)) nil)]
+        main-menu (menu
+                    (or main-menu (fix-menu-urls base-path defaults/main-menu))
+                    :title (or main-menu-title defaults/main-menu-title))
+        secondary-menu (if secondary-menu
+                         (menu
+                           secondary-menu
+                           :title (or secondary-menu-title defaults/secondary-menu-title))
+                         nil)]
 
-    (eh/at (fix-rel-urls base-path (template "base"))
+    (eh/at (fix-urls base-path (template "base"))
 	    [:head :title] (eh/content title)
 	    [:head :script#js_code] (eh/content js-code)
 	    [:nav#main-menu] (eh/content main-menu)

@@ -5,3 +5,8 @@ function video_jump(pos) {
   }
   player.currentTime = pos;
 }
+
+function innerpage(id) {
+  $("article.innerpage").css("display", "none");
+  $("#" + id).css("display", "inherit");
+}

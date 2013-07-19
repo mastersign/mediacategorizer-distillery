@@ -1,3 +1,7 @@
+article.innerpage h3 {
+  margin-bottom: 0.75em;
+}
+
 figure {
   padding: 0;
   border: none;
@@ -9,14 +13,20 @@ video#main_video {
 }
 
 div.transcript {
-  padding: 0.33em;
-  background-color: #F0F0F0;
+  padding: 0.5em;
   height: 15em;
   overflow: auto;
+  box-shadow: inset 0 0 4px #BBB;
+  -moz-box-shadow: inset 0 0 4px #BBB;
+  -webkit-box-shadow: inset 0 0 4px #BBB;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
 }
 
 div.transcript div.phrase {
   margin-bottom: 0.25em;
+  border-bottom: 1px solid #F0F0F0;
 }
 
 div.transcript span.tc {
@@ -35,5 +45,20 @@ div.transcript span.pt {
   display: block;
   margin-left: 4.5em;
   padding: 0.33em;
-  background-color: #FFF;
 }
+
+.todo {
+  display: block;
+  font-weight: bold;
+  background-color: #F46;
+  color: #FFF;
+  padding: 0.5em;
+  margin: 1em 0;
+  border-radius: 6px;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+}
+.todo:before {
+  content: "\23E9  ";
+}
+

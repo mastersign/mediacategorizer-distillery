@@ -29,6 +29,12 @@
              {:src (str (:id video) ".mp4")
               :type "video/mp4" }}]}]})
 
+(defn- render-overview
+  "Creates the HTML for the overview page."
+  [{:keys [video]}]
+  (innerpage "overview" "Übersicht" true
+             (TODO "Videoübersicht")))
+
 (defn- format-time
   [seconds]
   (let [h (int (/ seconds (* 60 60)))
@@ -46,7 +52,7 @@
 (defn- format-word
   [{:keys [text confidence pronunciation]}]
   {:tag :span
-   :attrs {:style (str "color:" (confidence-color confidence))
+   :attrs {:style (str "color:" (confidence-color (* confidence confidence))
           :title pronunciation}
    :content (str text " ")})
 
@@ -63,8 +69,26 @@
 (defn- render-transcript
   "Creates the HTML for the transcript with all phrases."
   [{:keys [results] :as args}]
-  [(headline 3 "Transkript")
-   (div "transcript" (map format-result results))])
+  (innerpage "transcript" "Transkript" false
+              (div "transcript" (map format-result results))))
+
+(defn- render-glossary
+  "Create the HTML for the video glossary."
+  [{:keys [results] :as args}]
+  (innerpage "glossary" "Glossar" false
+             (TODO "Videoglossar")))
+
+(defn- render-cloud
+  "Create the HTML for the video word cloud."
+  [{:keys [results] :as args}]
+  (innerpage "cloud" "Wolke" false
+             (TODO "Videowortwolke")))
+
+(defn- render-categories
+  "Create the HTML for the video categories."
+  [{:keys [results] :as args}]
+  (innerpage "categories" "Kategorien" false
+             (TODO "Videokategorien")))
 
 (defn render-video-page
   "Renders the main page for a video."
@@ -72,13 +96,17 @@
   [:base-path "../../"
    :title job-name
 ;   :js-code "videojs.options.flash.swf = 'video-js.swf';"
-   :secondary-menu {"Übersicht" ""
-                    "Transcript" ""
-                    "Glossar" ""
-                    "Cloud" ""
-                    "Kategorien" ""}
+   :secondary-menu {"Übersicht" (jshref "innerpage('overview')")
+                    "Transcript" (jshref "innerpage('transcript')")
+                    "Glossar" (jshref "innerpage('glossary')")
+                    "Cloud" (jshref "innerpage('cloud')")
+                    "Kategorien" (jshref "innerpage('categories')")}
    :page
      [(render-headline args)
       (render-video args)
-      (render-transcript args)]])
+      (render-overview args)
+      (render-transcript args)
+      (render-glossary args)
+      (render-cloud args)
+      (render-categories args)]])
 

@@ -23,26 +23,39 @@
   (save-dependencies output-dir))
 
 
-(defn create-index-page
-  "Creates the main page for the site."
-  [{:keys [output-dir job-name job-description]
-    :as args}]
-
-  (let [target-file (combine-path output-dir "index.html")]
-
+(defn- create-page
+  [page-name page-f {:keys [output-dir] :as args}]
+  (let [target-file (combine-path output-dir page-name)]
     (->> args
-         v-index/render-main-page
+         page-f
          (apply render)
          (save-page target-file))))
 
 
+(defn create-index-page
+  "Creates the main page for the site."
+  [args]
+  (create-page "index.html" v-index/render-main-page args))
+
+(defn create-categories-page
+  "Creates the overview page for all categories."
+  [args]
+  (create-page "categories.html" v-index/render-categories-page args))
+
+(defn create-videos-page
+  "Creates the overview page for all videos."
+  [args]
+  (create-page "videos.html" v-index/render-videos-page args))
+
+(defn create-glossary-page
+  "Creates the overview page for all words."
+  [args]
+  (create-page "glossary.html" v-index/render-glossary-page args))
+
 (defn create-video-page
   "Create the main page for a certain video."
-  [{:keys [output-dir video]
-    :as args}]
-
+  [{:keys [output-dir video] :as args}]
   (let [video-id (:id video)
-        target-file (combine-path output-dir "videos" video-id "index.html")
         video-target-file (combine-path output-dir "videos" video-id (str video-id ".mp4"))
         args (assoc args :results (load-data (:results-file video)))]
 
@@ -50,10 +63,10 @@
     (when (not (file-exists? video-target-file))
       (copy-file (get-path (:video-file video)) (get-path video-target-file)))
 
-    (->> args
-         v-video/render-video-page
-         (apply render)
-         (save-page target-file))))
+    (create-page
+      (combine-path "videos" video-id "index.html")
+      v-video/render-video-page
+      args)))
 
 (defn print-reverse-indexed-results
   [{:keys [video]}]

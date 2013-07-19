@@ -24,6 +24,19 @@
 
     (vec (map t-result results))))
 
+(defn result-of-word
+  "Returns the result which contains the given word."
+  [word results]
+  (get results (:result-no word)))
+
+(defn phrase-of-word
+  "Returns the phrase which contains the given word.
+   The phrase can be a result."
+  [word results]
+  (if (contains? word :alt-no)
+    (get (get results (:result-no word)) (:alt-no word))
+    (get results (:result-no word))))
+
 (defn word-text
   "Returns the text of a word. The word can be a string or a map with a the key :lexical-form."
   [word]
