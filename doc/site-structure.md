@@ -7,7 +7,7 @@ Path: `/index.html`
 * Multiple Categories
 * Multiple Videos
 ### Views
-* Index
+* Overview
 	* Description
 	* Statistics
 * Categories
@@ -63,3 +63,4 @@ Video-Path: `/video/<video>/<video>.mp4`
   Path: `/videos/<video>/words/<word>.part.html`
 	* Statistics
 	* Occurrences -> Playback Position
+
