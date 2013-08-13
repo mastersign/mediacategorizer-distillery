@@ -132,3 +132,73 @@ two additional slots:
 * **alt-no**
   _integer number_ `[0..n]` identifying the alternate phrase in the result
 
+## Job File
+A job file is the input for the speech recognition result analysis.
+A job is encoded as a job description structure. Part of a job is a name, 
+a number of categories, a number of videos, and additional parameters
+like the output directory.
+### Job Description
+A job description contains all information necessary to perform the analysis
+and create the analysis result representation.
+#### Slots
+* **job-name**  
+  _string_ short name for the job
+* **job-description**  
+  _string_ brief textual description of the job
+* **output-dir**  
+  _string_ file system path to the directory to save the analysis result 
+  representation
+* **categories**  
+  _vector_ of _category descriptions_
+* **videos**  
+  _vector_ of _video descriptions_
+#### Example
+### Category Description
+#### Slots
+#### Example
+### Video Description
+#### Slots
+#### Example
+
+## Analysis Results
+### Word Index
+A word index points from words to a number of occurrences 
+in video phrases. It is encoded as a map with the lexical form of a word
+as the key and a map with properties of the word as value.
+#### Value Slots
+The following properties of a word are possible.
+
+* **occurrences**  
+  _vector_ a vector of _occurrences_
+* **videos**  
+  _set_ a set of video ids
+* **categories**  
+  _set_ a set of category ids
+* **mean-confidence**  
+  _floating point number_ `[0..1]` mean recognition confidence  
+#### Example
+    { "Grammar" { :occurrences [ { :video-id "video1" :result-no 20 :word-no 3 :confidence 0.679 } ... ]
+                  :mean-confidence 0.7533
+                  :videos #{ "video1" "video4" }
+                  :categories #{ "Language" "Programming" } }
+      "Method"  { :occurrences [ ... ] 
+                  :mean-confidence 0.895
+                  :videos #{ "video2" "video4" } 
+                  :categories #{ "Programming" } }
+
+### Occurrence
+An occurrence is the address to a recognized word in video.
+#### Slots
+* **video-id** _(optional)_  
+  _string_ video id
+* **result-no**  
+  _int_ result number
+* **word-no**  
+  _int_ word number
+* **confidence**  
+  _floating point number_ `[0..1]` recognition confidence 
+#### Example
+    { :video-id "video1" 
+      :result-no 20 
+      :word-no 3 
+      :confidence 0.679 }
