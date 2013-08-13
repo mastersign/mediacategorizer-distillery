@@ -52,7 +52,7 @@
 (defn- format-word
   [{:keys [text confidence pronunciation]}]
   {:tag :span
-   :attrs {:style (str "color:" (confidence-color (* confidence confidence))
+   :attrs {:style (str "color:" (confidence-color (* confidence confidence)))
           :title pronunciation}
    :content (str text " ")})
 
