@@ -24,6 +24,11 @@
   "Applies a function to the value of a key-value-pair."
   [f [k v]] [k (f v)])
 
+(defn map-values
+  "Applies a function to the values of a map and returns a map with associating the original keys with the transformed values."
+  [f m]
+  (apply (if (sorted? m) sorted-map hash-map) (apply concat (map #(map-pair-value f %) m))))
+
 (defn multi-filter
   "Applies a number of predicates to a value and returns true if all predicates are true."
   [predicates x]
