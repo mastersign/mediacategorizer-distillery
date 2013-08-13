@@ -122,4 +122,7 @@
               :attrs {:class "innerpage"}
               :content (safe-content content)}]})
 
-(defn TODO [text] {:tag :div :attrs {:class "todo"} :content text})
+(defn TODO
+  [text]
+  (println (format "TODO: %s" text))
+  {:tag :div :attrs {:class "todo"} :content text})
