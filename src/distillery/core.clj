@@ -3,6 +3,7 @@
 
 (def root "D:\\Daten\\FH\\OLL\\") ;; FHB
 ;(def root "D:\\Repository\\Projekte\\Arbeit\\FHB\\OLL\\") ;; HOME
+;(def root "C:\\Repository\\Projekte\\Arbeit\\FHB\\OLL\\") ;; NB
 
 (def job-descr
   {:job-name "Testlauf"
