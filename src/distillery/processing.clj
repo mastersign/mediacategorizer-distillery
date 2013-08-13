@@ -80,20 +80,16 @@
       :confidence
       (>= cfg/good-confidence)))
 
-(defn best-alternate-phrase
-  "Returns the best alternate phrase of a recgnition result."
-  [result]
-  (apply max-key :confidence (:alternates result)))
+(defn alternate-phrases
+  "Returns alternate phrases of the recognition results."
+  [results]
+  (mapcat :alternates results))
 
-(defn- words
+(defn words
   "Returns words without statistic infos from a result sequence."
-  [results & {:keys [predicate best-phrases]}]
-  (let [predicate    (or predicate (fn [x] true))
-        phrase-src   (if best-phrases
-                       (partial map best-alternate-phrase)
-                       (partial mapcat :alternates))]
-    (->> results
-         (phrase-src)
+  [phrases & {:keys [predicate]}]
+  (let [predicate (or predicate (fn [x] true))]
+    (->> phrases
          (mapcat :words)
          (filter predicate))))
 
