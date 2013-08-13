@@ -130,8 +130,9 @@ two additional slots:
   _integer number_ `[0..n]` identifying the alternate phrase in the result
 
 ## Job File
-A job file is the input for the speech recognition result analysis.
-A job is encoded as a job description structure. Part of a job is a name, 
+File in [Clojure EDN syntax](http://edn-format.org/) with file extension `.aj`.
+It is the input for the speech recognition result analysis and contains
+a job description structure. Part of a job is a name, 
 a number of categories, a number of videos, and additional parameters
 like the output directory.
 ### Job Description
@@ -193,7 +194,7 @@ An occurrence is the address to a recognized word in video.
 * **word-no**  
   _int_ word number
 * **confidence**  
-  _floating point number_ `[0..1]` recognition confidence 
+  _floating point number_ `[0..1]` recognition confidence
 #### Example
     { :video-id "video1" 
       :result-no 20 
