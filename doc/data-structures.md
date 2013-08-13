@@ -1,10 +1,10 @@
 Data Structures
 ===============
 
-### Speech Recognition Result File
+## Speech Recognition Result File
 File in [Clojure EDN syntax](http://edn-format.org/) with file extension `.srr`.
 The content is a vector of speech recognition results.
-#### Example
+### Example
 	[ { :no 0
 	    :start 0.3
 	    :duration 2.712
@@ -29,7 +29,6 @@ A phrase is a sequence of recognized words.
   _string_ with the text of the words in this phrase
 * **words**
   _vector_ of the _recognized words_ in this phrase
-
 ### Speech Recognition Result
 A speech recognition result describes the result yielded by the speech
 recognition engine, analyzing a section of an audio stream.
@@ -116,13 +115,11 @@ one additional slot:
 
 * **result-no**
   _integer number_ `[0..n]` identifying the result containing this word
-
 #### Reverse Indexed Alternate Phrase
 The reverse indexing adds one additional slot:
 
 * **result-no**
   _integer number_ `[0..n]` identifying the result containing this phrase
-
 #### Reverse Indexed Phrase Word
 For words in an alternate phrase of a result the reverse indexing adds
 two additional slots:
