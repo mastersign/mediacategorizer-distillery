@@ -83,6 +83,21 @@
   [css-class content]
   {:tag :span :attrs {:class css-class} :content (safe-content content)})
 
+(defn list-item
+  "Creates a list item."
+  [content]
+  {:tag :li :content (safe-content content)})
+
+(defn ulist
+  "Creates an unordered list with a given CSS class and a sequence of list items."
+  [css-class items]
+  {:tag :ul :attrs {:class css-class} :content (vec items)})
+
+(defn ulist
+  "Creates an ordered list with a given CSS class and a sequence of list items."
+  [css-class items]
+  {:tag :ol :attrs {:class css-class} :content (vec items)})
+
 (defn jshref
   "Creates a URI referencing a JavaScript call."
   [js]
