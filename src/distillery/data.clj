@@ -37,6 +37,15 @@
               (assoc summaries k (f (summaries k init) x))))
           {} coll))
 
+(defn reduce-by-sorted
+  "Groups a collection by a key, computed by key-fn, and reduces the values of each group with f.
+   Returns a sorted map."
+  [key-fn f init coll]
+  (reduce (fn [summaries x]
+            (let [k (key-fn x)]
+              (assoc summaries k (f (summaries k init) x))))
+          (sorted-map) coll))
+
 (defn multi-filter
   "Applies a number of predicates to a value and returns true if all predicates are true."
   [predicates x]
