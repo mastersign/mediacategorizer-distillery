@@ -166,6 +166,9 @@ as the key and a map with properties of the word as value.
 #### Value Slots
 The following properties of a word are possible.
 
+* **pronunciation**  
+  _string_ the [IPA](http://en.wikipedia.org/wiki/International_Phonetic_Alphabet)
+  pronunciation of the word
 * **occurrences**  
   _vector_ a vector of _occurrences_
 * **videos**  
