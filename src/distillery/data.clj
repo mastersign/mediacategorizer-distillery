@@ -29,6 +29,14 @@
   [f m]
   (apply (if (sorted? m) sorted-map hash-map) (apply concat (map #(map-pair-value f %) m))))
 
+(defn reduce-by
+  "Groups a collection by a key, computed by key-fn, and reduces the values of each group with f."
+  [key-fn f init coll]
+  (reduce (fn [summaries x]
+            (let [k (key-fn x)]
+              (assoc summaries k (f (summaries k init) x))))
+          {} coll))
+
 (defn multi-filter
   "Applies a number of predicates to a value and returns true if all predicates are true."
   [predicates x]
