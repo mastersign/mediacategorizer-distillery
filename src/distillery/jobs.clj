@@ -54,10 +54,10 @@
 
 (defn create-video-page
   "Create the main page for a certain video."
-  [{:keys [output-dir video] :as args}]
+  [{:keys [output-dir] :as job} video]
   (let [video-id (:id video)
         video-target-file (combine-path output-dir "videos" video-id (str video-id ".mp4"))
-        args (assoc args :results (load-data (:results-file video)))]
+        args (assoc job :video video :results (load-data (:results-file video)))]
 
     (create-dir output-dir "videos" video-id)
     (when (not (file-exists? video-target-file))
@@ -67,6 +67,12 @@
       (combine-path "videos" video-id "index.html")
       v-video/render-video-page
       args)))
+
+(defn create-video-pages
+  "Creates the main pages for all videos."
+  [job]
+  (doseq [video (:videos job)]
+    (create-video-page job video)))
 
 (defn print-reverse-indexed-results
   [{:keys [video]}]
