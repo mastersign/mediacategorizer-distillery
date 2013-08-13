@@ -158,3 +158,21 @@
        (string/join "\n")
        println))
 
+(defn video-word-index
+  "Builds an index of words for a sequence of recognition results."
+  [video & {:keys [predicate]}]
+  (let [ws (words video :predicate predicate)
+        add-occurrence (fn [props word]
+                         (let [props (or props {:pronunciation (:pronunciation word)})]
+                           (assoc props :occurrences
+                             (conj (:occurrences props [])
+                                   {:video-id (:id video)
+                                    :result-no (:result-no word)
+                                    :word-no (:no word)
+                                    :confidence (:confidence word)}))))
+        index (reduce-by-sorted :lexical-form add-occurrence nil ws)
+        build-word-props (fn [{:keys [occurrences] :as props}]
+                           (assoc props
+                             :mean-confidence (mean (map :confidence occurrences))))]
+    (map-values build-word-props index)))
+
