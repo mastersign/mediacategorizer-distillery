@@ -72,11 +72,16 @@
   (innerpage "transcript" "Transkript" false
               (div "transcript" (map format-result results))))
 
+(defn- render-glossary-word
+  "Creates the HTML for a glossary entry."
+  [[lexical {:keys [occurrences mean-confidence]}]]
+  (list-item (format "%s (%d, %f)" lexical (count occurrences) mean-confidence)))
+
 (defn- render-glossary
   "Create the HTML for the video glossary."
-  [{:keys [results] :as args}]
+  [{:keys [index] :as args}]
   (innerpage "glossary" "Glossar" false
-             (TODO "Videoglossar")))
+             (ulist "glossary" (map render-glossary-word index))))
 
 (defn- render-cloud
   "Create the HTML for the video word cloud."
