@@ -108,8 +108,8 @@
   [results word-filters group-filters]
   (let [word-filter (partial multi-filter (vec word-filters))
         group-filter (partial multi-filter (vec group-filters))]
-    (->> (words results :best-phrases cfg/best-phrases-only :predicate word-filter)
-         (group-by #(dissoc % :confidence))
+    (->> (words results :predicate word-filter)
+         (group-by #(dissoc % :no :result-no :alt-no :confidence))
          (map process-word-group)
          (filter group-filter))))
 
