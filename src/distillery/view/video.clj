@@ -63,7 +63,7 @@
 (defn- format-result
   "Creates the HTML for a single phrase."
   [result]
-  (div "phrase" [(span "tc" (jslink (format "video_jump(%f)" (:start result)) (format-time (:start result))))
+  (div "phrase" [(span "tc" (jslink (format "video_jump(%f)" (double (:start result))) (format-time (:start result))))
                  (span "pt" (format-phrase result))]))
 
 (defn- render-transcript
