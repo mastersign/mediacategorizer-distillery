@@ -24,7 +24,7 @@ div.transcript, div.glossary-part {
   -webkit-border-radius: 10px;
 }
 
-div.transcript div.phrase, div.glossary-part ul {
+div.transcript div.phrase {
   margin-bottom: 0.25em;
   border-bottom: 1px solid #F0F0F0;
 }
@@ -49,10 +49,12 @@ div.transcript span.pt {
 
 div.glossary-nav {
   font-size: larger;
+  margin-bottom: 0.5em;
 }
 
 div.glossary-part {
   display: none;
+  padding: 0em 0.5em;
 }
 
 .todo {

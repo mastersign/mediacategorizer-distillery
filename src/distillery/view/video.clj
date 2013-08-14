@@ -98,8 +98,7 @@
   [[letter index-part]]
   {:tag :div
    :attrs {:id (str "glossary-part-" (glossary-partition-id letter)) :class "glossary-part"}
-   :content [(headline 3 (str letter))
-             (ulist "glossary" (map render-glossary-word index-part))]})
+   :content [(ulist "glossary" (map render-glossary-word index-part))]})
 
 (defn- render-glossary
   "Create the HTML for the video glossary."
