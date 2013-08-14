@@ -68,7 +68,7 @@
 
 (defn- render-transcript
   "Creates the HTML for the transcript with all phrases."
-  [{:keys [results] :as args}]
+  [{{:keys [results] :as video} :video :as args}]
   (innerpage "transcript" "Transkript" false
               (div "transcript" (map format-result results))))
 
@@ -102,20 +102,20 @@
 
 (defn- render-glossary
   "Create the HTML for the video glossary."
-  [{:keys [pindex] :as args}]
+  [{{:keys [pindex] :as video} :video :as args}]
   (innerpage "glossary" "Glossar" false
     (cons (render-glossary-navigation pindex)
           (map render-glossary-partition pindex))))
 
 (defn- render-cloud
   "Create the HTML for the video word cloud."
-  [{:keys [results] :as args}]
+  [{{:keys [index] :as video} :video :as args}]
   (innerpage "cloud" "Wolke" false
              (TODO "Videowortwolke")))
 
 (defn- render-categories
   "Create the HTML for the video categories."
-  [{:keys [results] :as args}]
+  [args]
   (innerpage "categories" "Kategorien" false
              (TODO "Videokategorien")))
 

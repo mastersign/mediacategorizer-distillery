@@ -20,6 +20,10 @@
              :audio-file (str root "Media\\Audio\\de-DE\\Der Lambda-Kalkül (720).wav")
              :results-file (str root "Media\\Audio\\de-DE\\transcript\\Der Lambda-Kalkül (720).srr")}]})
 
+(def job (-> job-descr
+             tasks/load-speech-recognition-results
+             tasks/analyze-speech-recognition-results))
+
 (def tasks {:prep tasks/prepare-output-dir
             :main-page tasks/create-index-page
             :categories-page tasks/create-categories-page
@@ -27,6 +31,6 @@
             :glossary-page tasks/create-glossary-page
             :videos tasks/create-video-pages})
 
-((:prep tasks) job-descr)
+((:prep tasks) job)
 
-(doseq [task (rest (vals tasks))] (task job-descr))
+(doseq [task (rest (vals tasks))] (task job))

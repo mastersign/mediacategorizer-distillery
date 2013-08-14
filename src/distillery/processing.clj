@@ -21,8 +21,12 @@
                    (-> result
                        (assoc :words (vec (map #(t-rword % result) (:words result))))
                        (assoc :alternates (vec (map #(t-alt % result) (:alternates result))))))]
-
     (vec (map t-result results))))
+
+(defn strip-alternates
+  "Removes potential alternate phrases from results for memory optimization."
+  [results]
+  (map #(dissoc % :alternates) results))
 
 (defn result-of-word
   "Returns the result which contains the given word."
