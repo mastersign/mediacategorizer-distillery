@@ -93,7 +93,7 @@
   [css-class items]
   {:tag :ul :attrs {:class css-class} :content (vec items)})
 
-(defn ulist
+(defn olist
   "Creates an ordered list with a given CSS class and a sequence of list items."
   [css-class items]
   {:tag :ol :attrs {:class css-class} :content (vec items)})
