@@ -1,9 +1,9 @@
 (ns distillery.core
-  (:require [distillery.jobs :as jobs]))
+  (:require [distillery.tasks :as tasks]))
 
-(def root "D:\\Daten\\FH\\OLL\\") ;; FHB
+;(def root "D:\\Daten\\FH\\OLL\\") ;; FHB
 ;(def root "D:\\Repository\\Projekte\\Arbeit\\FHB\\OLL\\") ;; HOME
-;(def root "C:\\Repository\\Projekte\\Arbeit\\FHB\\OLL\\") ;; NB
+(def root "C:\\Repository\\Projekte\\Arbeit\\FHB\\OLL\\") ;; NB
 
 (def job-descr
   {:job-name "Testlauf"
@@ -20,12 +20,13 @@
              :audio-file (str root "Media\\Audio\\de-DE\\Der Lambda-Kalkül (720).wav")
              :results-file (str root "Media\\Audio\\de-DE\\transcript\\Der Lambda-Kalkül (720).srr")}]})
 
+(def tasks {:prep tasks/prepare-output-dir
+            :main-page tasks/create-index-page
+            :categories-page tasks/create-categories-page
+            :videos-page tasks/create-videos-page
+            :glossary-page tasks/create-glossary-page
+            :videos tasks/create-video-pages})
 
-(def base-jobs [jobs/prepare-output-dir
-                jobs/create-index-page
-                jobs/create-categories-page
-                jobs/create-videos-page
-                jobs/create-glossary-page
-                jobs/create-video-pages])
+((:prep tasks) job-descr)
 
-(doseq [job base-jobs] (job job-descr))
+(doseq [task (rest (vals tasks))] (task job-descr))

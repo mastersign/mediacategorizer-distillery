@@ -1,4 +1,4 @@
-(ns distillery.jobs
+(ns distillery.tasks
   (:require [clojure.string :as string])
   (:require [clojure.pprint :as pp])
   (:require [distillery.config :as cfg])
