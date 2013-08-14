@@ -10,3 +10,8 @@ function innerpage(id) {
   $("article.innerpage").css("display", "none");
   $("#" + id).css("display", "inherit");
 }
+
+function glossary(part_id) {
+  $("div.glossary-part").css("display", "none");
+  $("#glossary-part-" + part_id).css("display", "inherit");
+}

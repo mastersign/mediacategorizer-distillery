@@ -58,8 +58,9 @@
   (let [video-id (:id video)
         video-target-file (combine-path output-dir "videos" video-id (str video-id ".mp4"))
         results (load-data (:results-file video))
-        index (proc/video-word-index results :predicate (partial multi-filter [proc/not-short? proc/noun?]))
-        args (assoc job :video video :results results :index index)]
+        index (proc/video-word-index results :predicate (partial multi-filter [proc/not-short? proc/noun? proc/min-confidence?]))
+        pindex (proc/partition-index index)
+        args (assoc job :video video :results results :pindex pindex)]
 
     (create-dir output-dir "videos" video-id)
     (when (not (file-exists? video-target-file))

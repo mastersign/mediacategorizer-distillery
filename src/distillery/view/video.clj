@@ -77,11 +77,36 @@
   [[lexical {:keys [occurrences mean-confidence]}]]
   (list-item (format "%s (%d, %f)" lexical (count occurrences) mean-confidence)))
 
+(defn- glossary-partition-id
+  "Creates an identifier for a glossary partition by its letter."
+  [letter]
+  (if (= \? letter) "SYM" (str letter)))
+
+(defn- render-glossary-navigation
+  "Creates the HTML for the navigation bar of a glossary."
+  [pindex]
+  (let [letters (map char (concat (range 65 91) [63]))]
+    (div "glossary-nav"
+      (map (fn [l]
+             (if (contains? pindex l)
+               (jslink (str "glossary('" (glossary-partition-id l) "')") (str l "  "))
+               (str l "  ")))
+           letters))))
+
+(defn- render-glossary-partition
+  "Creates the HTML for a partion of a glossary."
+  [[letter index-part]]
+  {:tag :div
+   :attrs {:id (str "glossary-part-" (glossary-partition-id letter)) :class "glossary-part"}
+   :content [(headline 3 (str letter))
+             (ulist "glossary" (map render-glossary-word index-part))]})
+
 (defn- render-glossary
   "Create the HTML for the video glossary."
-  [{:keys [index] :as args}]
+  [{:keys [pindex] :as args}]
   (innerpage "glossary" "Glossar" false
-             (ulist "glossary" (map render-glossary-word index))))
+    (cons (render-glossary-navigation pindex)
+          (map render-glossary-partition pindex))))
 
 (defn- render-cloud
   "Create the HTML for the video word cloud."
