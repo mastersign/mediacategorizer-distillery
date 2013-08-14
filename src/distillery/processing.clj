@@ -176,3 +176,19 @@
                              :mean-confidence (mean (map :confidence occurrences))))]
     (map-values build-word-props index)))
 
+(defn- char-to-index-letter
+  "Converts every alphabetic character in its upper case and all other characters into '?'."
+  [c]
+  (let [c (java.lang.Character/toUpperCase c)
+        n (int c)]
+    (if (and (>= n 65) (<= n 91)) c \?)))
+
+(defn partition-index
+  "Partitions an index into sections.
+   One section for every letter and one section for other symbols.
+   The partitioned index is a map with a letter as key and the
+   index partiton as value."
+  [index]
+  (->> index
+       (group-by (comp char-to-index-letter first first))
+       (map-values #(apply sorted-map (apply concat %)))))
