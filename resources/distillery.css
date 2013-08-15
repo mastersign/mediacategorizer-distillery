@@ -13,6 +13,7 @@ video#main_video {
 }
 
 div.transcript, div.glossary-part {
+  margin-top: 1em;
   padding: 0.5em;
   height: 15em;
   overflow: auto;
@@ -49,7 +50,6 @@ div.transcript span.pt {
 
 div.glossary-nav {
   font-size: larger;
-  margin-bottom: 0.5em;
 }
 
 div.glossary-part {
