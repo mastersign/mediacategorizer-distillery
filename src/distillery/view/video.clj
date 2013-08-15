@@ -36,6 +36,7 @@
              (TODO "Videoübersicht")))
 
 (defn- format-time
+  "Creates a pretty time string from total seconds."
   [seconds]
   (let [h (int (/ seconds (* 60 60)))
         m (int (mod (/ seconds 60) 60))
@@ -45,32 +46,35 @@
       (format "%02d:%02d" m s))))
 
 (defn- confidence-color
+  "Creates a CSS compatible color definition string for a given confidence value."
   [confidence]
   (let [v (int (* (- 1 confidence) 192))]
     (format "#%02X%02X%02X" v v v)))
 
-(defn- format-word
+(defn- render-word
+  "Creates the HTML for a recognized word."
   [{:keys [text confidence pronunciation]}]
   {:tag :span
    :attrs {:style (str "color:" (confidence-color (* confidence confidence)))
           :title pronunciation}
    :content (str text " ")})
 
-(defn- format-phrase
+(defn- render-phrase
+  "Creates the HTML for the words of a recognized phrase."
   [{:keys [words]}]
-  (map format-word words))
+  (map render-word words))
 
-(defn- format-result
+(defn- render-result
   "Creates the HTML for a single phrase."
   [result]
   (div "phrase" [(span "tc" (jslink (format "video_jump(%f)" (double (:start result))) (format-time (:start result))))
-                 (span "pt" (format-phrase result))]))
+                 (span "pt" (render-phrase result))]))
 
 (defn- render-transcript
   "Creates the HTML for the transcript with all phrases."
   [{{:keys [results] :as video} :video :as args}]
   (innerpage "transcript" "Transkript" false
-              (div "transcript" (map format-result results))))
+              (div "transcript" (map render-result results))))
 
 (defn- render-glossary-word
   "Creates the HTML for a glossary entry."
