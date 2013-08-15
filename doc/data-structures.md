@@ -130,7 +130,7 @@ two additional slots:
   _integer number_ `[0..n]` identifying the alternate phrase in the result
 
 ## Job File
-File in [Clojure EDN syntax](http://edn-format.org/) with file extension `.aj`.
+File in [Clojure EDN syntax](http://edn-format.org/) with file extension `.saj`.
 It is the input for the speech recognition result analysis and contains
 a job description structure. Part of a job is a name, 
 a number of categories, a number of videos, and additional parameters
