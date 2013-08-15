@@ -34,7 +34,11 @@
   "Creates the HTML for the overview page."
   [{:keys [video]}]
   (innerpage "overview" "Übersicht" true
-             (TODO "Videoübersicht")))
+             [(ulist "video_statistic"
+                     [(list-item (str "Länge: " (transcript/format-time (:duration video))))
+                      (list-item (str "Erkannte Phrasen: " (:phrase-count video)))
+                      (list-item (str "Erkannte Worte: " (:word-count video)))
+                      (list-item (format "Mittlere Erkennungssicherheit: %1.1f%%" (* 100 (:confidence video))))])]))
 
 (defn- render-transcript
   "Creates the HTML for the transcript with all phrases."

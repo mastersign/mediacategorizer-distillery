@@ -23,13 +23,12 @@
                     proc/reverse-index-results)]
     (assoc video :results results)))
 
-
 (defn load-speech-recognition-results
   "Loads the speech recognition results for the videos."
   [job]
   (update-in job [:videos] #(vec (map load-speech-recognition-result %))))
 
-(defn- analyze-speech-recognition-result
+(defn- build-video-index
   "Analyzes the speech recognition results of a single video and builds the video word index."
   [video]
   (let [filters [proc/not-short? proc/noun? proc/min-confidence?]
@@ -37,11 +36,26 @@
         index (proc/video-word-index video :predicate predicate)]
     (assoc video :index index)))
 
+(defn- build-video-statistics
+  [{:keys [results] :as video}]
+  (let [last-result (last results)
+        duration (+ (:start last-result) (:duration last-result))]
+    (assoc video
+      :phrase-count (count results)
+      :word-count (count (proc/words results))
+      :confidence (mean (map :confidence results))
+      :duration duration)))
+
 (defn analyze-speech-recognition-results
   "Analyzes the speech recognition results an generates the index structures."
   [job]
-  (-> job
-      (update-in [:videos] #(vec (map analyze-speech-recognition-result %)))))
+  (update-in job [:videos]
+    #(vec (map
+            (comp
+              build-video-statistics
+              build-video-index)
+            %))))
+
 
 (defn prepare-output-dir
   "Prepares the output directory by creating a number of sub directories and copying site dependencies."

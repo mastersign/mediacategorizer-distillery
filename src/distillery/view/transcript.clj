@@ -4,7 +4,7 @@
   (:require [distillery.processing :refer [word-identifier]])
   (:require [distillery.view.html :refer :all]))
 
-(defn- format-time
+(defn format-time
   "Creates a pretty time string from total seconds."
   [seconds]
   (let [h (int (/ seconds (* 60 60)))
