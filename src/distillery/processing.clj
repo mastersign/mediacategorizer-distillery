@@ -178,7 +178,7 @@
 (defn video-word-index
   "Builds an index of words for a sequence of recognition results."
   [video & {:keys [predicate]}]
-  (let [ws (words video :predicate predicate)
+  (let [ws (words (:results video) :predicate predicate)
         add-occurrence (fn [props word]
                          (let [props (or props {:id (word-identifier word)
                                                 :lexical-form (:lexical-form word)

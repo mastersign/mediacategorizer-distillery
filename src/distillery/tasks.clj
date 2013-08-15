@@ -17,7 +17,10 @@
 (defn- load-speech-recognition-result
   "Loads the speech recognition results for a video."
   [{:keys [results-file] :as video}]
-  (let [results (proc/strip-alternates (load-data results-file))]
+  (let [results (-> results-file
+                    load-data
+                    proc/strip-alternates
+                    proc/reverse-index-results)]
     (assoc video :results results)))
 
 
@@ -28,10 +31,10 @@
 
 (defn- analyze-speech-recognition-result
   "Analyzes the speech recognition results of a single video and builds the video word index."
-  [{:keys [results] :as video}]
+  [video]
   (let [filters [proc/not-short? proc/noun? proc/min-confidence?]
         predicate (partial multi-filter filters)
-        index (proc/video-word-index results :predicate predicate)]
+        index (proc/video-word-index video :predicate predicate)]
     (assoc video :index index)))
 
 (defn analyze-speech-recognition-results
@@ -93,7 +96,7 @@
   (create-include
     (str path ".inc.html")
     v-word/render-video-word-include
-    (assoc job :word word)))
+    (assoc job :video video :word word)))
 
 (defn create-video-word-includes
   [{:keys [output-dir] :as job} {:keys [id index path] :as video}]

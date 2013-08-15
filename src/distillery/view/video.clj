@@ -38,15 +38,14 @@
 
 (defn- render-transcript
   "Creates the HTML for the transcript with all phrases."
-  [{{:keys [results] :as video} :video :as args}]
+  [{{:keys [results index] :as video} :video :as args}]
   (innerpage "transcript" "Transkript" false
-              (transcript/render-result-list results)))
+              (transcript/render-result-list results :index index)))
 
 (defn- render-glossary-word
   "Creates the HTML for a glossary entry."
-  [[lexical {:keys [id occurrences mean-confidence] :as word}]]
-  (list-item [(jslink (str "word('" id "')") lexical)
-              (format " (%d, %f)" (count occurrences) mean-confidence)]))
+  [[lexical {:keys [id occurrences] :as word}]]
+  (list-item (jslink (str "word('" id "')") lexical)))
 
 (defn- glossary-partition-id
   "Creates an identifier for a glossary partition by its letter."

@@ -1,7 +1,7 @@
 (ns distillery.view.transcript
   (:require [clojure.string :as string])
   (:require [net.cgrand.enlive-html :as eh])
-  (:require [distillery.files :refer :all])
+  (:require [distillery.processing :refer [word-identifier]])
   (:require [distillery.view.html :refer :all]))
 
 (defn- format-time
@@ -22,24 +22,29 @@
 
 (defn- render-word
   "Creates the HTML for a recognized word."
-  [{:keys [text confidence pronunciation]}]
-  {:tag :span
-   :attrs {:style (str "color:" (confidence-color (* confidence confidence)))
-          :title pronunciation}
-   :content (str text " ")})
+  [{:keys [text lexical-form confidence pronunciation] :as word} & {:keys [index pivot]}]
+  (let [highlight (= pivot lexical-form)
+        color (if highlight "#FF0000" (confidence-color (* confidence confidence)))
+        html {:tag :span
+              :attrs {:style (str "color:" color)
+                      :title pronunciation}
+              :content (str text " ")}]
+    (if (contains? index lexical-form)
+      (jslink (str "word('" (word-identifier word) "')") html)
+      html)))
 
 (defn- render-phrase
   "Creates the HTML for the words of a recognized phrase."
-  [{:keys [words]}]
-  (map render-word words))
+  [{:keys [words]} & {:keys [index pivot]}]
+  (map #(render-word % :index index :pivot pivot) words))
 
 (defn- render-result
   "Creates the HTML for a single phrase."
-  [result]
+  [result & {:keys [index pivot]}]
   (div "phrase" [(span "tc" (jslink (format "video_jump(%f)" (double (:start result))) (format-time (:start result))))
-                 (span "pt" (render-phrase result))]))
+                 (span "pt" (render-phrase result :index index :pivot pivot))]))
 
 (defn render-result-list
   "Creates the HTML for a sequence of phrases."
-  [results]
-  (div "transcript" (map render-result results)))
+  [results & {:keys [index pivot]}]
+  (div "transcript" (map #(render-result % :index index :pivot pivot) results)))
