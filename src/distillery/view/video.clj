@@ -78,8 +78,9 @@
 
 (defn- render-glossary-word
   "Creates the HTML for a glossary entry."
-  [[lexical {:keys [occurrences mean-confidence]}]]
-  (list-item (format "%s (%d, %f)" lexical (count occurrences) mean-confidence)))
+  [[lexical {:keys [id occurrences mean-confidence] :as word}]]
+  (list-item [(jslink (str "word('" id "')") lexical)
+              (format " (%d, %f)" (count occurrences) mean-confidence)]))
 
 (defn- glossary-partition-id
   "Creates an identifier for a glossary partition by its letter."
@@ -123,6 +124,12 @@
   (innerpage "categories" "Kategorien" false
              (TODO "Videokategorien")))
 
+(defn- render-video-word-frame
+  "Create the HTML for the word frame.
+   The word frame is an empty container to load a video word page into."
+  [args]
+  (innerpage "word" "Wort" false nil))
+
 (defn render-video-page
   "Renders the main page for a video."
   [{:keys [job-name video] :as args}]
@@ -141,5 +148,6 @@
       (render-transcript args)
       (render-glossary args)
       (render-cloud args)
-      (render-categories args)]])
+      (render-categories args)
+      (render-video-word-frame args)]])
 

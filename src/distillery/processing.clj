@@ -162,12 +162,27 @@
        (string/join "\n")
        println))
 
+(defn word-identifier
+  "Creates an identifier for a word.
+   The identifier can be used as HTML/XML ID or as filename."
+  [{:keys [lexical-form] :as word}]
+  (comment "TODO Needs to be improved for arbitrary characters!")
+  (-> lexical-form
+      (.replace " " "_")
+      (.toLowerCase)
+      (.replace "ß" "ss")
+      (.replace "ä" "ae")
+      (.replace "ö" "oe")
+      (.replace "ü" "ue")))
+
 (defn video-word-index
   "Builds an index of words for a sequence of recognition results."
   [video & {:keys [predicate]}]
   (let [ws (words video :predicate predicate)
         add-occurrence (fn [props word]
-                         (let [props (or props {:pronunciation (:pronunciation word)})]
+                         (let [props (or props {:id (word-identifier word)
+                                                :lexical-form (:lexical-form word)
+                                                :pronunciation (:pronunciation word)})]
                            (assoc props :occurrences
                              (conj (:occurrences props [])
                                    {:video-id (:id video)

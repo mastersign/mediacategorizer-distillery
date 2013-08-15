@@ -6,12 +6,18 @@ function video_jump(pos) {
   player.currentTime = pos;
 }
 
-function innerpage(id) {
+function innerpage(page_id) {
   $("article.innerpage").css("display", "none");
-  $("#" + id).css("display", "inherit");
+  $("#" + page_id).css("display", "inherit");
 }
 
 function glossary(part_id) {
   $("div.glossary-part").css("display", "none");
   $("#glossary-part-" + part_id).css("display", "inherit");
+}
+
+function word(word_id) {
+  $("#word .innerpage").load("words/" + word_id + ".inc.html", function() {
+    innerpage("word");
+  });
 }
