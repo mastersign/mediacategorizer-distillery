@@ -45,8 +45,10 @@
 
 (defn paragraph
   "Wrappes the given content into a paragraph."
-  [content]
+  ([content]
   {:tag :p :content (safe-content content)})
+  ([css-class content]
+  {:tag :p :attrs {:class css-class} :content (safe-content content)}))
 
 (defn headline
   "Wrappes the given content into a headline. Headline levels from 1 to 8 are supported."
