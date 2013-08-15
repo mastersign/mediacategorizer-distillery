@@ -6,9 +6,14 @@ function video_jump(pos) {
   player.currentTime = pos;
 }
 
+function scroll_to_page() {
+  window.location.hash = "#main-menu";
+}
+
 function innerpage(page_id) {
   $("article.innerpage").css("display", "none");
   $("#" + page_id).css("display", "inherit");
+  scroll_to_page();
 }
 
 function glossary(part_id) {
