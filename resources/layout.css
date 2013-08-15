@@ -1,5 +1,17 @@
+/**
+* h5smpl - responsive HTML/CSS template
+* https://github.com/mastersign/h5smpl
+* 
+* Tobias Kiertscher (http://www.mastersign.de)
+*
+* LAYOUT
+* Contains only layout specific stylings, especially the responsive parts.
+* 
+* Expects a DIV with ID 'frame' as child in BODY, wrapping all content.
+* Expects a DIV with ID 'page', wrapping the main content of the page.
+*/
+
 body {
-	/*text-align: center;*/
 	margin: 0;
 	padding: 0;
 	background-color: #F0F0F0;
@@ -19,8 +31,8 @@ header {
 }
 
 figure {
-  margin-left: 0;
-  margin-right: 0;
+	margin-left: 0;
+	margin-right: 0;
 }
 
 /*** NAV ***/
@@ -63,9 +75,13 @@ nav.horizontal li {
 
 nav.vertical {
 	border-bottom: none;
-	width: 90px;
+	width: 10em;
 	float: left;
 	padding: 1em 1em 1em 0.5em;
+}
+
+nav.fixed {
+	position: fixed;
 }
 
 nav.vertical .menu-title, nav.vertical ul {
@@ -81,8 +97,14 @@ nav.vertical li {
 	padding: 0 0 0.25em 0;
 }
 
+nav.vertical li li {
+	margin-left: 0.75em;
+	font-size: small;
+	padding: 0;
+}
+
 #page {
-	margin: 1em 0.5em 1em 110px;
+	margin: 1em 0.5em 1em 11em;
 	padding-left: 1em;
 	/*border-left: 1px solid #AAA;*/
 }
@@ -101,15 +123,19 @@ footer {
 }
 
 @media screen and (max-width: 720px), screen and (max-device-height: 720px) and (orientation: landscape) {
-  #frame {
-    max-width: 720px;
-  }
+	#frame {
+		max-width: 720px;
+	}
 
 	nav.vertical {
 		width: auto;
 		float: none;
 		margin: 0;
 		padding: 0.25em;
+	}
+
+	nav.fixed {
+		position: relative;
 	}
 
 	nav.vertical {
@@ -140,16 +166,16 @@ footer {
 
 @media screen and (max-width: 480px) and (orientation: portrait) {
 	#frame {
-    max-width: 480px;
+		max-width: 480px;
 		padding: 0.25em;
 	}
-  header {
+	header {
 		padding-bottom: 0;
 	}
 	header h1 {
 		margin: 0;
 		padding-bottom: 0.25em;
-    padding-top: 0.25em;
+		padding-top: 0.25em;
 		font-size: 1.8em;
 		border-bottom: 1px solid #AAA;
 		text-align: center;
@@ -180,4 +206,3 @@ footer {
 		padding: 0 0 0.25em 0;
 	}
 }
-

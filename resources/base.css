@@ -1,210 +1,263 @@
+/**
+* h5smpl - responsive HTML/CSS template
+* https://github.com/mastersign/h5smpl
+*
+* Tobias Kiertscher (http://www.mastersign.de)
+* 
+* BASE
+* Contains layout independent styling for HTML elements.
+*/
+
 body
 {
-    font-family: Calibri, Tahoma, Helvetica, Arial, sans-serif;
-    line-height: 115%;
-    margin: 1em 1.5em 2em 1.5em;
+	font-family: Calibri, Tahoma, Helvetica, Arial, sans-serif;
+	line-height: 115%;
+	margin: 1em 1.5em 2em 1.5em;
 }
 
 h1, h2, h3, h4, h5, h6 {
-    margin-top: 0.66em;
-    margin-bottom: 0.33em;
-    line-height: 100%;
+	margin-top: 0.66em;
+	margin-bottom: 0.33em;
+	line-height: 100%;
 }
 h1, h2, h3, h4 {
-    font-family: Cambria, Times, "Times New Roman", serif;
-    font-weight: normal;
+	font-family: Cambria, Times, "Times New Roman", serif;
+	font-weight: normal;
 }
 h1 {
-    font-size: 2.3em;
+	font-size: 2.3em;
 }
 h2 {
-    font-size: 1.8em;
+	font-size: 1.8em;
 }
 h3 {
-    font-size: 1.4em;
+	font-size: 1.4em;
 }
 h4 {
-    font-size: 1.1em;
+	font-size: 1.1em;
 }
 h5, h6 {
-    font-family: Calibri, Tahoma, Helvetica, Arial, sans-serif;
+	font-family: Calibri, Tahoma, Helvetica, Arial, sans-serif;
 }
 h5 {
-    font-size: 1.1em;
-    font-weight: bold;
+	font-size: 1em;
+	font-weight: bold;
 }
 h6 {
-    text-decoration: underline;
-    font-weight: normal;
+	font-size: 1em;
+	text-decoration: underline;
+	font-weight: normal;
 }
 
 hr {
-    clear: both;
+	clear: both;
 }
 
 p, ul, ol, pre, figure, table {
-    margin-top: 1.00em;
+	margin-top: 1.00em;
 }
 
 a {
-    color: #0850ff;
-    text-decoration: none;
-}
-a:hover {
-    color: #0080ff;
+	color: #0850ff;
+	text-decoration: none;
 }
 a:visited {
-    color: #4060A0;
+	color: #4060A0;
+}
+a:hover {
+	color: #0080ff;
 }
 a:active {
-    color: #dc143c;
+	color: #dc143c;
 }
 
+h1 a, h1 a:visited,
+h2 a, h2 a:visited,
+h3 a, h3 a:visited,
+h4 a, h4 a:visited,
+h5 a, h5 a:visited,
+h6 a, h6 a:visited
+{
+	color: inherit;
+}
+
+h1 a:hover, h2 a:hover, h3 a:hover, h4 a:hover, h5 a:hover, h6 a:hover {
+	color: #0080ff;
+}
+h1 a:active, h2 a:active, h3 a:active, h4 a:active, h5 a:active, h6 a:active {
+	color: #dc143c;
+}
+
+
 img {
-    border: none;
+	border: none;
+}
+
+ins, mark, del {
+	border-radius: 0.25em;
+	padding: 0 0.2em;
 }
 
 ins
 {
-    background-color: #9f9;
-    color: #000;
-    text-decoration: none;
+	background-color: #9f9;
+	border: 1px solid #6b6;
+	color: #000;
+	text-decoration: none;
 }
 
 mark
 {
-    background-color: #ff9;
-    color: #000;
-    font-style: italic;
+	background-color: #ff9;
+	border: 1px solid #bb6;
+	color: #000;
+	font-style: italic;
 }
 
 del
 {
-    background-color: #f99;
-    color: #000;
-    text-decoration: line-through;
+	background-color: #f99;
+	border: 1px solid #b66;
+	color: #000;
+	text-decoration: line-through;
 }
 
 li ul, li ol {
-    margin-top: 0.33em;
-    margin-bottom: 0.33em;
+	margin-top: 0.33em;
+	margin-bottom: 0.33em;
 }
 li {
-    margin-left: 2em;
+	margin-left: 2em;
 }
 ul li {
-    list-style: disc outside none;
+	list-style: disc outside none;
 }
 ul li li {
-    list-style: circle outside none;
+	list-style: circle outside none;
 }
 ul li li li {
-    list-style: square outside none;
+	list-style: square outside none;
 }
 ol li {
-    list-style: decimal outside none;
+	list-style: decimal outside none;
 }
 ol li li {
-    list-style: lower-latin outside none;
+	list-style: lower-latin outside none;
 }
 ol li li li {
-    list-style: lower-roman outside none;
+	list-style: lower-roman outside none;
 }
 
 nav li {
-    list-style: none outside none;
-    margin-left: 0;
+	list-style: none outside none;
+	margin-left: 0;
 }
 
 q {
-    quotes: "\201E" "\201C";
-    font-style: italic;
+	quotes: "\201E" "\201C";
+	font-style: italic;
 }
 q:before {
-    content: open-quote;
+	content: open-quote;
 }
 q:after {
-    content: close-quote;
+	content: close-quote;
 }
 
 blockquote {
-    border: 1px #CCC dotted;
-    margin: 1em 10% 1em 10%;
-    padding: 0.5em;
-    font-style: italic;
+	border: 1px #ddd solid;
+	border-radius: 0.5em;
+	margin: 1em 10% 1em 10%;
+	padding: 0.5em 0.75em;
+	font-style: italic;
 }
 blockquote cite {
-    display: block;
-    text-align: right;
-    margin-top: 0.5em;
-    font-style: normal;
-    font-size: 0.8em;
+	display: block;
+	text-align: right;
+	margin-top: 0.5em;
+	font-style: normal;
+	font-size: 0.8em;
+}
+blockquote > p:first-child {
+	margin-top: 0;
 }
 
 code {
-    font-family: Consolas, "Lucida Console", Courier, monospace;
+	font-family: Consolas, "Lucida Console", Courier, monospace;
+	font-size: 0.8em;
+	color: #024;
+	background-color: #f6f6f6;
+	padding: 0 0.2em;
+	border: 1px solid #e4e4e4;
+	border-radius: 0.2em;
 }
 pre code {
-    font-size: 0.8em;
+	background-color: inherit;
+	border: none;
+	border-radius: none;
 }
 pre {
-    border: 1px #ccc dotted;
-    padding: 0.5em;
-    white-space: pre;
-    overflow: auto;
+	border: 1px #ddd solid;
+	border-radius: 0.5em;
+	padding: 0.5em 0.75em;
+	white-space: pre;
+	overflow: auto;
 }
 
 table {
-    border-collapse: collapse;
+	border-collapse: collapse;
 }
 td, th {
-    padding: 0.125em 0.5em 0.125em 0.5em;
-    border: 1px #ccc solid;
+	padding: 0.125em 0.5em 0.125em 0.5em;
+	border: 1px #ddd solid;
 }
 thead td, th, tfoot td {
-    font-weight: bold;
+	font-weight: bold;
 }
 
 thead, tfoot {
-    background-color: #F0F0F0;
+	background-color: #F0F0F0;
 }
 
 figure {
-    border: 1px #CCC dotted;
-    margin-left: 10%;
-    margin-right: 10%;
-    padding: 0.5em;
-    text-align: center;
-    overflow: auto;
+	border: 1px #ddd solid;
+	border-radius: 0.5em;
+	margin-left: 10%;
+	margin-right: 10%;
+	padding: 0.5em;
+	text-align: center;
+	overflow: auto;
 }
 figure figcaption {
-    display: block;
-    text-align: center;
-    font-style: normal;
-    font-weight: bold;
-    font-size: 0.8em;
-    margin-top: 0.5em;
+	display: block;
+	text-align: center;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 0.8em;
+	margin-top: 0.5em;
 }
 
 figure table {
-    width: 100%;
-    margin-top: 0;
+	width: 100%;
+	margin-top: 0;
 }
 
 section {
-    border-top: 1px #ccc dotted;
-    margin-top: 2em;
+	border-top: 1px #aaa solid;
+	margin-top: 2em;
 }
 
 footer {
-    margin-top: 2em;
-    text-align: center;
-    color: #888;
+	margin-top: 2em;
+	text-align: center;
+	color: #888;
 }
 
 aside {
-    float: right;
-    width: 20%;
-    border: 1px #ccc dotted;
-    padding: 0 0.5em 1em 0.5em;
+	float: right;
+	width: 20%;
+	border: 1px #ddd solid;
+	border-radius: 0.5em;
+	margin-left: 1em;
+	padding: 0 0.5em 1em 0.5em;
 }
