@@ -48,11 +48,11 @@
   ([content]
   {:tag :p :content (safe-content content)})
   ([css-class content]
-  {:tag :p :attrs {:class css-class} :content (safe-content content)}))
+  (assoc-in (paragraph content) [:attrs :class] css-class)))
 
 (defn headline
   "Wrappes the given content into a headline. Headline levels from 1 to 8 are supported."
-  [level content]
+  ([level content]
   (let [head-sym
         (cond
           (= level 1) :h1
@@ -64,6 +64,8 @@
           (= level 7) :h7
           (= level 8) :h8)]
     {:tag head-sym :content (safe-content content)}))
+  ([level css-class content]
+   (assoc-in (headline level content) [:attrs :class] css-class)))
 
 (defn preformatted
   "Wrappes the given text into a pre element."
@@ -77,28 +79,38 @@
 
 (defn div
   "Creates a div container with a given CSS class and some content."
-  [css-class content]
-  {:tag :div :attrs {:class css-class} :content (safe-content content)})
+  ([content]
+   {:tag :div :content (safe-content content)})
+  ([css-class content]
+   (assoc-in (div content) [:attrs :class] css-class)))
 
 (defn span
   "Creates a span container with a given CSS class and some text."
-  [css-class content]
-  {:tag :span :attrs {:class css-class} :content (safe-content content)})
+  ([content]
+   {:tag :span :content (safe-content content)})
+  ([css-class content]
+   (assoc-in (span content) [:attrs :class] css-class)))
 
 (defn list-item
   "Creates a list item."
-  [content]
-  {:tag :li :content (safe-content content)})
+  ([content]
+   {:tag :li :content (safe-content content)})
+  ([css-class content]
+   (assoc-in (list-item content) [:attrs :class] css-class)))
 
 (defn ulist
   "Creates an unordered list with a given CSS class and a sequence of list items."
-  [css-class items]
-  {:tag :ul :attrs {:class css-class} :content (vec items)})
+  ([items]
+   {:tag :ul :content (vec items)})
+  ([css-class items]
+   (assoc-in (ulist items) [:attrs :class] css-class)))
 
 (defn olist
   "Creates an ordered list with a given CSS class and a sequence of list items."
-  [css-class items]
-  {:tag :ol :attrs {:class css-class} :content (vec items)})
+  ([items]
+   {:tag :ol :content (vec items)})
+  ([css-class items]
+   (assoc-in (olist content) [:attrs :class] css-class)))
 
 (defn jshref
   "Creates a URI referencing a JavaScript call."
