@@ -166,6 +166,10 @@ as the key and a map with properties of the word as value.
 #### Value Slots
 The following properties of a word are possible.
 
+* **id**  
+  _string_ an identifier, that can be used ax HTML/XML ID or as a filename 
+* **lexical-form**  
+  _string_ the lexical form of the word
 * **pronunciation**  
   _string_ the [IPA](http://en.wikipedia.org/wiki/International_Phonetic_Alphabet)
   pronunciation of the word
@@ -178,11 +182,17 @@ The following properties of a word are possible.
 * **mean-confidence**  
   _floating point number_ `[0..1]` mean recognition confidence  
 #### Example
-    { "Grammar" { :occurrences [ { :video-id "video1" :result-no 20 :word-no 3 :confidence 0.679 } ... ]
+    { "Grammar" { :id "grammar"
+                  :lexical-form "Grammar"
+                  :pronunciation "..."
+                  :occurrences [ { :video-id "video1" :result-no 20 :word-no 3 :confidence 0.679 } ... ]
                   :mean-confidence 0.7533
                   :videos #{ "video1" "video4" }
                   :categories #{ "Language" "Programming" } }
-      "Method"  { :occurrences [ ... ] 
+      "Method"  { :id "method"
+                  :lexical-form "Method"
+                  :pronunciation "..."
+                  :occurrences [ ... ] 
                   :mean-confidence 0.895
                   :videos #{ "video2" "video4" } 
                   :categories #{ "Programming" } }
