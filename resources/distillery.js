@@ -1,13 +1,14 @@
+function scroll_to_page() {
+  window.location.hash = "#main-menu";
+}
+
 function video_jump(pos) {
   var player = $("#main_video")[0];
   if (player.paused) {
     player.play();
   }
   player.currentTime = pos;
-}
-
-function scroll_to_page() {
-  window.location.hash = "#main-menu";
+  scroll_to_page();
 }
 
 function innerpage(page_id) {
