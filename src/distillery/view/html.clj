@@ -123,6 +123,14 @@
   [js content]
   {:tag :a :attrs {:href (jshref js)} :content (safe-content content)})
 
+
+(defn link
+  "Create a link tag with the given URL an optional target and some content."
+  ([url content]
+   {:tag :a :attrs {:href url} :content (safe-content content)})
+  ([url target content]
+   (assoc-in (link url content) [:attrs :target] target)))
+
 (defn menu
   "Builds a menu structure from a menu title and a sequence of label/url pairs."
   [items & {:keys [title]}]
