@@ -3,6 +3,11 @@
   (:require [clojure.string :as string])
   (:require [clojure.edn :as edn]))
 
+(defmacro key-comp
+  "Creates a comparator, defined by a function which takes an element and returns the key."
+  [f-key]
+  `(fn [a# b#] (compare (~f-key a#) (~f-key b#))))
+
 (defn load-data
   "Loads the content of a file as EDN formatted data structure."
   [path & opts]
