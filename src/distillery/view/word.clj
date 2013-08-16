@@ -1,6 +1,7 @@
 (ns distillery.view.word
   (:require [clojure.string :as string])
   (:require [net.cgrand.enlive-html :as eh])
+  (:require [distillery.data :refer [key-comp]])
   (:require [distillery.files :refer :all])
   (:require [distillery.view.html :refer :all])
   (:require [distillery.view.transcript :as transcript]))
@@ -18,7 +19,7 @@
   [{:keys [video word] :as args}]
   (let [occurrences (in-video-occurrences video word)
         results (into
-                 (sorted-set-by #(< (:start %1) (:start %2)))
+                 (sorted-set-by (key-comp :start))
                  (map #(get (:results video) (:result-no %)) occurrences))]
     (transcript/render-result-list results :index (:index video) :pivot (:lexical-form word))))
 
