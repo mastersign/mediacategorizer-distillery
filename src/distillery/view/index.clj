@@ -1,5 +1,6 @@
 (ns distillery.view.index
   (:require [net.cgrand.enlive-html :as eh])
+  (:require [distillery.data :refer [key-comp]])
   (:require [distillery.files :refer :all])
   (:require [distillery.view.html :refer :all]))
 
@@ -42,10 +43,16 @@
       (render-categories-list args)]])
 
 
+(defn- render-video-list-item
+  "Renders a video link as list item."
+  [{:keys [id name] :as video}]
+  (list-item (link (str "videos/" id "/index.html") name)))
+
 (defn- render-videos-list
   [{:keys [videos] :as args}]
-  (innerpage "list" "Liste" true
-             [(TODO "Videoliste")]))
+  (let [video-list (into (sorted-set-by (key-comp :name)) videos)]
+    (innerpage "list" "Liste" true
+               (ulist (map render-video-list-item video-list)))))
 
 (defn render-videos-page
   "Renders the videos main page."
