@@ -17,6 +17,7 @@
   [& msg]
   (println (str "# " (apply str msg))))
 
+
 (defmacro long-task
   [msg & body]
   `(do
@@ -24,6 +25,7 @@
        (let [result# (do ~@body)]
          (print-progress (str "END   " ~msg))
          result#)))
+
 
 (defn- load-speech-recognition-result
   "Loads the speech recognition results for a video."
@@ -35,11 +37,13 @@
                     proc/reverse-index-results)]
     (assoc video :results results)))
 
+
 (defn load-speech-recognition-results
   "Loads the speech recognition results for the videos."
   [job]
   (long-task "Loading speech recognition results"
     (update-in job [:videos] #(vec (map load-speech-recognition-result %)))))
+
 
 (defn- build-video-index
   "Analyzes the speech recognition results of a single video and builds the video word index."
@@ -49,6 +53,7 @@
         predicate (partial multi-filter filters)
         index (proc/video-word-index video :predicate predicate)]
     (assoc video :index index)))
+
 
 (defn- build-video-statistics
   [{:keys [id results] :as video}]
@@ -60,6 +65,7 @@
       :word-count (count (proc/words results))
       :confidence (mean (map :confidence results))
       :duration duration)))
+
 
 (defn analyze-speech-recognition-results
   "Analyzes the speech recognition results an generates the index structures."
@@ -92,6 +98,7 @@
          (apply render)
          (save-page target-file))))
 
+
 (defn- create-include
   [include-name include-f {:keys [output-dir] :as args}]
   (let [target-file (combine-path output-dir include-name)]
@@ -106,11 +113,13 @@
   (print-progress "Creating index page")
   (create-page "index.html" v-index/render-main-page job))
 
+
 (defn create-categories-page
   "Creates the overview page for all categories."
   [job]
   (print-progress "Creating categories overview page")
   (create-page "categories.html" v-index/render-categories-page job))
+
 
 (defn create-videos-page
   "Creates the overview page for all videos."
@@ -118,11 +127,13 @@
   (print-progress "Creating videos overview page")
   (create-page "videos.html" v-index/render-videos-page job))
 
+
 (defn create-glossary-page
   "Creates the overview page for all words."
   [job]
   (print-progress "Creating global glossary page")
   (create-page "glossary.html" v-index/render-glossary-page job))
+
 
 (defn create-video-word-include
   [{:keys [output-dir] :as job} video {:keys [path] :as word}]
@@ -130,6 +141,7 @@
     (str path ".inc.html")
     v-word/render-video-word-include
     (assoc job :video video :word word)))
+
 
 (defn create-video-word-includes
   [{:keys [output-dir] :as job} {:keys [id index path] :as video}]
@@ -139,6 +151,7 @@
       (doseq [word (vals index)]
         (let [word-path (combine-path words-path (:id word))]
           (create-video-word-include job video (assoc word :path word-path)))))))
+
 
 (defn create-video-page
   "Create the main page for a certain video."
@@ -161,12 +174,14 @@
 
     (create-video-word-includes job video*)))
 
+
 (defn create-video-pages
   "Creates the main pages for all videos."
   [job]
   (long-task "Creating video pages"
     (doseq [video (:videos job)]
       (create-video-page job video))))
+
 
 (defn print-reverse-indexed-results
   [{:keys [video]}]
