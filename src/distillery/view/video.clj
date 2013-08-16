@@ -106,10 +106,10 @@
    :title job-name
 ;   :js-code "videojs.options.flash.swf = 'video-js.swf';"
    :secondary-menu {"Übersicht" (jshref "innerpage('overview')")
-                    "Transcript" (jshref "innerpage('transcript')")
-                    "Glossar" (jshref "innerpage('glossary')")
                     "Cloud" (jshref "innerpage('cloud')")
-                    "Kategorien" (jshref "innerpage('categories')")}
+                    "Transcript" (jshref "innerpage('transcript')")
+                    "Kategorien" (jshref "innerpage('categories')")
+                    "Glossar" (jshref "innerpage('glossary')")}
    :page
      [(render-headline args)
       (render-video args)
