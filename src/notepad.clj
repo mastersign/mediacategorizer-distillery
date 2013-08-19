@@ -1,8 +1,7 @@
-(require 'distillery.data)
-(refer 'distillery.data)
-(require 'distillery.tasks)
-(refer 'distillery.tasks)
-
-(require 'mastersign.wordcloud)
-(refer 'mastersign.wordcloud)
+(ns notepad
+  (:require [clojure.pprint :refer [pprint]])
+  ;(:require [distillery.data :refer :all])
+  ;(:require [distillery.tasts :refer :all])
+  ;(:require [mastersign.wordcloud :refer :all])
+  )
 
