@@ -25,11 +25,13 @@
          (+ (.y r) (/ (.height r) 2.0))))
 
 (defn area
-  [& shapes]
-  (let [a (Area.)]
+  ([] (Area.))
+  ([s] (Area. s))
+  ([s & shapes]
+  (let [a (Area. s)]
     (doseq [s shapes]
-      (.add a s))
-    a))
+      (.add a (Area. s))
+    a))))
 
 (defn translate-point
   [p x y]
