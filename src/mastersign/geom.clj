@@ -34,13 +34,19 @@
     a))))
 
 (defn translate-point
-  [p x y]
-  (point (+ (.x p) x) (+ (.y p) y)))
+  ([p o]
+   (translate-point p (.x o) (.y o)))
+  ([p x y]
+   (point (+ (.x p) x) (+ (.y p) y))))
 
 (defn translate-rect
-  [r x y]
-  (rectangle (+ (.x r) x) (+ (.y r) y) (.width r) (.height r)))
+  ([r o]
+   (translate-rect r (.x o) (.y o)))
+  ([r x y]
+   (rectangle (+ (.x r) x) (+ (.y r) y) (.width r) (.height r))))
 
 (defn translate-ellipse
-  [e x y]
-  (ellipse (+ (.x e) x) (+ (.y e) y) (.width e) (.height e)))
+  ([e o]
+   (translate-ellipse e (.x o) (.y o)))
+  ([e x y]
+   (ellipse (+ (.x e) x) (+ (.y e) y) (.width e) (.height e))))
