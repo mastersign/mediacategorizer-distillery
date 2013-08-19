@@ -33,6 +33,10 @@
       (.add a (Area. s))
     a))))
 
+(defn grow-rect
+  [r d]
+  (rectangle (- (.x r) d) (- (.y r) d) (+ (.width r) d d) (+ (.height r) d d)))
+
 (defn translate-point
   ([p o]
    (translate-point p (.x o) (.y o)))
