@@ -6,13 +6,16 @@
             Ellipse2D Ellipse2D$Float]))
 
 (defn point
-  [x y] (Point2D$Float. (float x) (float y)))
+  ([] (point 0 0))
+  ([x y] (Point2D$Float. (float x) (float y))))
 
 (defn rectangle
+  ([] (rectangle 0 0 0 0))
   ([x y w h] (Rectangle2D$Float. (float x) (float y) (float w) (float h)))
   ([p w h] (rectangle (.x p) (.y p) w h)))
 
 (defn ellipse
+  ([] (ellipse 0 0 0 0))
   ([x y w h] (Ellipse2D$Float. (float x) (float y) (float w) (float h)))
   ([p w h] (ellipse (.x p) (.y p) w h)))
 
