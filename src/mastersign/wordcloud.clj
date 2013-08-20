@@ -26,6 +26,7 @@
    :max-test-radius 350
    :order-priority 0.7
    :padding 4
+   :debug false
    :shape-mode :glyph-box ; :word-box, :glyph-box
    :allow-rotation true
    :final-refine true
@@ -243,11 +244,12 @@
         bg (translate-area test-area c)]
     (doto g
       setup
-      (fill-rect (rectangle 0 0 w h) :color (:background-color args))
-      ;(draw-rect (rectangle 0 0 (dec w) (dec h)))
-      ;(fill-shape bg)
-      ;(draw-shape bg)
-      )
+      (fill-rect (rectangle 0 0 w h) :color (:background-color args)))
+    (when (:debug args)
+      (doto g
+        (draw-rect (rectangle 0 0 (dec w) (dec h)))
+        (fill-shape bg)
+        (draw-shape bg)))
     (doseq [{:keys [text font color position rotation]} (filter #(not (nil? %)) word-infos)]
       (draw-string-centered g text (translate-point c position) :font font :color color :rotation rotation))))
 
