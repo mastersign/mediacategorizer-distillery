@@ -12,7 +12,7 @@
            :or {color Color/RED}}]
   (doto g
     (.setColor color)
-    (.fill (ellipse (- (.x p) 2) (- (.y p) 2) 4 4)))))
+    (.fill (ellipse (- (.x p) 1) (- (.y p) 1) 2 2)))))
 
 (defn draw-dots
   [g ps o & {color :color
