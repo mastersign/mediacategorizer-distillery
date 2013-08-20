@@ -65,7 +65,7 @@
   (let [args (merge default-args args)
         img (image 1 1)
         graphics (.createGraphics img)
-        word-stats (reverse (sort-by second word-stats))
+        word-stats (reverse (sort-by #(nth % 2) word-stats))
         word-infos (doall (map (partial build-word-info graphics args) word-stats))]
     (.dispose graphics)
     word-infos))
