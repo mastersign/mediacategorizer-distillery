@@ -33,8 +33,9 @@
    :max-test-radius 350
    :order-priority 0.7
    :padding 3
-   :shape-mode :glyph-box ; :word-box, :glyph-box
+   :shape-mode :word-box ; :word-box, :glyph-box
    :allow-rotation true
+   :order-mode :value1 ; :id, :text, :value1, :value2
    :color-fn #'default-color-fn
    })
 
@@ -65,7 +66,11 @@
   (let [args (merge default-args args)
         img (image 1 1)
         graphics (.createGraphics img)
-        word-stats (reverse (sort-by #(nth % 2) word-stats))
+        word-stats (case (:order-mode args)
+                       :id (sort-by first word-stats)
+                       :text (sort-by second word-stats)
+                       :value2 (reverse (sort-by #(nth % 3) word-stats))
+                       (reverse (sort-by #(nth % 2) word-stats)))
         word-infos (doall (map (partial build-word-info graphics args) word-stats))]
     (.dispose graphics)
     word-infos))
