@@ -9,6 +9,10 @@
   ([] (point 0 0))
   ([x y] (Point2D$Float. (float x) (float y))))
 
+(defn polar-point
+  [r a]
+  (point (* r (Math/cos a)) (* r (Math/sin a))))
+
 (defn rectangle
   ([] (rectangle 0 0 0 0))
   ([x y w h] (Rectangle2D$Float. (float x) (float y) (float w) (float h)))

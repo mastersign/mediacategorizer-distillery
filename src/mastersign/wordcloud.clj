@@ -67,10 +67,6 @@
   [g cx cy ps]
   (doseq [p (map #(translate-point % cx cy) ps)] (draw-dot g p)))
 
-(defn- polar-point
-  [r a]
-  (point (* r (Math/cos a)) (* r (Math/sin a))))
-
 (defn- lazy-numbers
    ([] (lazy-numbers 0))
    ([n] (lazy-seq (cons n (lazy-numbers (inc n))))))
