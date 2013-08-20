@@ -32,6 +32,20 @@
     (.setColor color)
     (.fill r)))
 
+(defn draw-shape
+  [g s & {color :color
+          :or {color Color/ORANGE}}]
+  (doto g
+    (.setColor color)
+    (.draw s)))
+
+(defn fill-shape
+  [g s & {color :color
+          :or {color Color/YELLOW}}]
+  (doto g
+    (.setColor color)
+    (.fill s)))
+
 (defn draw-string
   [g p text & {font :font
                color :color
