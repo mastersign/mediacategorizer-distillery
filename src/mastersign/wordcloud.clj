@@ -63,10 +63,6 @@
     (.setRenderingHint RenderingHints/KEY_ANTIALIASING antialias-mode)
     (.setRenderingHint RenderingHints/KEY_TEXT_ANTIALIASING text-antialias-mode)))
 
-(defn- draw-dot-seq
-  [g cx cy ps]
-  (doseq [p (map #(translate-point % cx cy) ps)] (draw-dot g p)))
-
 (defn- lazy-numbers
    ([] (lazy-numbers 0))
    ([n] (lazy-seq (cons n (lazy-numbers (inc n))))))

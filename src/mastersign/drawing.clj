@@ -13,6 +13,11 @@
     (.setColor color)
     (.fill (ellipse (- (.x p) 2) (- (.y p) 2) 4 4)))))
 
+(defn draw-dots
+  [g ps o & {color :color
+                 :or {color Color/RED}}]
+  (doseq [p (map #(translate-point % o) ps)] (draw-dot g p :color color)))
+
 (defn draw-rect
   [g r & {color :color
           :or {color Color/BLUE}}]
