@@ -1,5 +1,6 @@
 (ns mastersign.geom
   (:import [java.awt.geom
+            AffineTransform
             Area
             Rectangle2D Rectangle2D$Float
             Point2D Point2D$Float
@@ -28,15 +29,6 @@
   (point (+ (.x r) (/ (.width r) 2.0))
          (+ (.y r) (/ (.height r) 2.0))))
 
-(defn area
-  ([] (Area.))
-  ([s] (Area. s))
-  ([s & shapes]
-  (let [a (Area. s)]
-    (doseq [s shapes]
-      (.add a (Area. s))
-    a))))
-
 (defn grow-rect
   [r d]
   (rectangle (- (.x r) d) (- (.y r) d) (+ (.width r) d d) (+ (.height r) d d)))
@@ -58,3 +50,20 @@
    (translate-ellipse e (.x o) (.y o)))
   ([e x y]
    (ellipse (+ (.x e) x) (+ (.y e) y) (.width e) (.height e))))
+
+(defn area
+  ([] (Area.))
+  ([s] (Area. s))
+  ([s & shapes]
+   (let [a (Area. s)]
+     (doseq [s shapes]
+       (.add a (Area. s))
+       a))))
+
+(defn translate-area
+  ([area o]
+   (translate-area area (.x o) (.y o)))
+  ([area x y]
+   (.createTransformedArea
+    area
+    (AffineTransform/getTranslateInstance (double x) (double y)))))
