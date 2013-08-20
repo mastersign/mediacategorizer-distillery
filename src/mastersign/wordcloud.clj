@@ -9,13 +9,6 @@
   (:require [mastersign.drawing :refer :all])
   (:require [mastersign.imaging :refer :all]))
 
-(def antialias-mode RenderingHints/VALUE_ANTIALIAS_ON)
-(def text-antialias-mode RenderingHints/VALUE_TEXT_ANTIALIAS_ON)
-(def default-color Color/BLACK)
-(def font-family "Calibri")
-(def font-style Font/BOLD)
-(def base-font (Font. font-family font-style (float 100)))
-
 (defn default-color-fn
   [value]
   (let [n (float 0.4)
@@ -27,7 +20,7 @@
   {:width 600
    :height 300
    :precision 0.4
-   :font base-font
+   :font (Font. "Calibri" Font/BOLD (float 50))
    :min-font-size 14
    :max-font-size 60
    :max-test-radius 350
@@ -79,8 +72,8 @@
 (defn- setup
   [g]
   (doto g
-    (.setRenderingHint RenderingHints/KEY_ANTIALIASING antialias-mode)
-    (.setRenderingHint RenderingHints/KEY_TEXT_ANTIALIASING text-antialias-mode)))
+    (.setRenderingHint RenderingHints/KEY_ANTIALIASING RenderingHints/VALUE_ANTIALIAS_ON)
+    (.setRenderingHint RenderingHints/KEY_TEXT_ANTIALIASING RenderingHints/VALUE_TEXT_ANTIALIAS_ON)))
 
 (defn- lazy-numbers
    ([] (lazy-numbers 0))
@@ -265,7 +258,7 @@
 
 (defn test-painter
   [g w h]
-  (let [font (.deriveFont base-font (float 30.0))
+  (let [font (:font default-args)
         text "MjgqAIkqQ$§|"
         p1 (point 100 30)
         p2 (point 100 60)
@@ -280,6 +273,7 @@
       ;(draw-dots (test-ring 50 0.2) pc)
       ;(draw-dots (test-ring 10 0.2) pc)
       (draw-dots (test-sequence default-args {:text "Alpha"}) pc)
+
       (draw-rect (rectangle 0 0 (dec w) (dec h)))
       (fill-rect r1)
       (draw-rect r1)
