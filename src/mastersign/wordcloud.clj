@@ -26,15 +26,16 @@
 (def default-args
   {:width 600
    :height 300
-   :precision 0.7
+   :precision 0.4
    :font base-font
    :min-font-size 14
    :max-font-size 60
    :max-test-radius 350
    :order-priority 0.7
-   :padding 3
-   :shape-mode :word-box ; :word-box, :glyph-box
+   :padding 4
+   :shape-mode :glyph-box ; :word-box, :glyph-box
    :allow-rotation true
+   :final-refine true
    :order-mode :value1 ; :id, :text, :value1, :value2
    :color-fn #'default-color-fn
    })
@@ -176,13 +177,46 @@
       [pos rotation]
       nil)))
 
+(defn- recur-seq
+  [f args]
+  (let [args* (apply f args)]
+    (if (nil? args*)
+      [args]
+      (cons
+       args
+       (recur-seq f args*)))))
+
+(defn- approach
+  [check-fn ref-pos pos rotation]
+  (let [sign #(if (< % 0) -1 1)
+        rx (int (.x ref-pos))
+        ry (int (.y ref-pos))
+        dx (- rx (int (.x pos)))
+        dy (- ry (int (.y pos)))
+        sx (sign dx)
+        sy (sign dy)
+        step-fn (fn [p r]
+                  (let [px (int (.x p))
+                        py (int (.y p))
+                        x (+ px sx)
+                        y (+ py sy)]
+                    (or
+                     (when (or (and (== sx -1) (> x rx)) (and (== sx 1) (< x rx))) (check-fn (point (+ (.x p) sx) (.y p)) r))
+                     (when (or (and (== sy -1) (> y ry)) (and (== sy 1) (< y ry))) (check-fn (point (.x p) (+ (.y p) sy)) r)))))]
+    (if (and (== 0 dx) (== 0 dy))
+      [pos rotation]
+      (last (recur-seq step-fn [pos rotation])))))
+
 (defn- find-position
-  [{:keys [allow-rotation] :as args} test-area boundaries point-sequence {:keys [word-bounds] :as word-info}]
-  (let [cp (partial check-position args test-area boundaries word-info)
-        cp (if allow-rotation
-               (fn [pos] (or (cp pos 0) (cp pos 90) (cp pos 270)))
-               (fn [pos] (cp pos 0)))]
-    (first (filter #(not (nil? %)) (map cp point-sequence)))))
+  [{:keys [allow-rotation final-refine] :as args} test-area boundaries point-sequence {:keys [word-bounds] :as word-info}]
+  (let [check (partial check-position args test-area boundaries word-info)
+        check* (if allow-rotation
+               (fn [pos] (or (check pos 0) (check pos 90) (check pos 270)))
+               (fn [pos] (check pos 0)))
+        [p a] (first (filter #(not (nil? %)) (map check* point-sequence)))]
+    (if (and final-refine (not (nil? p)))
+      (approach check (point) p a)
+      [p a])))
 
 (defn- add-word-to-area!
   [args *area* word-info pos rotation]
