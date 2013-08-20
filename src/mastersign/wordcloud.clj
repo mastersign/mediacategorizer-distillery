@@ -16,6 +16,13 @@
 (def font-style Font/BOLD)
 (def base-font (Font. font-family font-style (float 100)))
 
+(defn default-color-fn
+  [value]
+  (let [n (float 0.4)
+        v1 (float value)
+        v2 (float (- 1.0 value))]
+  (Color. v1 n v2)))
+
 (def default-args
   {:width 600
    :height 200
@@ -25,8 +32,9 @@
    :max-font-size 60
    :max-test-radius 350
    :padding 2
-   :shape-mode :glyph-box ; :word-box, :glyph-box
+   :shape-mode :word-box ; :word-box, :glyph-box
    :allow-rotation true
+   :color-fn #'default-color-fn
    })
 
 (defn- calc-font-size
@@ -37,11 +45,17 @@
   [{:keys [font] :as args} v]
   (.deriveFont font (calc-font-size args v)))
 
+(defn- get-color
+  [{:keys [color-fn]} v]
+  (color-fn v))
+
 (defn- build-word-info
-  [g args [text value]]
-  (let [font* (get-font args value)]
+  [g args [id text value1 value2]]
+  (let [font* (get-font args value1)
+        color (get-color args value2)]
     {:text text
      :font font*
+     :color color
      :word-bounds (string-centered-bounds g font* text)
      :glyph-bounds (string-centered-glyphbounds g font* text)}))
 
@@ -159,8 +173,8 @@
       ;(fill-shape bg)
       ;(draw-shape bg)
       )
-    (doseq [{:keys [text font position rotation]} (filter #(not (nil? %)) word-infos)]
-      (draw-string-centered g text (translate-point c position) :font font :rotation rotation))))
+    (doseq [{:keys [text font color position rotation]} (filter #(not (nil? %)) word-infos)]
+      (draw-string-centered g text (translate-point c position) :font font :color color :rotation rotation))))
 
 (defn paint-cloud
   [cloud & args]
@@ -214,7 +228,7 @@
    "Yankee" "Zulu"
    "Adventskalender" "Mittelpunktbestimmung" "Zentralfeuerwaffe"])
 
-(def stats (vec (map (fn [x] [x (/ (rand-int 101) 100.0)]) words)))
+(def stats (vec (map-indexed (fn [id x] [id x (/ (rand-int 101) 100.0) (rand)]) words)))
 
 (def test-infos (build-word-infos stats))
 
