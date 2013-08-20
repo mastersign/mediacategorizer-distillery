@@ -1,5 +1,6 @@
 (ns mastersign.drawing
   (:import [java.awt Color Font])
+  (:import [java.awt.geom AffineTransform])
   (:require [mastersign.geom :refer :all]))
 
 (def default-font-size 16)
@@ -102,14 +103,21 @@
      (.getOutline gv (- x (.x c)) (- y (.y c))))))
 
 (defn draw-string-centered
-  [g text p & {font :font,
-               color :color,
+  [g text p & {font :font
+               color :color
+               rotation :rotation
                :or {font default-font,
-                    color Color/BLACK}}]
-  (let [offset (string-centered-offset g font text)]
+                    color Color/BLACK
+                    rotation 0}}]
+  (let [offset (string-centered-offset g font text)
+        x (.x p)
+        y (.y p)
+        transform (AffineTransform/getRotateInstance (* rotation (/ Math/PI 180)) x y)]
     (doto g
         (.setColor color)
         (.setFont font)
+        (.setTransform transform)
         (.drawString text
                      (float (+ (.x p) (.x offset)))
-                     (float (+ (.y p) (.y offset)))))))
+                     (float (+ (.y p) (.y offset))))
+        (.setTransform (AffineTransform.)))))
