@@ -8,7 +8,7 @@
 
 (defn draw-dot
   ([g p & {color :color
-            :or {color Color/RED}}]
+           :or {color Color/RED}}]
   (doto g
     (.setColor color)
     (.fill (ellipse (- (.x p) 2) (- (.y p) 2) 4 4)))))
@@ -63,27 +63,53 @@
         c (rect-center r)]
      (point (- (.x c)) (- (.y c)))))
 
-(defn string-centered-rect
+(defn string-centered-bounds
   ([g font text]
+   (string-centered-bounds g font text 0 0))
+  ([g font text p]
+   (string-centered-bounds g font text (.x p) (.y p)))
+  ([g font text x y]
    (let [gv (.createGlyphVector font (.getFontRenderContext g) text)
          r (.getVisualBounds gv)
          c (rect-center r)]
-     (rectangle (- (.x r) (.x c)) (- (.y r) (.y c)) (.width r) (.height r))))
+     (rectangle (- (+ x (.x r)) (.x c)) (- (+ y (.y r)) (.y c)) (.width r) (.height r)))))
+
+(defn string-centered-glyphbounds
+  ([g font text]
+   (string-centered-glyphbounds g font text 0 0))
+  ([g font text p]
+   (string-centered-glyphbounds g font text (.x p) (.y p)))
   ([g font text x y]
-   (let [r (string-centered-rect g font text)]
-     (set! (.x r) (+ x (.x r)))
-     (set! (.y r) (+ y (.y r)))
-     r)))
+  (let [frc (.getFontRenderContext g)
+        gv (.createGlyphVector font frc text)
+        r (.getVisualBounds gv)
+        c (rect-center r)
+        glyphbounds (map
+                     #(.getBounds2D (.getGlyphOutline gv % (- x (.x c)) (- y (.y c))))
+                     (range (.getNumGlyphs gv)))]
+    (vec glyphbounds))))
+
+(defn string-centered-outline
+  ([g font text]
+   (string-centered-outline g font text 0 0))
+  ([g font text p]
+   (string-centered-outline g font text (.x p) (.y p)))
+  ([g font text x y]
+   (let [frc (.getFontRenderContext g)
+         gv (.createGlyphVector font frc text)
+         r (.getVisualBounds gv)
+         c (rect-center r)]
+     (.getOutline gv (- x (.x c)) (- y (.y c))))))
 
 (defn draw-string-centered
-  [g text x y & {font :font,
-                 color :color,
-                 :or {font default-font,
-                      color Color/BLACK}}]
+  [g text p & {font :font,
+               color :color,
+               :or {font default-font,
+                    color Color/BLACK}}]
   (let [offset (string-centered-offset g font text)]
     (doto g
         (.setColor color)
         (.setFont font)
         (.drawString text
-                     (float (+ x (.x offset)))
-                     (float (+ y (.y offset)))))))
+                     (float (+ (.x p) (.x offset)))
+                     (float (+ (.y p) (.y offset)))))))
