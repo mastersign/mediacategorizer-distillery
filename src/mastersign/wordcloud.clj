@@ -232,7 +232,8 @@
                        (add-word-to-area! args *test-area* word-info hit rotation)
                        ;(println (str "Found place at " (.x hit) ", " (.y hit)))
                        (assoc word-info :position hit :rotation rotation)))))]
-    {:word-infos (doall (map finder word-infos))
+    {:args args
+     :word-infos (doall (map finder word-infos))
      :test-area *test-area*}))
 
 (defn- cloud-painter
