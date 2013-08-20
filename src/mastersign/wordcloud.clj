@@ -25,14 +25,15 @@
 
 (def default-args
   {:width 600
-   :height 200
-   :precision 0.5
+   :height 300
+   :precision 0.7
    :font base-font
-   :min-font-size 13
+   :min-font-size 14
    :max-font-size 60
    :max-test-radius 350
-   :padding 2
-   :shape-mode :word-box ; :word-box, :glyph-box
+   :order-priority 0.7
+   :padding 3
+   :shape-mode :glyph-box ; :word-box, :glyph-box
    :allow-rotation true
    :color-fn #'default-color-fn
    })
@@ -79,20 +80,57 @@
    ([] (lazy-numbers 0))
    ([n] (lazy-seq (cons n (lazy-numbers (inc n))))))
 
+(defn- priority-angle
+  [text]
+  (let [clean-DE (fn [c] (case c \Ä \A \Ö \O \Ü \U \ß \S c))
+        c (clean-DE (first (.toUpperCase text)))
+        n (int c)
+        s (- (if (or (< n 64) (> n 90)) 64 n) 65)
+        a (* (/ Math/PI 13) s)]
+    (if (<= a Math/PI) (- Math/PI a) a)))
+
+(defn- ring-step
+  [r prec]
+  (/ 2.0 (+ 4 (* prec prec (* Math/PI r)))))
+
+(ring-step 5 1.0)
+
+(defn- scale-radius
+  [priority r a]
+  (let [base (* r (- 1.0 priority))
+        a* (* Math/PI (Math/sqrt a))]
+    (+ base (* (- r base) (+ (* (Math/cos a*) 0.5) 0.5)))))
+
+(defn- ring-angles
+  [precision priority r a]
+  (lazy-seq (cons
+             a
+             (ring-angles precision priority r
+                          (+ a (ring-step (scale-radius priority r a) precision))))))
+
 (defn- test-ring
-  [r precision]
-  (let [n (int (+ 4 (* precision precision (- (* Math/PI r) 4))))
-        step (/ (* 2 Math/PI) n)]
-    (map (partial polar-point r) (range 0.0 (* 2 Math/PI) step))))
+  [r precision pa priority]
+  (cons
+   (polar-point r pa)
+   (apply concat (map
+             (fn [a]
+               (let [sr (scale-radius priority r a)
+                     a* (* Math/PI a)]
+                 [(polar-point sr (+ pa a*))
+                  (polar-point sr (- pa a*))]))
+             (take-while #(< % 1.0) (ring-angles precision priority r 0))))))
 
 (defn- test-sequence
-  [{:keys [precision max-font-size max-test-radius] :as args} {:keys [text] :as word-info}]
+  [{:keys [width height precision max-font-size max-test-radius order-priority] :as args} {:keys [text] :as word-info}]
   (let [imprecision (* (- 1.0 precision) (- 1.0 precision))
         radii (take-while
-                  #(< % max-test-radius)
+                  #(< (scale-radius order-priority % 1) max-test-radius)
                   (map #(* (+ 1 (* imprecision max-font-size 0.5)) %) (lazy-numbers 1)))
-        rings (map #(test-ring % precision) radii)]
-    (cons (point) (apply concat rings))))
+        pa (priority-angle text)
+        rings (map #(test-ring % precision pa order-priority) radii)
+        boundaries (rectangle (- (/ width 2.0)) (- (/ height 2.0)) width height)
+        reject-pred (fn [p] (.contains boundaries (.x p) (.y p)))]
+    (filter reject-pred (cons (point) (apply concat rings)))))
 
 (defn- rotate-rect
   [r c a]
@@ -190,7 +228,7 @@
         text "MjgqAIkqQ$§|"
         p1 (point 100 30)
         p2 (point 100 60)
-        pc (point 200 150)
+        pc (point (/ (:width default-args) 2.0) (/ (:height default-args) 2.0))
         r1 (string-centered-bounds g font text p1)
         r2 (string-centered-bounds g font text p2)
         a1 (Area. r1)
@@ -198,24 +236,23 @@
         c2 (rect-center r2)]
     (doto g
       setup
-      ;(draw-rect (rectangle 0 0 (dec w) (dec h)))
-      ;(fill-rect r1)
-      ;(draw-rect r1)
-      ;(fill-rect r2)
-      ;(draw-rect r2)
-      ;(draw-string-centered text p1 :font font)
-      ;(draw-string-centered text p2 :font font)
-      ;(draw-dot c1)
-      ;(draw-dot c2)
-
-      (draw-dot pc)
       ;(draw-dots (test-ring 50 0.2) pc)
       ;(draw-dots (test-ring 10 0.2) pc)
-
       (draw-dots (test-sequence default-args {:text "Alpha"}) pc)
+      (draw-rect (rectangle 0 0 (dec w) (dec h)))
+      (fill-rect r1)
+      (draw-rect r1)
+      ;(fill-rect r2)
+      ;(draw-rect r2)
+      (draw-string-centered text p1 :font font)
+      (draw-string-centered text p2 :font font)
+      ;(draw-dot c1)
+      (draw-dot c2 :color Color/GREEN)
+
+      (draw-dot pc)
       )))
 
-(let [img (create-image 400 300 test-painter)]
+(let [img (create-image (:width default-args) (:height default-args) test-painter)]
   (save-image img "D:/Temp/test.png"))
 
 ; ########################
