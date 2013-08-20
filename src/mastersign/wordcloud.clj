@@ -57,7 +57,7 @@
      :word-bounds (string-centered-bounds g font* text)
      :glyph-bounds (string-centered-glyphbounds g font* text)}))
 
-(defn- build-word-infos
+(defn build-word-infos
   [word-stats & args]
   (let [args (merge default-args args)
         img (image 1 1)
