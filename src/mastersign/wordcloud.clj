@@ -30,6 +30,7 @@
    :allow-rotation true
    :final-refine true
    :order-mode :value1 ; :id, :text, :value1, :value2
+   :background-color (Color. 0 0 0 0)
    :color-fn #'default-color-fn
    })
 
@@ -237,11 +238,12 @@
      :test-area *test-area*}))
 
 (defn- cloud-painter
-  [{:keys [word-infos test-area]} g w h]
+  [{:keys [args word-infos test-area]} g w h]
   (let [c (point (/ w 2.0) (/ h 2.0))
         bg (translate-area test-area c)]
     (doto g
       setup
+      (fill-rect (rectangle 0 0 w h) :color (:background-color args))
       ;(draw-rect (rectangle 0 0 (dec w) (dec h)))
       ;(fill-shape bg)
       ;(draw-shape bg)
