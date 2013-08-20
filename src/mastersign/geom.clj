@@ -55,10 +55,10 @@
   ([] (Area.))
   ([s] (Area. s))
   ([s & shapes]
-   (let [a (Area. s)]
+   (let [*a* (Area. s)]
      (doseq [s shapes]
-       (.add a (Area. s))
-       a))))
+       (.add *a* (Area. s)))
+     *a*)))
 
 (defn translate-area
   ([area o]
