@@ -12,7 +12,7 @@
 
 (defn polar-point
   [r a]
-  (point (* r (Math/cos a)) (* r (Math/sin a))))
+  (point (* r (Math/cos a)) (- (* r (Math/sin a)))))
 
 (defn rectangle
   ([] (rectangle 0 0 0 0))
