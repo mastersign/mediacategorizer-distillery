@@ -131,7 +131,9 @@
         radii (take-while
                   #(< (scale-radius order-priority % 1) max-test-radius)
                   (map #(* (+ 1 (* imprecision max-font-size 0.5)) %) (lazy-numbers 1)))
-        pa (priority-angle text)
+        pa (if (> order-priority 0.0)
+             (priority-angle text)
+             (rand (* Math/PI 2)))
         rings (map #(test-ring % precision pa order-priority) radii)
         boundaries (rectangle (- (/ width 2.0)) (- (/ height 2.0)) width height)
         reject-pred (fn [p] (.contains boundaries (.x p) (.y p)))]
