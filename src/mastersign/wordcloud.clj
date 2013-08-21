@@ -20,7 +20,7 @@
   {:width 600
    :height 300
    :precision 0.4
-   :font (Font. "Calibri" Font/BOLD (float 50))
+   :font (Font. "Calibri" Font/BOLD (float 30))
    :min-font-size 14
    :max-font-size 60
    :max-test-radius 350
@@ -58,16 +58,15 @@
      :glyph-bounds (string-centered-glyphbounds g font* text)}))
 
 (defn build-word-infos
-  [word-stats & args]
-  (let [args (merge default-args args)
-        img (image 1 1)
+  [word-data args]
+  (let [img (image 1 1)
         graphics (.createGraphics img)
-        word-stats (case (:order-mode args)
-                       :id (sort-by first word-stats)
-                       :text (sort-by second word-stats)
-                       :value2 (reverse (sort-by #(nth % 3) word-stats))
-                       (reverse (sort-by #(nth % 2) word-stats)))
-        word-infos (doall (map (partial build-word-info graphics args) word-stats))]
+        word-data* (case (:order-mode args)
+                       :id (sort-by first word-data)
+                       :text (sort-by second word-data)
+                       :value2 (reverse (sort-by #(nth % 3) word-data))
+                       (reverse (sort-by #(nth % 2) word-data)))
+        word-infos (doall (map (partial build-word-info graphics args) word-data*))]
     (.dispose graphics)
     word-infos))
 
@@ -216,10 +215,9 @@
   (let [rects (get-word-rects args word-info pos rotation true)]
     (.add *area* (apply area rects))))
 
-(defn generate-cloud
-  [word-infos & args]
-  (let [args (merge default-args args)
-        {:keys [width height padding]} args
+(defn build-cloud-info
+  [word-infos args]
+  (let [{:keys [width height padding]} args
         boundaries (area (rectangle (- (/ width 2)) (- (/ height 2)) width height))
         *test-area* (area)
         finder (fn [{:keys [text word-bounds] :as word-info}]
@@ -252,8 +250,16 @@
       (draw-string-centered g text (translate-point c position) :font font :color color :rotation rotation))))
 
 (defn paint-cloud
-  [cloud & args]
-  (let [args (merge default-args)]
-    (create-image (:width args) (:height args)
-                  (partial cloud-painter cloud))))
+  [cloud args]
+  (create-image (:width args) (:height args)
+                (partial cloud-painter cloud)))
 
+(defn create-cloud
+  [word-data & {:as args}]
+  (let [args (merge default-args args)
+        word-infos (build-word-infos word-data args)
+        cloud-info (build-cloud-info word-infos args)
+        img (paint-cloud cloud-info args)
+        target-file (:target-file args)]
+    (when target-file (save-image img target-file))
+    (assoc cloud-info :image img)))

@@ -3,9 +3,11 @@
   (:require [mastersign.imaging :refer :all])
   (:require [mastersign.geom :refer :all])
   (:require [mastersign.drawing :refer :all])
-  (:require [mastersign.wordcloud :refer :all]))
+  (:require [mastersign.wordcloud :as cloud]))
 
 ; ########################
+
+(def default-args cloud/default-args)
 
 (defn test-painter
   [g w h]
@@ -55,8 +57,4 @@
 
 (def stats (vec (map-indexed (fn [id x] [id x (/ (rand-int 101) 100.0) (rand)]) words)))
 
-(def test-infos (time (build-word-infos stats)))
-
-(def test-cloud (time (generate-cloud test-infos)))
-
-(save-image (paint-cloud test-cloud) "D:/Temp/cloud.png")
+(time (cloud/create-cloud stats :target-file "D:/Temp/cloud.png"))
