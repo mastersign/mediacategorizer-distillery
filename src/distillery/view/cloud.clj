@@ -27,7 +27,7 @@
             (sort-by :v1)
             (map (fn
                    [{:keys [id rect]}]
-                   (str "{id:' id "',r:{x:"(.x rect)",y:"(.y rect)",w:"(.width rect)",h:"(.height rect)"}},")))
+                   (str "{id:'" id "',r:{x:"(.x rect)",y:"(.y rect)",w:"(.width rect)",h:"(.height rect)"}},")))
             (apply str))
        "]"))
 
