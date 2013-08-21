@@ -34,4 +34,7 @@
 
 ((:prep tasks) job)
 
-(doseq [task (rest (vals tasks))] (task job))
+(tasks/long-task "Complete run"
+  (doseq
+    [task (rest (vals tasks))]
+    (task job)))
