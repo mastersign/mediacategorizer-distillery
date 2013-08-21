@@ -1,3 +1,13 @@
+#page {
+  margin-left: 8em;
+}
+
+@media screen and (max-width: 720px), screen and (max-device-height: 720px) and (orientation: landscape) {
+  #page {
+    margin-left: 0.5em;
+  }
+}
+
 article.innerpage h3 {
   margin-bottom: 0.75em;
 }
