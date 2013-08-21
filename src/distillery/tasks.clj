@@ -16,7 +16,7 @@
   (:require [mastersign.wordcloud :as mwc])
   (:require [mastersign.drawing :as mdr]))
 
-(defn- print-progress
+(defn print-progress
   [& msg]
   (println (str "# " (apply str msg))))
 
