@@ -85,9 +85,16 @@
 
 (defn- render-cloud
   "Create the HTML for the video word cloud."
-  [{{:keys [index] :as video} :video :as args}]
-  (innerpage "cloud" "Wolke" false
-             (TODO "Videowortwolke")))
+  [{{:keys [id index cloud] :as video} :video :as args}]
+  (let [];code (map #(div (str (first %) ": " (let [r (second %)] (str (.x r) ", " (.y r))))) cloud)]
+    (innerpage "cloud" "Word-Cloud" false
+               {:tag :figure
+                :attrs {:class "wordcloud"
+                        :data-cloud-id id}
+                :content [{:tag :img
+                           :attrs {:class "wordcloud"
+                                   :src "cloud.png"}}
+                          (jscript (str "register_cloud_data('" id "'," cloud ");"))]})))
 
 (defn- render-categories
   "Create the HTML for the video categories."

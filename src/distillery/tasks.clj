@@ -9,9 +9,12 @@
   (:require [distillery.view.html :refer (save-page)])
   (:require [distillery.view.dependencies :refer (save-dependencies)])
   (:require [distillery.view.base :refer (render)])
+  (:require [distillery.view.cloud :refer (build-cloud-word-data build-cloud-ui-data)])
   (:require [distillery.view.index :as v-index])
   (:require [distillery.view.video :as v-video])
-  (:require [distillery.view.word :as v-word]))
+  (:require [distillery.view.word :as v-word])
+  (:require [mastersign.wordcloud :as mwc])
+  (:require [mastersign.drawing :as mdr]))
 
 (defn- print-progress
   [& msg]
@@ -144,13 +147,37 @@
 
 
 (defn create-video-word-includes
+  "Create includes for all words of a video."
   [{:keys [output-dir] :as job} {:keys [id index path] :as video}]
-  (long-task (str "Creating video word includes for " id)
-    (let [words-path (combine-path path "words")]
-      (create-dir (combine-path output-dir words-path))
-      (doseq [word (vals index)]
-        (let [word-path (combine-path words-path (:id word))]
-          (create-video-word-include job video (assoc word :path word-path)))))))
+  (long-task
+   (str "Creating video word includes for " id)
+   (let [words-path (combine-path path "words")]
+     (create-dir (combine-path output-dir words-path))
+     (doseq [word (vals index)]
+       (let [word-path (combine-path words-path (:id word))]
+         (create-video-word-include job video (assoc word :path word-path)))))))
+
+
+(defn- create-video-cloud
+  "Creates the word cloud for a video."
+  [{:keys [output-dir cloud-precision] :as job} {:keys [id index path] :as video}]
+  (long-task
+   (str "Creating word cloud for " id)
+   (let [target-path (combine-path output-dir path "cloud.png")
+         word-data (build-cloud-word-data index)
+         precision (case cloud-precision :low 0.25 :medium 0.45 :high 0.65 0.35)
+         cloud-info (mwc/create-cloud word-data
+                                      :target-file target-path
+                                      :width 540
+                                      :height 200
+                                      :precision precision
+                                      :order-priority 0.5
+                                      :font (mdr/font "Segoe UI" 20 :bold)
+                                      :min-font-size 13
+                                      :max-font-size 70
+                                      :color-fn #(mdr/color 0 0.3 0.8 (+ 0.25 (* % 0.75))))]
+                                      ;:color-fn #(mdr/color (- 0.75 (* % 0.75)) (- 0.6 (* % 0.2)) (+ 0.5 (* % 0.5)) 1))]
+     (build-cloud-ui-data cloud-info))))
 
 
 (defn create-video-page
@@ -158,17 +185,21 @@
   [{:keys [output-dir] :as job} {:keys [id index video-file] :as video}]
   (print-progress "Creating video page for " id)
   (let [video-path (combine-path "videos" id)
-        video-target-file (combine-path output-dir video-path (str id ".mp4"))
+        video* (assoc video :path video-path)
+        cloud (create-video-cloud job video*)
+        video* (assoc video* :cloud cloud)
         pindex (proc/partition-index index)
-        video* (assoc video :pindex pindex :path video-path)
+        video* (assoc video* :pindex pindex)
         args (assoc job :video video*)]
 
     (create-dir (combine-path output-dir video-path))
-    (when (not (file-exists? video-target-file))
-      (copy-file (get-path video-file) (get-path video-target-file)))
+
+    (let [video-target-file (combine-path output-dir video-path (str id ".mp4"))]
+      (when (not (file-exists? video-target-file))
+        (copy-file (get-path video-file) (get-path video-target-file)))      )
 
     (create-page
-      (combine-path video-path "index.html")
+     (combine-path video-path "index.html")
       v-video/render-video-page
       args)
 

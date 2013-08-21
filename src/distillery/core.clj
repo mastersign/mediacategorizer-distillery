@@ -9,6 +9,7 @@
   {:job-name "Testlauf"
    :job-description "Ein Testprojekt für Testzwecke mit Testvideos und Testkategorien. Wird zum Testen verwendet."
    :output-dir (str root "Output")
+   :cloud-precision :low ; :low, :medium, :high
    :videos [{:id "12-01-1"
              :name "12.01.1 Datenstrukturen, Array, Queue, Stack"
              :video-file (str root "Media\\Video\\12.01.1 Datenstrukturen, Array, Queue, Stack.mp4")

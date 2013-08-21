@@ -48,10 +48,13 @@
   (color-fn v))
 
 (defn- build-word-info
-  [g args [id text value1 value2]]
-  (let [font* (get-font args value1)
-        color (get-color args value2)]
-    {:text text
+  [g args [id text v1 v2]]
+  (let [font* (get-font args v1)
+        color (get-color args v2)]
+    {:id id
+     :text text
+     :v1 v1
+     :v2 v2
      :font font*
      :color color
      :word-bounds (string-centered-bounds g font* text)
@@ -219,6 +222,7 @@
   [word-infos args]
   (let [{:keys [width height padding]} args
         boundaries (area (rectangle (- (/ width 2)) (- (/ height 2)) width height))
+        center (point (/ width 2) (/ height 2))
         *test-area* (area)
         finder (fn [{:keys [text word-bounds] :as word-info}]
                  ;(println (str "Placing " text " ..."))
@@ -229,9 +233,14 @@
                      (do
                        (add-word-to-area! args *test-area* word-info hit rotation)
                        ;(println (str "Found place at " (.x hit) ", " (.y hit)))
-                       (assoc word-info :position hit :rotation rotation)))))]
+                       (assoc word-info
+                         :position hit
+                         :rotation rotation
+                         :rect (translate-rect
+                                (rotate-rect word-bounds (point) rotation)
+                                (translate-point hit center)))))))]
     {:args args
-     :word-infos (doall (map finder word-infos))
+     :word-infos (take-while #(not (nil? %)) (map finder word-infos))
      :test-area *test-area*}))
 
 (defn- cloud-painter

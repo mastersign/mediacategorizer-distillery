@@ -7,6 +7,43 @@
 (def default-font-style Font/PLAIN)
 (def default-font (Font. Font/SANS_SERIF default-font-style default-font-size))
 
+(defn color
+  ([v] (Color. (float v) (float v) (float v) (float 1)))
+  ([r g b] (Color. (float r) (float g) (float b) (float 1)))
+  ([r g b a] (Color. (float r) (float g) (float b) (float a))))
+
+(defn- font-family-name
+  [family]
+  (case family
+    :dialog Font/DIALOG
+    :dialog-input Font/DIALOG_INPUT
+    :mono Font/MONOSPACED
+    :serif Font/SERIF
+    :sans-serif Font/SANS_SERIF
+    family))
+
+(def ^:private ^:const font-styles
+  {:plain Font/PLAIN
+   :bold Font/BOLD
+   :italic Font/ITALIC})
+
+(defn- font-style
+  [styles]
+  (reduce
+   (fn [r s] (+ r (get font-styles s)))
+   Font/PLAIN
+   styles))
+
+(defn font
+  ([]
+   (font :dialog))
+  ([family]
+   (font family (float 14)))
+  ([family size]
+   (font family size :plain))
+  ([family size & styles]
+   (Font. (font-family-name family) (font-style styles) (float size))))
+
 (defn draw-dot
   ([g p & {color :color
            :or {color Color/RED}}]
