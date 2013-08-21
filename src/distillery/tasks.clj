@@ -185,26 +185,27 @@
   "Create the main page for a certain video."
   [{:keys [output-dir] :as job} {:keys [id index video-file] :as video}]
   (print-progress "Creating video page for " id)
-  (let [video-path (combine-path "videos" id)
-        video* (assoc video :path video-path)
-        cloud (create-video-cloud job video*)
-        video* (assoc video* :cloud cloud)
-        pindex (proc/partition-index index)
-        video* (assoc video* :pindex pindex)
-        args (assoc job :video video*)]
+  (let [video-path (combine-path "videos" id)]
 
     (create-dir (combine-path output-dir video-path))
 
-    (let [video-target-file (combine-path output-dir video-path (str id ".mp4"))]
-      (when (not (file-exists? video-target-file))
-        (copy-file (get-path video-file) (get-path video-target-file)))      )
+    (let [video* (assoc video :path video-path)
+          cloud (create-video-cloud job video*)
+          video* (assoc video* :cloud cloud)
+          pindex (proc/partition-index index)
+          video* (assoc video* :pindex pindex)
+          args (assoc job :video video*)]
 
-    (create-page
-     (combine-path video-path "index.html")
-      v-video/render-video-page
-      args)
+      (let [video-target-file (combine-path output-dir video-path (str id ".mp4"))]
+        (when (not (file-exists? video-target-file))
+          (copy-file (get-path video-file) (get-path video-target-file)))      )
 
-    (create-video-word-includes job video*)))
+      (create-page
+       (combine-path video-path "index.html")
+       v-video/render-video-page
+       args)
+
+      (create-video-word-includes job video*))))
 
 
 (defn create-video-pages
