@@ -52,7 +52,7 @@
   "Analyzes the speech recognition results of a single video and builds the video word index."
   [video]
   (print-progress "Building index for " (:id video))
-  (let [filters [proc/not-short? proc/noun? proc/min-confidence?]
+  (let [filters [proc/not-short? proc/noun? proc/min-confidence? proc/no-punctuation?]
         predicate (partial multi-filter filters)
         index (proc/video-word-index video :predicate predicate)]
     (assoc video :index index)))
