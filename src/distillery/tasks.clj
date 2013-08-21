@@ -25,9 +25,9 @@
   [msg & body]
   `(do
      (print-progress (str "BEGIN " ~msg "..."))
-       (let [result# (time (do ~@body))]
-         (print-progress (str "END   " ~msg))
-         result#)))
+     (let [result# (time (do ~@body))]
+       (print-progress (str "END   " ~msg))
+       result#)))
 
 
 (defn- load-speech-recognition-result
