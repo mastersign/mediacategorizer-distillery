@@ -139,6 +139,7 @@
 
 
 (defn create-video-word-include
+  "Creates the include file for a word in the context of a video."
   [{:keys [output-dir] :as job} video {:keys [path] :as word}]
   (create-include
     (str path ".inc.html")
