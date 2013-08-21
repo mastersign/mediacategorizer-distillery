@@ -40,8 +40,8 @@ function rect_contains(r, x, y) {
 
 function get_word_id(event) {
   var id = event.data.cloud_id;
-  var x = event.clientX - event.currentTarget.offsetLeft;
-  var y = event.clientY - event.currentTarget.offsetTop;
+  var x = event.pageX - event.currentTarget.offsetLeft;
+  var y = event.pageY - event.currentTarget.offsetTop;
   var words = clouds[id];
   for (var i = 0; i < words.length; i++) {
     var w = words[i];
