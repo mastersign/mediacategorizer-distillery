@@ -89,7 +89,7 @@ ul.video_statistic li, ul.word_statistic li {
 
 .bar_text {
   display: inline-block;
-  width: 50%;
+  width: 45%;
   vertical-align: top;
   padding-right: 1em;
 }
@@ -98,7 +98,7 @@ ul.video_statistic li, ul.word_statistic li {
   display: inline-block;
   background-color: #F8F8F8;
   text-align: left;
-  width: 50%;
+  width: 45%;
   height: 1.2em;
   vertical-align: top;
 }
