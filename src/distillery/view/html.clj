@@ -77,6 +77,16 @@
   [text]
   {:tag :code :content [{:tag :pre :content text}]})
 
+(defn emph
+  "Wrappes the content into an emphasizing element."
+  [content]
+  {:tag :em :content (safe-content content)})
+
+(defn strong
+  "Wrappes the content int a strong emphasizing element."
+  [content]
+  {:tag :strong :content (safe-content content)})
+
 (defn div
   "Creates a div container with a given CSS class and some content."
   ([content]
