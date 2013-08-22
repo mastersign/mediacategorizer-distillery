@@ -12,4 +12,4 @@
 
 (def min-relative-appearance (/ 1.0 4.0))
 
-(def skip-wordclouds true)
+(def skip-wordclouds false)
