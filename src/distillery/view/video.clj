@@ -28,6 +28,31 @@
                 {:src (str (:id video) ".mp4")
                  :type "video/mp4" }}]}]})
 
+(defn- render-hitlist
+  [video]
+  (let [video-id (:id video)
+        words (vals (:index video))
+        occ (fn [w] (filter #(= video-id (:video-id %)) (:occurrences w)))
+        hitlist (take 10 (reverse (sort-by #(count (occ %)) words)))
+        max-occ (count (occ (first hitlist)))]
+    (div "hitlist"
+         [(headline 3 "Hitlist")
+          (olist
+           (map
+            (fn [{:keys [id lexical-form pronunciation mean-confidence] :as w}]
+              (let [num-occ (count (occ w))]
+                (list-item
+                 (bar (jslink
+                       (str "word('" id "');")
+                       {:tag :span
+                        :attrs {:title pronunciation}
+                        :content lexical-form})
+                      (strong (str num-occ))
+                      ;(str "(" num-occ
+                      ;     ", " (format "%1.1f%%" (* 100 mean-confidence)) ")")
+                      (/ num-occ max-occ)))))
+            hitlist))])))
+
 (defn- render-overview
   "Creates the HTML for the overview page."
   [{:keys [video]}]
@@ -37,7 +62,7 @@
                       (list-item (str "Erkannte Phrasen: " (:phrase-count video)))
                       (list-item (str "Erkannte Worte: " (:word-count video)))
                       (list-item (format "Mittlere Erkennungssicherheit: %1.1f%%" (* 100 (:confidence video))))])
-              (TODO "Hitlist")
+              (render-hitlist video)
               (TODO "Word distribution matrix (frequency vs. confidence)")]))
 
 (defn- render-transcript

@@ -175,6 +175,17 @@
               :attrs {:class "innerpage"}
               :content (safe-content content)}]})
 
+(defn bar
+  [content label value]
+  (let [iv (int (* 100 value))]
+    (div "bar"
+         [(span "bar_text" content)
+          (span "bar_label" label)
+          (div "bar_client"
+               {:tag :div
+                :attrs {:class "bar_beam"
+                        :style (str "width:" iv "%")}})])))
+
 (defn TODO
   [text]
   (println (format "TODO: %s" text))
