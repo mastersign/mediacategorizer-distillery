@@ -12,8 +12,9 @@
 
 (defn- render-statistic
   [{:keys [video word] :as args}]
-  (ulist "word_statistic" [(list-item (str "Vorkommen: " (count (in-video-occurrences video word))))
-           (list-item (format "Mittlere Erkennungssicherheit: %1.1f%%" (* 100 (:mean-confidence word)) "%"))]))
+  (ulist "word_statistic"
+         [(list-item (str "Vorkommen: " (count (in-video-occurrences video word))))
+          (list-item (format "Mittlere Erkennungssicherheit: %1.1f%%" (* 100 (:mean-confidence word)) "%"))]))
 
 (defn- render-phrases
   [{:keys [video word] :as args}]
