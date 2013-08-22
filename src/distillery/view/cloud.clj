@@ -1,4 +1,5 @@
 (ns distillery.view.cloud
+  (:require [clojure.string :as string])
   (:require [distillery.config :as cfg])
   (:require [distillery.view.html :refer :all]))
 
@@ -27,7 +28,7 @@
             (sort-by :v1)
             (map (fn
                    [{:keys [id rect]}]
-                   (str "{id:'" id "',r:{x:"(.x rect)",y:"(.y rect)",w:"(.width rect)",h:"(.height rect)"}},")))
-            (apply str))
+                   (str "{id:'" id "',r:{x:"(.x rect)",y:"(.y rect)",w:"(.width rect)",h:"(.height rect)"}}")))
+            (string/join ","))
        "]"))
 
