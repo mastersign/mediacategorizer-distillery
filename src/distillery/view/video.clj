@@ -56,7 +56,7 @@
                        (/ num-occ max-occ)
                        (conf-fn mean-confidence)))))]
     (div "hitlist"
-         [(headline 3 "H??ufige Worte")
+         [(headline 3 "Häufige Worte")
           (olist (map item-gen hitlist))])))
 
 (defn- render-overview
