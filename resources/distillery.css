@@ -86,33 +86,46 @@ ul.video_statistic li, ul.word_statistic li {
 .bar {
   margin-bottom: 0.5em;
 }
-.bar_text, .bar_label {
-  display: inline-block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  vertical-align: bottom;
-}
+
 .bar_text {
-  width: 30%;
+  display: inline-block;
+  width: 50%;
+  vertical-align: top;
+  padding-right: 1em;
 }
-.bar_label {
-  text-align: right;
-  padding: 0 2%;
-  width: 8%;
-}
+
 .bar_client {
   display: inline-block;
-  background-color: #EEE;
+  background-color: #F8F8F8;
   text-align: left;
   width: 50%;
   height: 1.2em;
-  vertical-align: bottom;
+  vertical-align: top;
 }
+
 .bar_beam {
   display: inline-block;
   background-color: #0850ff;
   width: 50%;
   height: 1.2em;
+}
+
+.hitlist_text, .hitlist_stats {
+  display: inline-block;
+  width: auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: top;
+}
+
+.hitlist_text {
+  float: left;
+  text-align: left;
+}
+
+.hitlist_stats {
+  float: right;
+  text-align: right;
 }
 
 .todo {

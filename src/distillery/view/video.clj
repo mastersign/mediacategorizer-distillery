@@ -1,6 +1,7 @@
 (ns distillery.view.video
   (:require [clojure.string :as string])
   (:require [net.cgrand.enlive-html :as eh])
+  (:require [distillery.config :as cfg])
   (:require [distillery.files :refer :all])
   (:require [distillery.view.html :refer :all])
   (:require [distillery.view.transcript :as transcript]))
@@ -34,24 +35,29 @@
         words (vals (:index video))
         occ (fn [w] (filter #(= video-id (:video-id %)) (:occurrences w)))
         hitlist (take 10 (reverse (sort-by #(count (occ %)) words)))
-        max-occ (count (occ (first hitlist)))]
+        max-occ (count (occ (first hitlist)))
+        conf-fn (fn [cnf]
+                  (let [minc cfg/min-confidence
+                        cnf* (/ (- cnf minc) (- 1 minc))]
+                    (* cnf* cnf*)))
+        item-gen (fn [{:keys [id lexical-form pronunciation mean-confidence] :as w}]
+                   (let [num-occ (count (occ w))]
+                     (list-item
+                      (bar
+                       [(span "hitlist_text"
+                              (jslink
+                               (str "word('" id "');")
+                               {:tag :span
+                                :attrs {:title pronunciation}
+                                :content lexical-form}))
+                        (span "hitlist_stats"
+                              ;(strong (str num-occ))
+                              (strong (str num-occ " | " (format "%2.1f%%" (* 100 mean-confidence)))))]
+                       (/ num-occ max-occ)
+                       (conf-fn mean-confidence)))))]
     (div "hitlist"
-         [(headline 3 "Hitlist")
-          (olist
-           (map
-            (fn [{:keys [id lexical-form pronunciation mean-confidence] :as w}]
-              (let [num-occ (count (occ w))]
-                (list-item
-                 (bar (jslink
-                       (str "word('" id "');")
-                       {:tag :span
-                        :attrs {:title pronunciation}
-                        :content lexical-form})
-                      (strong (str num-occ))
-                      ;(str "(" num-occ
-                      ;     ", " (format "%1.1f%%" (* 100 mean-confidence)) ")")
-                      (/ num-occ max-occ)))))
-            hitlist))])))
+         [(headline 3 "H??ufige Worte")
+          (olist (map item-gen hitlist))])))
 
 (defn- render-overview
   "Creates the HTML for the overview page."

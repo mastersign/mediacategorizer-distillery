@@ -176,15 +176,17 @@
               :content (safe-content content)}]})
 
 (defn bar
-  [content label value]
-  (let [iv (int (* 100 value))]
-    (div "bar"
-         [(span "bar_text" content)
-          (span "bar_label" label)
-          (div "bar_client"
-               {:tag :div
-                :attrs {:class "bar_beam"
-                        :style (str "width:" iv "%")}})])))
+  ([text v]
+   (bar text v 1))
+  ([text v1 v2]
+   (let [iv (int (* 100 v1))
+         c (str "rgba(10,100,255," (float v2) ")")]
+     (div "bar"
+          [(div "bar_text" text)
+           (div "bar_client"
+                {:tag :div
+                 :attrs {:class "bar_beam"
+                         :style (str "width:" iv "%; background-color: " c ";")}})]))))
 
 (defn TODO
   [text]
