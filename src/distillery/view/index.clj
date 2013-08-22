@@ -6,37 +6,47 @@
 
 
 (defn- render-main-overview
-  [{:keys [job-description] :as args}]
-  (innerpage "overview" "Projekt" true
-             [(paragraph job-description)]))
+  [{:keys [job-description videos categories words] :as args}]
+  (innerpage "overview" "Übersicht" true
+             [(paragraph job-description)
+              (headline 3 "Inhalt")
+              (ulist "main_statistic"
+                     [(list-item (str "Videos: " (count videos)))
+                      (list-item (str "Kategorien: " (count categories)))
+                      (list-item (str "Wörter: " (count words)))])]))
 
-(defn- render-main-statistics
-  [{:keys [videos categories words] :as args}]
-  (innerpage "statistics" "Statistiken" false
-             [(TODO "Hauptstatistik der Site.")]))
+(defn- render-main-cloud
+  [{:keys [words] :as args}]
+  (innerpage "cloud" "Cloud" false
+             [(TODO "Word-Cloud der Site.")]))
+
+(defn- render-main-glossary
+  [{:keys [words] :as args}]
+  (innerpage "glossary" "Glossar" false
+             [(TODO "Glossar der Site.")]))
 
 (defn render-main-page
   "Renders the main page for the site."
   [{:keys [job-name] :as args}]
   [:title job-name
-   :secondary-menu {"Projekt" (jshref "innerpage('overview')")
-                    "Statistiken" (jshref "innerpage('statistics')")}
+   :secondary-menu {"Übersicht" (jshref "innerpage('overview')")
+                    "Cloud" (jshref "innerpage('cloud')")
+                    "Glossar" (jshref "innerpage('glossary')")}
    :page
-     [(headline 2 "Start")
+     [(headline 2 "Projekt")
       (render-main-overview args)
       (render-main-statistics args)]])
 
-
 (defn- render-categories-list
   [{:keys [categories] :as args}]
-  (innerpage "list" "Liste" true
+  (innerpage "overview" "Übersicht" true
              [(TODO "Kategorieliste")]))
 
 (defn render-categories-page
   "Renders the categories main page."
   [{:keys [job-name] :as args}]
   [:title job-name
-   :secondary-menu {"Liste" (jshref "innerpage('list')")}
+   :secondary-menu {"Übersicht" (jshref "innerpage('overview')")}
    :page
      [(headline 2 "Kategorien")
       (render-categories-list args)]])
@@ -50,36 +60,14 @@
 (defn- render-videos-list
   [{:keys [videos] :as args}]
   (let [video-list (into (sorted-set-by (key-comp :name)) videos)]
-    (innerpage "list" "Liste" true
+    (innerpage "overview" "Übersicht" true
                (ulist (map render-video-list-item video-list)))))
 
 (defn render-videos-page
   "Renders the videos main page."
   [{:keys [job-name] :as args}]
   [:title job-name
-   :secondary-menu {"Liste" (jshref "innerpage('list')")}
+   :secondary-menu {"Übersicht" (jshref "innerpage('overview')")}
    :page
      [(headline 2 "Videos")
       (render-videos-list args)]])
-
-
-(defn- render-glossary-list
-  [{:keys [videos] :as args}]
-  (innerpage "list" "Liste" true
-             [(TODO "Wortliste")]))
-
-(defn- render-glossary-cloud
-  [{:keys [videos] :as args}]
-  (innerpage "cloud" "Wolke" false
-             [(TODO "Wortwolke")]))
-
-(defn render-glossary-page
-  "Renders the main glossary page."
-  [{:keys [job-name] :as args}]
-  [:title job-name
-   :secondary-menu {"Liste" (jshref "innerpage('list')")
-                    "Wolke" (jshref "innerpage('cloud')")}
-   :page
-     [(headline 2 "Glossar")
-      (render-glossary-list args)
-      (render-glossary-cloud args)]])

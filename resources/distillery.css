@@ -77,7 +77,7 @@ span.pronunciation {
   color: #888;
 }
 
-ul.video_statistic li, ul.word_statistic li {
+ul.main_statistic li, ul.video_statistic li, ul.word_statistic li {
   list-style: none;
   margin-left: 1em;
   color: #444;

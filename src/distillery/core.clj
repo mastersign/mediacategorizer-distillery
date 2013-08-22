@@ -29,8 +29,8 @@
 (def tasks {:prep dt/prepare-output-dir
             :main-page dt/create-index-page
             :categories-page dt/create-categories-page
+            :categories dt/create-category-pages
             :videos-page dt/create-videos-page
-            :glossary-page dt/create-glossary-page
             :videos dt/create-video-pages})
 
 ((:prep tasks) job)

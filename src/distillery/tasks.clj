@@ -124,18 +124,18 @@
   (create-page "categories.html" v-index/render-categories-page job))
 
 
+(defn create-category-pages
+  "Creates one page for every category."
+  [job]
+  (long-task "Creating category pages"
+             (println "TODO: category pages")))
+
+
 (defn create-videos-page
   "Creates the overview page for all videos."
   [job]
   (print-progress "Creating videos overview page")
   (create-page "videos.html" v-index/render-videos-page job))
-
-
-(defn create-glossary-page
-  "Creates the overview page for all words."
-  [job]
-  (print-progress "Creating global glossary page")
-  (create-page "glossary.html" v-index/render-glossary-page job))
 
 
 (defn create-video-word-include
@@ -162,23 +162,25 @@
 (defn- create-video-cloud
   "Creates the word cloud for a video."
   [{:keys [output-dir cloud-precision] :as job} {:keys [id index path] :as video}]
-  (long-task
-   (str "Creating word cloud for " id)
-   (let [target-path (combine-path output-dir path "cloud.png")
-         word-data (build-cloud-word-data index)
-         precision (case cloud-precision :low 0.25 :medium 0.45 :high 0.65 0.35)
-         cloud-info (mwc/create-cloud word-data
-                                      :target-file target-path
-                                      :width 540
-                                      :height 200
-                                      :precision precision
-                                      :order-priority 0.5
-                                      :font (mdr/font "Segoe UI" 20 :bold)
-                                      :min-font-size 13
-                                      :max-font-size 70
-                                      :color-fn #(mdr/color 0 0.3 0.8 (+ 0.25 (* % 0.75))))]
-                                      ;:color-fn #(mdr/color (- 0.75 (* % 0.75)) (- 0.6 (* % 0.2)) (+ 0.5 (* % 0.5)) 1))]
-     (build-cloud-ui-data cloud-info))))
+  (if cfg/skip-wordclouds
+    (do (print-progress "Skipping wordcloud for " id) [])
+    (long-task
+     (str "Creating wordcloud for " id)
+     (let [target-path (combine-path output-dir path "cloud.png")
+           word-data (build-cloud-word-data index)
+           precision (case cloud-precision :low 0.25 :medium 0.45 :high 0.65 0.35)
+           cloud-info (mwc/create-cloud word-data
+                                        :target-file target-path
+                                        :width 540
+                                        :height 200
+                                        :precision precision
+                                        :order-priority 0.5
+                                        :font (mdr/font "Segoe UI" 20 :bold)
+                                        :min-font-size 13
+                                        :max-font-size 70
+                                        :color-fn #(mdr/color 0 0.3 0.8 (+ 0.25 (* % 0.75))))]
+       ;:color-fn #(mdr/color (- 0.75 (* % 0.75)) (- 0.6 (* % 0.2)) (+ 0.5 (* % 0.5)) 1))]
+       (build-cloud-ui-data cloud-info)))))
 
 
 (defn create-video-page
@@ -209,7 +211,7 @@
 
 
 (defn create-video-pages
-  "Creates the main pages for all videos."
+  "Creates one page for every video."
   [job]
   (long-task "Creating video pages"
     (doseq [video (:videos job)]

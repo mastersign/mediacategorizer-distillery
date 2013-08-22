@@ -11,3 +11,5 @@
 (def good-confidence 0.700)
 
 (def min-relative-appearance (/ 1.0 4.0))
+
+(def skip-wordclouds true)

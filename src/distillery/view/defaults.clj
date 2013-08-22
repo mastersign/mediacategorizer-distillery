@@ -5,10 +5,9 @@
 (def secondary-menu-title "Views")
 
 (def main-menu
-  {"Start" "index.html"
+  {"Projekt" "index.html"
    "Kategorien" "categories.html"
-   "Videos" "videos.html"
-   "Glossar" "glossary.html"})
+   "Videos" "videos.html"})
 
 (def copyright
   {:tag :p
