@@ -2,9 +2,9 @@
   (:require [clojure.pprint :refer (pprint)])
   (:require [distillery.tasks :as dt]))
 
-;(def root "D:\\Daten\\FH\\OLL\\") ;; FHB
+(def root "D:\\Daten\\FH\\OLL\\") ;; FHB
 ;(def root "D:\\Repository\\Projekte\\Arbeit\\FHB\\OLL\\") ;; HOME
-(def root "C:\\Repository\\Projekte\\Arbeit\\FHB\\OLL\\") ;; NB
+;(def root "C:\\Repository\\Projekte\\Arbeit\\FHB\\OLL\\") ;; NB
 
 (def job-descr
   {:job-name "Testlauf"
@@ -20,7 +20,8 @@
              :name "Der Lambda-Kalkül (720)"
              :video-file (str root "Media\\Video\\Der Lambda-Kalkül (720).mp4")
              :audio-file (str root "Media\\Audio\\de-DE\\Der Lambda-Kalkül (720).wav")
-             :results-file (str root "Media\\Audio\\de-DE\\transcript\\Der Lambda-Kalkül (720).srr")}]})
+             :results-file (str root "Media\\Audio\\de-DE\\transcript\\Der Lambda-Kalkül (720).srr")}]
+   :categories []})
 
 (def job (-> job-descr
              dt/load-speech-recognition-results
