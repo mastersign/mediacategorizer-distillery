@@ -50,7 +50,6 @@
      [(headline 2 "Kategorien")
       (render-categories-list args)]])
 
-
 (defn- render-video-list-item
   "Renders a video link as list item."
   [{:keys [id name] :as video}]
@@ -66,7 +65,7 @@
   "Renders the videos main page."
   [{:keys [job-name] :as args}]
   [:title job-name
-   :secondary-menu {"Übersicht" (jshref "innerpage('overview')")}
+   :secondary-menu [["Übersicht" (jshref "innerpage('overview')")]]
    :page
      [(headline 2 "Videos")
       (render-videos-list args)]])

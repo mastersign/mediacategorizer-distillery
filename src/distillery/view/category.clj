@@ -38,10 +38,10 @@
   [{:keys [job-name category] :as args}]
   [:base-path "../../"
    :title job-name
-   :secondary-menu {"Übersicht" (jshref "innerpage('overview')")
-                    "Glossar" (jshref "innerpage('glossary')")
-                    "Cloud" (jshref "innerpage('cloud')")
-                    "Videos" (jshref "innerpage('videos')")}
+   :secondary-menu [["Übersicht" (jshref "innerpage('overview')")]
+                    ["Videos" (jshref "innerpage('videos')")]
+                    ["Cloud" (jshref "innerpage('cloud')")]
+                    ["Glossar" (jshref "innerpage('glossary')")]]
    :page
      [(render-headline args)
       (render-overview args)

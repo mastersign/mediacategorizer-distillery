@@ -142,11 +142,11 @@
   [:base-path "../../"
    :title job-name
 ;   :js-code "videojs.options.flash.swf = 'video-js.swf';"
-   :secondary-menu {"Übersicht" (jshref "innerpage('overview')")
-                    "Cloud" (jshref "innerpage('cloud')")
-                    "Transcript" (jshref "innerpage('transcript')")
-                    "Kategorien" (jshref "innerpage('categories')")
-                    "Glossar" (jshref "innerpage('glossary')")}
+   :secondary-menu [["Übersicht" (jshref "innerpage('overview')")]
+                    ["Cloud" (jshref "innerpage('cloud')")]
+                    ["Transcript" (jshref "innerpage('transcript')")]
+                    ["Kategorien" (jshref "innerpage('categories')")]
+                    ["Glossar" (jshref "innerpage('glossary')")]]
    :page
      [(render-headline args)
       (render-video args)
