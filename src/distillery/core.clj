@@ -1,6 +1,6 @@
 (ns distillery.core
   (:require [clojure.pprint :refer (pprint)])
-  (:require [distillery.tasks :as tasks]))
+  (:require [distillery.tasks :as dt]))
 
 ;(def root "D:\\Daten\\FH\\OLL\\") ;; FHB
 ;(def root "D:\\Repository\\Projekte\\Arbeit\\FHB\\OLL\\") ;; HOME
@@ -23,19 +23,19 @@
              :results-file (str root "Media\\Audio\\de-DE\\transcript\\Der Lambda-Kalkül (720).srr")}]})
 
 (def job (-> job-descr
-             tasks/load-speech-recognition-results
-             tasks/analyze-speech-recognition-results))
+             dt/load-speech-recognition-results
+             dt/analyze-speech-recognition-results))
 
-(def tasks {:prep tasks/prepare-output-dir
-            :main-page tasks/create-index-page
-            :categories-page tasks/create-categories-page
-            :videos-page tasks/create-videos-page
-            :glossary-page tasks/create-glossary-page
-            :videos tasks/create-video-pages})
+(def tasks {:prep dt/prepare-output-dir
+            :main-page dt/create-index-page
+            :categories-page dt/create-categories-page
+            :videos-page dt/create-videos-page
+            :glossary-page dt/create-glossary-page
+            :videos dt/create-video-pages})
 
 ((:prep tasks) job)
 
-(tasks/long-task "Complete run"
+(dt/long-task "Complete run"
   (doseq
     [task (rest (vals tasks))]
     (task job)))
