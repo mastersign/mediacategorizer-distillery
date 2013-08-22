@@ -34,8 +34,7 @@
                     "Glossar" (jshref "innerpage('glossary')")}
    :page
      [(headline 2 "Projekt")
-      (render-main-overview args)
-      (render-main-statistics args)]])
+      (render-main-overview args)]])
 
 (defn- render-categories-list
   [{:keys [categories] :as args}]
