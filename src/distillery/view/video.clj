@@ -14,21 +14,19 @@
   "Creates the HTML for the video display box."
   [{:keys [video]}]
   {:tag :figure
-   :attrs { :class "video-box" }
+   :attrs {:class "video-box"}
    :content
-     [{:tag :video
-       :attrs
-         {:id "main_video"
-          :class "video-js vjs-default-skin"
-          :controls "controls"
-          :preload "auto"
-          :width "540"
-          :height "360" }
-       :content
-         [{:tag :source
-           :attrs
-             {:src (str (:id video) ".mp4")
-              :type "video/mp4" }}]}]})
+   [{:tag :video
+     :attrs {:id "main_video"
+             :class "video-js vjs-default-skin"
+             :controls "controls"
+             :preload "auto"
+             :width "540"
+             :height "360" }
+     :content [{:tag :source
+                :attrs
+                {:src (str (:id video) ".mp4")
+                 :type "video/mp4" }}]}]})
 
 (defn- render-overview
   "Creates the HTML for the overview page."
