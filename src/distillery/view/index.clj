@@ -8,8 +8,7 @@
 (defn- render-main-overview
   [{:keys [job-description] :as args}]
   (innerpage "overview" "Projekt" true
-             [(paragraph job-description)
-              (TODO "Überblick über die Site.")]))
+             [(paragraph job-description)]))
 
 (defn- render-main-statistics
   [{:keys [videos categories words] :as args}]
