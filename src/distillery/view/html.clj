@@ -150,19 +150,14 @@
 (defn menu
   "Builds a menu structure from a menu title and a sequence of label/url pairs."
   [items & {:keys [title]}]
-  (defn menu-item
-    [[label url]]
-    {:tag :li
-     :content [{:tag :a
-               :attrs {:href url}
-               :content label}]})
-  [(if title
-     {:tag :div
-      :attrs {:class "menu-title"}
-      :content title}
-     nil)
-   {:tag :ul
-    :content (map menu-item items)}])
+  (let [menu-item (fn [[label url]] (list-item (link url label)))]
+    [(if title
+       {:tag :div
+        :attrs {:class "menu-title"}
+        :content title}
+       nil)
+     {:tag :ul
+      :content (map menu-item items)}]))
 
 (defn innerpage
   "Builds the block structure for an inner page.
