@@ -68,8 +68,7 @@
                       (list-item (str "Erkannte Phrasen: " (:phrase-count video)))
                       (list-item (str "Erkannte Worte: " (:word-count video)))
                       (list-item (format "Mittlere Erkennungssicherheit: %1.1f%%" (* 100 (:confidence video))))])
-              (render-hitlist video)
-              (TODO "Word distribution matrix (frequency vs. confidence)")]))
+              (render-hitlist video)]))
 
 (defn- render-transcript
   "Creates the HTML for the transcript with all phrases."
