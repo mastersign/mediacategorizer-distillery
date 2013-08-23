@@ -175,6 +175,21 @@
       (.replace "ö" "oe")
       (.replace "ü" "ue")))
 
+(defn- compute-index-entry-stats
+  [{:keys [occurrences] :as entry}]
+  (assoc entry
+    :occurrence-count (count occurrences)
+    :mean-confidence (mean (map :confidence occurrences))))
+
+(defn merge-index-entries
+  "Merges two index entries for the same word into one."
+  [a b]
+  (let [res (-> a
+      (assoc :occurrences (concat (:occurrences a) (:occurrences b)))
+      compute-index-entry-stats)]
+    (println res)
+    res))
+
 (defn video-word-index
   "Builds an index of words for a sequence of recognition results."
   [video & {:keys [predicate]}]
@@ -189,11 +204,8 @@
                                     :result-no (:result-no word)
                                     :word-no (:no word)
                                     :confidence (:confidence word)}))))
-        index (reduce-by-sorted :lexical-form add-occurrence nil ws)
-        build-word-props (fn [{:keys [occurrences] :as props}]
-                           (assoc props
-                             :mean-confidence (mean (map :confidence occurrences))))]
-    (map-values build-word-props index)))
+        index (reduce-by-sorted :lexical-form add-occurrence nil ws)]
+    (map-values compute-index-entry-stats index)))
 
 (defn- char-to-index-letter
   "Converts every alphabetic character in its upper case and all other characters into '?'."

@@ -48,16 +48,6 @@
     (update-in job [:videos] #(vec (map load-speech-recognition-result %)))))
 
 
-(defn- build-video-index
-  "Analyzes the speech recognition results of a single video and builds the video word index."
-  [video]
-  (print-progress "Building index for " (:id video))
-  (let [filters [proc/not-short? proc/noun? proc/min-confidence? proc/no-punctuation?]
-        predicate (partial multi-filter filters)
-        index (proc/video-word-index video :predicate predicate)]
-    (assoc video :index index)))
-
-
 (defn- build-video-statistics
   [{:keys [id results] :as video}]
   (print-progress "Building statistics for " id)
@@ -70,16 +60,34 @@
       :duration duration)))
 
 
+(defn- build-video-index
+  "Analyzes the speech recognition results of a single video and builds the video word index."
+  [video]
+  (print-progress "Building index for " (:id video))
+  (let [filters [proc/not-short? proc/noun? proc/min-confidence? proc/no-punctuation?]
+        predicate (partial multi-filter filters)
+        index (proc/video-word-index video :predicate predicate)]
+    (assoc video :index index)))
+
+
+(defn- build-global-index
+  "Merges the video indexes into one global word index."
+  [{:keys [videos]}]
+  (long-task
+   "Merging indexes"
+   (apply (partial merge-with proc/merge-index-entries) (map :index videos))))
+
+
 (defn analyze-speech-recognition-results
   "Analyzes the speech recognition results an generates the index structures."
   [job]
-  (long-task "Analyzing videos"
-    (update-in job [:videos]
-      #(vec (map
-              (comp
-                build-video-statistics
-                build-video-index)
-              %)))))
+  (long-task
+   "Analyzing videos"
+   (let [job* (update-in job [:videos]
+                         #(vec (map (comp build-video-statistics build-video-index) %)))
+         job* (assoc job*
+                :words (build-global-index job*))]
+     job*)))
 
 
 (defn prepare-output-dir
@@ -222,3 +230,4 @@
   [{:keys [video]}]
   (let [results (load-data (:results-file video))]
     (pp/pprint (proc/reverse-index-results [(first results)]))))
+

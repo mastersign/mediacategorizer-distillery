@@ -67,6 +67,7 @@
                      [(list-item (str "Länge: " (transcript/format-time (:duration video))))
                       (list-item (str "Erkannte Phrasen: " (:phrase-count video)))
                       (list-item (str "Erkannte Worte: " (:word-count video)))
+                      (list-item (str "Worte im Glossar: " (count (:index video))))
                       (list-item (format "Mittlere Erkennungssicherheit: %1.1f%%" (* 100 (:confidence video))))])
               (render-hitlist video)]))
 
