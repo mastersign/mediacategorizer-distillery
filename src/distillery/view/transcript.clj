@@ -44,7 +44,7 @@
   (div "phrase" [(span "tc" (jslink (format "video_jump(%f)" (double (:start result))) (format-time (:start result))))
                  (span "pt" (render-phrase result :index index :pivot pivot))]))
 
-(defn render-result-list
+(defn render-transcript
   "Creates the HTML for a sequence of phrases."
   [results & {:keys [index pivot]}]
   (div "transcript" (map #(render-result % :index index :pivot pivot) results)))

@@ -55,6 +55,7 @@
           (.endsWith text ",")
           (.endsWith text ":")
           (.endsWith text ";")
+          (= text "@")
           (= text "(")
           (= text ")")))))
 
@@ -187,7 +188,6 @@
   (let [res (-> a
       (assoc :occurrences (concat (:occurrences a) (:occurrences b)))
       compute-index-entry-stats)]
-    (println res)
     res))
 
 (defn video-word-index
@@ -223,3 +223,4 @@
   (->> index
        (group-by (comp char-to-index-letter first first))
        (map-values #(apply sorted-map (apply concat %)))))
+

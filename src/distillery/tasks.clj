@@ -118,11 +118,60 @@
          (save-page target-file))))
 
 
+(defn create-word-include
+  "Creates the include file for a word in the global context."
+  [{:keys [output-dir] :as job} {:keys [path] :as word}]
+  (create-include
+    (str path ".inc.html")
+    v-word/render-word-include
+    (assoc job :word word)))
+
+
+(defn create-word-includes
+  "Create includes for all words of the project."
+  [{:keys [output-dir words] :as job}]
+  (long-task
+   "Creating global word includes"
+   (let [words-path "words"]
+     (create-dir (combine-path output-dir words-path))
+     (doseq [word (vals words)]
+       (let [word-path (combine-path words-path (:id word))]
+         (create-word-include job (assoc word :path word-path)))))))
+
+
+(defn- create-main-cloud
+  "Creates the word cloud the global context."
+  [{:keys [output-dir cloud-precision words] :as job}]
+  (if cfg/skip-wordclouds
+    (do (print-progress "Skipping global wordcloud") [])
+    (long-task
+     "Creating global wordcloud"
+     (let [target-path (combine-path output-dir "cloud.png")
+           word-data (build-cloud-word-data words)
+           precision (case cloud-precision :low 0.2 :medium 0.4 :high 0.6 0.4)
+           cloud-info (mwc/create-cloud word-data
+                                        :target-file target-path
+                                        :width 540
+                                        :height 300
+                                        :precision precision
+                                        :order-priority 0.6
+                                        :font (mdr/font "Segoe UI" 20 :bold)
+                                        :min-font-size 13
+                                        :max-font-size 80
+                                        :color-fn #(mdr/color 0 0.3 0.8 (+ 0.25 (* % 0.75))))]
+       (build-cloud-ui-data cloud-info)))))
+
+
 (defn create-index-page
   "Creates the main page for the site."
   [job]
   (print-progress "Creating index page")
-  (create-page "index.html" v-index/render-main-page job))
+  (let [cloud (create-main-cloud job)
+        job* (assoc job :cloud cloud)
+        pwords (proc/partition-index (:words job*))
+        job* (assoc job* :pwords pwords)]
+    (create-page "index.html" v-index/render-main-page job*)
+    (create-word-includes job*)))
 
 
 (defn create-categories-page

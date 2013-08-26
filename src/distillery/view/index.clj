@@ -2,8 +2,9 @@
   (:require [net.cgrand.enlive-html :as eh])
   (:require [distillery.data :refer [key-comp]])
   (:require [distillery.files :refer :all])
-  (:require [distillery.view.html :refer :all]))
-
+  (:require [distillery.view.html :refer :all])
+  (:require [distillery.view.glossary :as glossary])
+  (:require [distillery.view.cloud :as cloud]))
 
 (defn- render-main-overview
   [{:keys [job-description videos categories words] :as args}]
@@ -16,14 +17,20 @@
                       (list-item (str "Wörter: " (count words)))])]))
 
 (defn- render-main-cloud
-  [{:keys [words] :as args}]
-  (innerpage "cloud" "Cloud" false
-             [(TODO "Word-Cloud der Site.")]))
+  [{:keys [cloud] :as args}]
+  (innerpage "cloud" "Globale Cloud" false
+             (cloud/render-cloud "global" cloud)))
+
+(defn- render-main-word-frame
+  "Create the HTML for the word frame.
+   The word frame is an empty container to load a word page into."
+  [args]
+  (innerpage "word" "Wort" false nil))
 
 (defn- render-main-glossary
-  [{:keys [words] :as args}]
-  (innerpage "glossary" "Glossar" false
-             [(TODO "Glossar der Site.")]))
+  [{:keys [pwords] :as args}]
+  (innerpage "glossary" "Globaler Glossar" false
+             (glossary/render-glossary pwords)))
 
 (defn render-main-page
   "Renders the main page for the site."
@@ -34,7 +41,10 @@
                     "Glossar" (jshref "innerpage('glossary')")}
    :page
      [(headline 2 "Projekt")
-      (render-main-overview args)]])
+      (render-main-overview args)
+      (render-main-cloud args)
+      (render-main-glossary args)
+      (render-main-word-frame args)]])
 
 (defn- render-categories-list
   [{:keys [categories] :as args}]
@@ -69,3 +79,4 @@
    :page
      [(headline 2 "Videos")
       (render-videos-list args)]])
+

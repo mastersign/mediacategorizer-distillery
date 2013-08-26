@@ -78,6 +78,11 @@ ul.glossary {
   padding-bottom: 1em;
 }
 
+ul.glossary li {
+  list-style: none;
+  margin-left: 0.75em;
+}
+
 span.pronunciation {
   margin-left: 0.5em;
   font-style: italic;

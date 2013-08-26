@@ -32,3 +32,13 @@
             (string/join ","))
        "]"))
 
+(defn render-cloud
+  [id, cloud]
+  {:tag :figure
+   :attrs {:class "wordcloud"
+           :data-cloud-id id}
+   :content [{:tag :img
+              :attrs {:class "wordcloud"
+                      :src "cloud.png"}}
+             (jscript (str "register_cloud_data('" id "'," cloud ");"))]})
+

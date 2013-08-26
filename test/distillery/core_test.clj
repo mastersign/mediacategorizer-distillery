@@ -24,6 +24,28 @@
              :results-file (str root "Media\\Audio\\de-DE\\transcript\\Der Lambda-Kalkül (720).srr")}]
    :categories []})
 
+(deftest test-resources
+  (dt/prepare-output-dir job-descr))
+
+(deftest test-analyze
+  (-> job-descr
+      dt/load-speech-recognition-results
+      dt/analyze-speech-recognition-results))
+
+(deftest test-index
+  (let [job (-> job-descr
+                dt/load-speech-recognition-results
+                dt/analyze-speech-recognition-results)
+        tasks {:prep dt/prepare-output-dir
+               :main-page dt/create-index-page
+               :categories-page dt/create-categories-page
+               :videos-page dt/create-videos-page}]
+    (dt/long-task
+     "Index run"
+     (doseq
+       [task (vals tasks)]
+       (task job)))))
+
 (deftest test-complete
   (let [job (-> job-descr
                 dt/load-speech-recognition-results
@@ -34,10 +56,9 @@
                :categories dt/create-category-pages
                :videos-page dt/create-videos-page
                :videos dt/create-video-pages}]
-    ((:prep tasks) job)
     (dt/long-task
      "Complete run"
      (doseq
-       [task (rest (vals tasks))]
+       [task (vals tasks)]
        (task job)))))
 

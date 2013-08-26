@@ -1,5 +1,5 @@
 function scroll_to_page() {
-  window.location.hash = "#main-menu";
+  //window.location.hash = "#main-menu";
 }
 
 function video_jump(pos) {
@@ -76,6 +76,32 @@ function register_cloud_handler(i, cloud_figure) {
   $(img).on("mousemove", { cloud_id: id }, cloud_mousemove_handler);
 }
 
+/**
+ * http://jeffreifman.com/2006/06/26/how-can-i-get-query-string-values-from-url-in-javascript/
+ */
+function get_query_variable(variable) {
+    var query = window.location.search.substring(1);
+    var vars = query.split('&');
+    for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split('=');
+        if (decodeURIComponent(pair[0]) == variable) {
+            return decodeURIComponent(pair[1]);
+        }
+    }
+  return null;
+}
+
 $(function() {
   $.each($("figure.wordcloud"), register_cloud_handler);
+
+  var page_id_request = get_query_variable("ipage");
+  if (page_id_request) {
+    innerpage(page_id_request);
+  }
+
+  var word_id_request = get_query_variable("word");
+  if (word_id_request) {
+    word(word_id_request);
+  }
 });
+
