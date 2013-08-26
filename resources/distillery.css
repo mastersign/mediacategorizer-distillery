@@ -2,9 +2,16 @@
   margin-left: 8em;
 }
 
+#secondary-menu {
+  width: 7em;
+}
+
 @media screen and (max-width: 720px), screen and (max-device-height: 720px) and (orientation: landscape) {
   #page {
     margin-left: 0.5em;
+  }
+  #secondary-menu {
+    width: auto;
   }
 }
 
