@@ -73,7 +73,7 @@
     (.dispose graphics)
     word-infos))
 
-(defn- setup
+(defn- setup-graphics-context
   [g]
   (doto g
     (.setRenderingHint RenderingHints/KEY_ANTIALIASING RenderingHints/VALUE_ANTIALIAS_ON)
@@ -248,7 +248,7 @@
   (let [c (point (/ w 2.0) (/ h 2.0))
         bg (translate-area test-area c)]
     (doto g
-      setup
+      setup-graphics-context
       (fill-rect (rectangle 0 0 w h) :color (:background-color args)))
     (when (:debug args)
       (doto g
@@ -272,3 +272,4 @@
         target-file (:target-file args)]
     (when target-file (save-image img target-file))
     (assoc cloud-info :image img)))
+
