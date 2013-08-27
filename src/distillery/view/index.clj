@@ -14,11 +14,12 @@
               (ulist "main_statistic"
                      [(list-item (str "Videos: " (count videos)))
                       (list-item (str "Kategorien: " (count categories)))
-                      (list-item (str "Wörter: " (count words)))])]))
+                      (list-item (str "Wörter: " (count words)))])
+              (render-hitlist args)]))
 
 (defn- render-main-cloud
   [{:keys [cloud] :as args}]
-  (innerpage "cloud" "Globale Cloud" false
+  (innerpage "cloud" "Globale Wortwolke" false
              (cloud/render-cloud "global" cloud)))
 
 (defn- render-main-word-frame
@@ -37,7 +38,7 @@
   [{:keys [job-name] :as args}]
   [:title job-name
    :secondary-menu {"Übersicht" (jshref "innerpage('overview')")
-                    "Cloud" (jshref "innerpage('cloud')")
+                    "Wortwolke" (jshref "innerpage('cloud')")
                     "Glossar" (jshref "innerpage('glossary')")}
    :page
      [(headline 2 "Projekt")
@@ -54,7 +55,7 @@
 (defn render-categories-page
   "Renders the categories main page."
   [{:keys [job-name] :as args}]
-  [:title job-name
+  [:title (str job-name " - " "Kategorien")
    :secondary-menu {"Übersicht" (jshref "innerpage('overview')")}
    :page
      [(headline 2 "Kategorien")
@@ -74,7 +75,7 @@
 (defn render-videos-page
   "Renders the videos main page."
   [{:keys [job-name] :as args}]
-  [:title job-name
+  [:title (str job-name " - " "Videos")
    :secondary-menu [["Übersicht" (jshref "innerpage('overview')")]]
    :page
      [(headline 2 "Videos")

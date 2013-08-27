@@ -58,7 +58,7 @@
                        (/ num-occ max-occ)
                        (conf-fn mean-confidence)))))]
     (div "hitlist"
-         [(headline 3 "Häufige Worte")
+         [(headline 3 "H??ufige Worte")
           (olist (map item-gen hitlist))])))
 
 (defn- render-overview
@@ -89,7 +89,7 @@
   "Create the HTML for the video word cloud."
   [{{:keys [id index cloud] :as video} :video :as args}]
   (let [];code (map #(div (str (first %) ": " (let [r (second %)] (str (.x r) ", " (.y r))))) cloud)]
-    (innerpage "cloud" "Word-Cloud" false
+    (innerpage "cloud" "Wortwolke" false
                (cloud/render-cloud id cloud))))
 
 (defn- render-categories
@@ -108,11 +108,11 @@
   "Renders the main page for a video."
   [{:keys [job-name video] :as args}]
   [:base-path "../../"
-   :title job-name
+   :title (str job-name " - " "Video")
 ;   :js-code "videojs.options.flash.swf = 'video-js.swf';"
    :secondary-menu [["Übersicht" (jshref "innerpage('overview')")]
-                    ["Cloud" (jshref "innerpage('cloud')")]
-                    ["Transcript" (jshref "innerpage('transcript')")]
+                    ["Wortwolke" (jshref "innerpage('cloud')")]
+                    ["Transkript" (jshref "innerpage('transcript')")]
                     ["Kategorien" (jshref "innerpage('categories')")]
                     ["Glossar" (jshref "innerpage('glossary')")]]
    :page

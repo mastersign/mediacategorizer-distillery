@@ -1,8 +1,8 @@
 (ns distillery.view.defaults)
 
-(def main-menu-title "Menü")
+(def main-menu-title "Hauptmenü")
 
-(def secondary-menu-title "Views")
+(def secondary-menu-title "Ansichten")
 
 (def main-menu
   [["Projekt" "index.html"]
