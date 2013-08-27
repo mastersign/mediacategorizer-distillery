@@ -164,7 +164,10 @@
    Inner pages can be shown without loading content from the server."
   [id title active content]
   {:tag :article
-   :attrs {:id id :class "innerpage" :style (str "display: " (if active "inherit" "none"))}
+   :attrs {:id id
+           :class "innerpage"
+           :style (str "display: " (if active "inherit" "none"))
+           :data-start (str active)}
    :content [(headline 3 title)
              {:tag :div
               :attrs {:class "innerpage"}
