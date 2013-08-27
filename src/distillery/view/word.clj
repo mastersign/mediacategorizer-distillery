@@ -10,19 +10,24 @@
   [video word]
   (filter #(= (:video-id %) (:id video)) (:occurrences word)))
 
-(defn- render-statistic
+(defn- render-word-statistic
   [{:keys [word] :as args}]
   (ulist "word_statistic"
          [(list-item (str "Vorkommen: " (count (:occurrences word))))
           (list-item (format "Mittlere Erkennungssicherheit: %1.1f%%" (* 100 (:mean-confidence word)) "%"))]))
 
-(defn- render-video-statistic
+(defn- render-video-word-statistic
   [{:keys [video word] :as args}]
   (ulist "word_statistic"
          [(list-item (str "Vorkommen: " (count (in-video-occurrences video word))))
           (list-item (format "Mittlere Erkennungssicherheit: %1.1f%%" (* 100 (:mean-confidence word)) "%"))]))
 
-(defn- render-phrases
+(defn- render-category-word-statistic
+  [{:keys [category word] :as args}]
+  (ulist "word_statistic"
+         [(list-item (str "Vorkommen: " "TODO"))]))
+
+(defn- render-video-word-phrases
   [{:keys [video word] :as args}]
   (let [occurrences (in-video-occurrences video word)
         results (into
@@ -32,34 +37,56 @@
 
 (defn- render-video-list-item
   [word-id {:keys [id name] :as video}]
-  (println word-id)
   (list-item (link (str "videos/" id "/index.html?word=" word-id) name)))
 
-(defn- render-video-list
+(defn- render-word-video-list
   [{:keys [word] :as args}]
   (let [word-id (:id word)
         video-ids (set (map :video-id (:occurrences word)))
         videos (filter #(contains? video-ids (:id %)) (:videos args))]
     (ulist (map (partial render-video-list-item word-id) videos))))
 
-(defn- render-category-list
-  [args]
-  (TODO "Category List"))
+(defn- render-category-word-video-list
+  [{:keys [word] :as args}]
+
+  (TODO "Category Word Video List"))
+
+(defn- render-word-category-list
+  [{:keys [word] :as args}]
+  (TODO "Word Category List"))
+
+(defn- render-video-word-category-list
+  [{:keys [video word] :as args}]
+  (TODO "Video Word Category List"))
 
 (defn render-word-include
   "Renders the include part for the word frame."
   [{:keys [word] :as args}]
   (let [{:keys [lexical-form pronunciation]} word]
     [(headline 4 "word_headline" [lexical-form (span "pronunciation" pronunciation)])
-     (render-statistic args)
+     (render-word-statistic args)
      (headline 4 "Videos")
-     (render-video-list args)]))
+     (render-word-video-list args)
+     (headline 4 "Kategorien")
+     (render-word-category-list args)]))
 
 (defn render-video-word-include
   "Renders the include part for the word frame of a video page."
   [{:keys [word] :as args}]
   (let [{:keys [lexical-form pronunciation]} word]
     [(headline 4 "word_headline" [lexical-form (span "pronunciation" pronunciation)])
-     (render-video-statistic args)
-     (render-phrases args)]))
+     (render-video-word-statistic args)
+     (headline 4 "Phrasen")
+     (render-video-word-phrases args)
+     (headline 4 "Kategorien")
+     (render-video-word-category-list args)]))
+
+(defn render-category-word-include
+  "Renders the include part for the word frame of a category page."
+  [{:keys [word] :as args}]
+  (let [{:keys [text]} word]
+    [(headline 4 "word_headline" text)
+     (render-category-word-statistic args)
+     (headline 4 "Videos")
+     (render-category-word-video-list args)]))
 

@@ -6,7 +6,8 @@
   (:require [distillery.view.html :refer :all])
   (:require [distillery.view.cloud :as cloud])
   (:require [distillery.view.transcript :as transcript])
-  (:require [distillery.view.glossary :as glossary]))
+  (:require [distillery.view.glossary :as glossary])
+  (:require [distillery.view.hitlist :as hitlist]))
 
 (defn- render-headline
   "Creates the headline for the video page."
@@ -32,34 +33,10 @@
                  :type "video/mp4" }}]}]})
 
 (defn- render-hitlist
-  [video]
-  (let [video-id (:id video)
-        words (vals (:index video))
-        occ (fn [w] (filter #(= video-id (:video-id %)) (:occurrences w)))
-        hitlist (take 10 (reverse (sort-by #(count (occ %)) words)))
-        max-occ (count (occ (first hitlist)))
-        conf-fn (fn [cnf]
-                  (let [minc cfg/min-confidence
-                        cnf* (/ (- cnf minc) (- 1 minc))]
-                    (* cnf* cnf*)))
-        item-gen (fn [{:keys [id lexical-form pronunciation mean-confidence] :as w}]
-                   (let [num-occ (count (occ w))]
-                     (list-item
-                      (bar
-                       [(span "hitlist_text"
-                              (jslink
-                               (str "word('" id "');")
-                               {:tag :span
-                                :attrs {:title pronunciation}
-                                :content lexical-form}))
-                        (span "hitlist_stats"
-                              ;(strong (str num-occ))
-                              (strong (str num-occ " | " (format "%2.1f%%" (* 100 mean-confidence)))))]
-                       (/ num-occ max-occ)
-                       (conf-fn mean-confidence)))))]
-    (div "hitlist"
-         [(headline 3 "H??ufige Worte")
-          (olist (map item-gen hitlist))])))
+  [{:keys [id index]}]
+  (hitlist/render-hitlist
+   (vals index)
+   (fn [w] (filter #(= id (:video-id %)) (:occurrences w)))))
 
 (defn- render-overview
   "Creates the HTML for the overview page."

@@ -4,7 +4,14 @@
   (:require [distillery.files :refer :all])
   (:require [distillery.view.html :refer :all])
   (:require [distillery.view.glossary :as glossary])
-  (:require [distillery.view.cloud :as cloud]))
+  (:require [distillery.view.cloud :as cloud])
+  (:require [distillery.view.hitlist :as hitlist]))
+
+(defn- render-hitlist
+  [{:keys [words] :as args}]
+  (hitlist/render-hitlist
+   (vals words)
+   (fn [w] (:occurrences w))))
 
 (defn- render-main-overview
   [{:keys [job-description videos categories words] :as args}]
