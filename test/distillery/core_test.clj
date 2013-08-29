@@ -134,8 +134,6 @@
                :videos dt/create-video-pages}]
     (dt/long-task
      "Complete run"
-     (doseq
-       [task (vals tasks)]
-       (task job)))))
+     (doall ((dt/map-fn) #(% job) (vals tasks))))))
 
 
