@@ -31,21 +31,32 @@
         "Makroökonomie online lernen - VWL Tutorium (360)"
         "Parabeln_Quadratische Funktion_en Übersicht (Scheitelpunkt,Stauchung,Streckung,etc.) (720)"]))
 
+(def videos [
+             ["12-01-1" "12.01.1 Datenstrukturen, Array, Queue, Stack"]
+             ["Bernoulli" "Binomialverteilung_Formel von Bernoulli, Stochastik, Nachhilfe online, Hilfe in Mathe (720)"]
+             ["Hypothesentest" "Einseitiger(rechtsseitiger) Hypothesentest_mit Ablesen aus der Tabelle, Stochastik, Nachhilfe online (720)"]
+             ["Parabeln" "Parabeln_Quadratische Funktion_en Übersicht (Scheitelpunkt,Stauchung,Streckung,etc.) (720)"]
+             ["Gauss" "Gauß-Algorithmus_Lineares Gleichungssystem lösen (einfach_schnell erklärt), Nachhilfe online (720)"]
+             ["Lambda" "Der Lambda-Kalkül (720)"]
+             ["IS-Kurve" "IS-Kurve im Vier-Quadrantenschema Die Herleitung (720)"]
+             ["Makrooekonomie" "Makroökonomie online lernen - VWL Tutorium (360)"]
+             ;["Bankgeheimnis" "Bernd Senf 3. Bankgeheimnis Geldschöpfung - Monetative als Lösung (720)"]
+             ])
+
 (def job-descr
   {:job-name "Testlauf"
    :job-description "Ein Testprojekt für Testzwecke mit Testvideos und Testkategorien. Wird zum Testen verwendet."
    :output-dir (str root "Output")
-   :cloud-precision :low ; :low, :medium, :high
-   :videos [{:id "12-01-1"
-             :name "12.01.1 Datenstrukturen, Array, Queue, Stack"
-             :video-file (str root "Media\\Video\\12.01.1 Datenstrukturen, Array, Queue, Stack.mp4")
-             :audio-file (str root "Media\\Audio\\de-DE\\12.01.1 Datenstrukturen, Array, Queue, Stack.wav")
-             :results-file (str root "Media\\Audio\\de-DE\\transcript\\12.01.1 Datenstrukturen, Array, Queue, Stack.srr")}
-            {:id "Lambda"
-             :name "Der Lambda-Kalkül (720)"
-             :video-file (str root "Media\\Video\\Der Lambda-Kalkül (720).mp4")
-             :audio-file (str root "Media\\Audio\\de-DE\\Der Lambda-Kalkül (720).wav")
-             :results-file (str root "Media\\Audio\\de-DE\\transcript\\Der Lambda-Kalkül (720).srr")}]
+   :cloud-precision :medium ; :low, :medium, :high
+   :videos (->> videos
+                (map (fn
+                       [[id name]]
+                       {:id id
+                        :name name
+                        :video-file (str root "Media\\Video\\" name ".mp4")
+                        :audio-file (str root "Media\\Audio\\de-DE\\" name ".wav")
+                        :results-file (str root "Media\\Audio\\de-DE\\transcript\\" name ".srr")}))
+                (vec))
    :categories []})
 
 (deftest test-playground
