@@ -16,3 +16,5 @@
 ;; ## Output Generation
 
 (def skip-wordclouds false)
+
+(def parallel-proc true)

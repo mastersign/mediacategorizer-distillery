@@ -16,10 +16,11 @@
   (:require [mastersign.wordcloud :as mwc])
   (:require [mastersign.drawing :as mdr]))
 
+;; ## Task Tracing
+
 (defn print-progress
   [& msg]
   (println (str "# " (apply str msg))))
-
 
 (defmacro long-task
   [msg & body]
@@ -28,6 +29,32 @@
      (let [result# (time (do ~@body))]
        (print-progress (str "END   " ~msg))
        result#)))
+
+
+;; ## Helper
+
+(defn map-fn
+  "This HOF returns the map function that should be
+  used for time consuming transformations.
+  The configuration var `distillery.configuration/parallel-proc`
+  controls whether `pmap` or `map` is returned."
+  []
+  (if cfg/parallel-proc pmap map))
+
+
+;; ## Task Functions
+
+;; ### Preprocessing and Dependencies
+
+(defn prepare-output-dir
+  "Prepares the output directory by creating a number of sub directories and copying site dependencies."
+  [{:keys [output-dir]}]
+  (print-progress "Preparing output directory " output-dir)
+  (create-dir output-dir)
+  (create-dir output-dir "categories")
+  (create-dir output-dir "videos")
+  (create-dir output-dir "words")
+  (save-dependencies output-dir))
 
 
 (defn- load-speech-recognition-result
@@ -44,8 +71,10 @@
 (defn load-speech-recognition-results
   "Loads the speech recognition results for the videos."
   [job]
-  (long-task "Loading speech recognition results"
-    (update-in job [:videos] #(vec (map load-speech-recognition-result %)))))
+  (long-task
+   "Loading speech recognition results"
+   (update-in job [:videos]
+              #(vec ((map-fn) load-speech-recognition-result %)))))
 
 
 (defn- build-video-statistics
@@ -84,22 +113,13 @@
   (long-task
    "Analyzing videos"
    (let [job* (update-in job [:videos]
-                         #(vec (map (comp build-video-statistics build-video-index) %)))
+                         #(vec ((map-fn) (comp build-video-statistics build-video-index) %)))
          job* (assoc job*
                 :words (build-global-index job*))]
      job*)))
 
 
-(defn prepare-output-dir
-  "Prepares the output directory by creating a number of sub directories and copying site dependencies."
-  [{:keys [output-dir]}]
-  (print-progress "Preparing output directory " output-dir)
-  (create-dir output-dir)
-  (create-dir output-dir "categories")
-  (create-dir output-dir "videos")
-  (create-dir output-dir "words")
-  (save-dependencies output-dir))
-
+;; ### Output Generation
 
 (defn- create-page
   [page-name page-f {:keys [output-dir] :as args}]
@@ -157,7 +177,7 @@
                                         :order-priority 0.6
                                         :font (mdr/font "Segoe UI" 20 :bold)
                                         :min-font-size 13
-                                        :max-font-size 80
+                                        :max-font-size 70
                                         :color-fn #(mdr/color 0 0.3 0.8 (+ 0.25 (* % 0.75))))]
        (build-cloud-ui-data cloud-info)))))
 
@@ -234,7 +254,7 @@
                                         :order-priority 0.5
                                         :font (mdr/font "Segoe UI" 20 :bold)
                                         :min-font-size 13
-                                        :max-font-size 70
+                                        :max-font-size 50
                                         :color-fn #(mdr/color 0 0.3 0.8 (+ 0.25 (* % 0.75))))]
        ;:color-fn #(mdr/color (- 0.75 (* % 0.75)) (- 0.6 (* % 0.2)) (+ 0.5 (* % 0.5)) 1))]
        (build-cloud-ui-data cloud-info)))))
@@ -270,13 +290,17 @@
 (defn create-video-pages
   "Creates one page for every video."
   [job]
-  (long-task "Creating video pages"
-    (doseq [video (:videos job)]
-      (create-video-page job video))))
+  (long-task
+   "Creating video pages"
+   (doall
+    ((map-fn)
+     #(create-video-page job %)
+     (:videos job)))))
 
 
 (defn print-reverse-indexed-results
   [{:keys [video]}]
   (let [results (load-data (:results-file video))]
     (pp/pprint (proc/reverse-index-results [(first results)]))))
+
 
