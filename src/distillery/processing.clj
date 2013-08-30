@@ -76,14 +76,14 @@
   [word]
   (-> word
       :confidence
-      (>= cfg/min-confidence)))
+      (>= (cfg/value :min-confidence))))
 
 (defn good-confidence?
   "Checks wheter the given word was recognized with good confidence."
   [word]
   (-> word
       :confidence
-      (>= cfg/good-confidence)))
+      (>= (cfg/value :good-confidence))))
 
 (defn alternate-phrases
   "Returns alternate phrases of the recognition results."
@@ -121,7 +121,7 @@
 (defn most-frequent-word
   "Returns the most frequent word from all words in the results."
   [results]
-  (->> (words results :best-phrases cfg/best-phrases-only)
+  (->> (words results)
        (group-by :lexical-form)
        (map (fn [[text group]] [text (count group)]))
        (apply max-key #(get % 1))))
@@ -140,8 +140,8 @@
     (->> words
          (map #(assoc % :relative-appearance (if (> (:appearance %) 1) (/ (:appearance %) norm) 0)))
          (filter #(and
-                   (< (:confidence %) cfg/good-confidence)
-                   (>= (:relative-appearance %) cfg/min-relative-appearance))))))
+                   (< (:confidence %) (cfg/value :good-confidence))
+                   (>= (:relative-appearance %) (cfg/value :min-relative-appearance)))))))
 
 (defn format-word-stat
   "Creates a formatted string for the given word."
@@ -223,4 +223,7 @@
   (->> index
        (group-by (comp char-to-index-letter first first))
        (map-values #(apply sorted-map (apply concat %)))))
+
+
+
 

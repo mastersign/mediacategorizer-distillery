@@ -47,7 +47,8 @@
   {:job-name "Testlauf"
    :job-description "Ein Testprojekt für Testzwecke mit Testvideos und Testkategorien. Wird zum Testen verwendet."
    :output-dir (str root "Output")
-   :cloud-precision :medium ; :low, :medium, :high
+   ;:configuration {:main-cloud {:precision :medium}
+   ;                :video-cloud {:precision :low}}
    :videos (->> videos
                 (map (fn
                        [[id name]]
@@ -135,5 +136,7 @@
     (dt/long-task
      "Complete run"
      (doall ((dt/map-fn) #(% job) (vals tasks))))))
+
+
 
 

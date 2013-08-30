@@ -188,5 +188,6 @@
 
 (defn TODO
   [text]
-  (println (format "TODO: %s" text))
+  ;(println (format "TODO: %s" text))
   {:tag :div :attrs {:class "todo"} :content text})
+

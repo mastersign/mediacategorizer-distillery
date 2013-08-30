@@ -7,7 +7,7 @@
   (let [hitlist (take 10 (reverse (sort-by #(count (occ-fn %)) words)))
         max-occ (count (occ-fn (first hitlist)))
         conf-fn (fn [cnf]
-                  (let [minc cfg/min-confidence
+                  (let [minc (cfg/value :min-confidence)
                         cnf* (/ (- cnf minc) (- 1 minc))]
                     (* cnf* cnf*)))
         item-gen (fn [{:keys [id lexical-form pronunciation mean-confidence] :as w}]
@@ -28,4 +28,5 @@
     (div "hitlist"
          [(headline 3 "Häufige Worte")
           (olist (map item-gen hitlist))])))
+
 

@@ -1,7 +1,9 @@
 (ns distillery.view.cloud
   (:require [clojure.string :as string])
   (:require [distillery.config :as cfg])
-  (:require [distillery.view.html :refer :all]))
+  (:require [distillery.view.html :refer :all])
+  (:require [mastersign.drawing :as mdr])
+  (:require [mastersign.wordcloud :as mwc]))
 
 (defn build-cloud-word-data
   "Transforms the word meta-data from an index
@@ -12,7 +14,7 @@
      (map
       (fn [w]
         (let [occurrence (dec (count (:occurrences w)))
-              confidence (/ (- (:mean-confidence w) cfg/min-confidence) (- 1 cfg/min-confidence))]
+              confidence (/ (- (:mean-confidence w) (cfg/value :min-confidence)) (- 1 (cfg/value :min-confidence)))]
           [(:id w)
            (:lexical-form w)
            (/ occurrence max-occurrence)
@@ -42,3 +44,18 @@
                       :src "cloud.png"}}
              (jscript (str "register_cloud_data('" id "'," cloud ");"))]})
 
+
+(defn create-cloud
+  [word-data target-path config cloud-key]
+  (let [ccv (fn [k] (cfg/value [cloud-key k] config))]
+    (mwc/create-cloud word-data
+                      :target-file target-path
+                      :width (ccv :width)
+                      :height (ccv :height)
+                      :precision (case (ccv :precision) :low 0.2 :medium 0.4 :high 0.6 0.4)
+                      :order-priority (ccv :order-priority)
+                      :font (apply mdr/font (concat [(ccv :font-family) 20] (ccv :font-style)))
+                      :min-font-size (ccv :min-font-size)
+                      :max-font-size (ccv :max-font-size)
+                      :color-fn #(apply mdr/color (concat (ccv :color) [(+ 0.25 (* % 0.75))]))
+                      :background-color (apply mdr/color (ccv :background-color)))))

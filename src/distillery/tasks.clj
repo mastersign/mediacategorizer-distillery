@@ -9,12 +9,10 @@
   (:require [distillery.view.html :refer (save-page)])
   (:require [distillery.view.dependencies :refer (save-dependencies)])
   (:require [distillery.view.base :refer (render)])
-  (:require [distillery.view.cloud :refer (build-cloud-word-data build-cloud-ui-data)])
+  (:require [distillery.view.cloud :refer (build-cloud-word-data build-cloud-ui-data create-cloud)])
   (:require [distillery.view.index :as v-index])
   (:require [distillery.view.video :as v-video])
-  (:require [distillery.view.word :as v-word])
-  (:require [mastersign.wordcloud :as mwc])
-  (:require [mastersign.drawing :as mdr]))
+  (:require [distillery.view.word :as v-word]))
 
 ;; ## Task Tracing
 
@@ -39,7 +37,7 @@
   The configuration var `distillery.configuration/parallel-proc`
   controls whether `pmap` or `map` is returned."
   []
-  (if cfg/parallel-proc pmap map))
+  (if (cfg/value :parallel-proc) pmap map))
 
 
 ;; ## Task Functions
@@ -161,25 +159,15 @@
 
 (defn- create-main-cloud
   "Creates the word cloud the global context."
-  [{:keys [output-dir cloud-precision words] :as job}]
-  (if cfg/skip-wordclouds
+  [{:keys [output-dir configuration words] :as job}]
+  (if (cfg/value :skip-wordclouds configuration)
     (do (print-progress "Skipping global wordcloud") [])
     (long-task
      "Creating global wordcloud"
-     (let [target-path (combine-path output-dir "cloud.png")
-           word-data (build-cloud-word-data words)
-           precision (case cloud-precision :low 0.2 :medium 0.4 :high 0.6 0.4)
-           cloud-info (mwc/create-cloud word-data
-                                        :target-file target-path
-                                        :width 540
-                                        :height 300
-                                        :precision precision
-                                        :order-priority 0.6
-                                        :font (mdr/font "Segoe UI" 20 :bold)
-                                        :min-font-size 13
-                                        :max-font-size 70
-                                        :color-fn #(mdr/color 0 0.3 0.8 (+ 0.25 (* % 0.75))))]
-       (build-cloud-ui-data cloud-info)))))
+     (build-cloud-ui-data (create-cloud (build-cloud-word-data words)
+                                        (combine-path output-dir "cloud.png")
+                                        configuration
+                                        :main-cloud)))))
 
 
 (defn create-index-page
@@ -238,26 +226,15 @@
 
 (defn- create-video-cloud
   "Creates the word cloud for a video."
-  [{:keys [output-dir cloud-precision] :as job} {:keys [id index path] :as video}]
-  (if cfg/skip-wordclouds
+  [{:keys [output-dir configuration] :as job} {:keys [id index path] :as video}]
+  (if (cfg/value :skip-wordclouds configuration)
     (do (print-progress "Skipping wordcloud for " id) [])
     (long-task
      (str "Creating wordcloud for " id)
-     (let [target-path (combine-path output-dir path "cloud.png")
-           word-data (build-cloud-word-data index)
-           precision (case cloud-precision :low 0.25 :medium 0.45 :high 0.65 0.35)
-           cloud-info (mwc/create-cloud word-data
-                                        :target-file target-path
-                                        :width 540
-                                        :height 200
-                                        :precision precision
-                                        :order-priority 0.5
-                                        :font (mdr/font "Segoe UI" 20 :bold)
-                                        :min-font-size 13
-                                        :max-font-size 50
-                                        :color-fn #(mdr/color 0 0.3 0.8 (+ 0.25 (* % 0.75))))]
-       ;:color-fn #(mdr/color (- 0.75 (* % 0.75)) (- 0.6 (* % 0.2)) (+ 0.5 (* % 0.5)) 1))]
-       (build-cloud-ui-data cloud-info)))))
+     (build-cloud-ui-data (create-cloud (build-cloud-word-data index)
+                                        (combine-path output-dir path "cloud.png")
+                                        configuration
+                                        :video-cloud)))))
 
 
 (defn create-video-page
@@ -302,5 +279,7 @@
   [{:keys [video]}]
   (let [results (load-data (:results-file video))]
     (pp/pprint (proc/reverse-index-results [(first results)]))))
+
+
 
 
