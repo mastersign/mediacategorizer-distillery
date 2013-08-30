@@ -1,6 +1,76 @@
 Data Structures
 ===============
 
+## Configuration File
+File in [Clojure EDN syntax](http://edn-format.org/) with the extension `.cfg`. 
+The content is a map with the configuration structure.
+### Configuration
+The configuration structure controls the processing of the 
+speech recognition results and the creation of the output. 
+#### Slots
+* **blacklist-resource**
+  _string_ the resource name for the blacklist
+* **blacklist-max-size**
+  _integer number_ the maximum number of words to take from the blacklist
+* **min-confidence**
+  _floating point number_ `[0..1]` the minimal recognition confidence for a word to be
+  used in the statistic analysis
+* **good-confidence**
+  _floating point number_ the minimal recognition confidence of words, 
+  recognized "without a doubt"
+* **min-relative-appearance**
+  _floating point number_ `[0..1]` the minimal relative appearance 
+  (`max-appearance / appearance`) for correction candidates
+* **parallel-proc**
+  _boolean_ a flag to activate the parallel processing
+* **skip-wordclouds**
+  _boolean_ a flag to suppress the time consuming generation of word clouds
+* **main-cloud**
+  _Cloud Configuration_ the configuration map for the global word cloud
+* **category-cloud**
+  _Cloud Configuration_ the configuration map for the category word clouds
+* **video-cloud**
+  _Cloud Configuration_ the configuration map for the video word clouds
+#### Example
+	{ :blacklist-resource (resource "blacklist.txt"))
+      :blacklist-max-size 1000
+	  :min-confidence 0.4
+	  :good-confidence 0.7
+	  :parallel-proc true
+      :skip-wordclouds false
+	  :main-cloud { ... } 
+      :category-cloud { ... }
+      :video-cloud { ... } }
+
+### Cloud Configuration
+A cloud configuration controls the creation of a word cloud.
+#### Slots
+* **width**
+  _integer number_ the width of the word cloud image in pixels
+* **height**
+  _integer number_ the height of the word cloud image in pixels
+* **precision**
+  _floating point number_ `[0..1]` the precision for finding a place for a word
+  in a word cloud
+* **order-priority**
+* **font-family**
+* **font-style**
+* **min-font-size**
+* **max-font-size**
+* **color**
+* **background-color**
+#### Example
+	{ :width 540
+	  :height 300
+	  :precision :medium
+	  :order-priority 0.6
+	  :font-family "Segoe UI"
+	  :font-style [:bold]
+	  :min-font-size 13
+	  :max-font-size 70
+	  :color [0.0 0.3 0.8]
+	  :background-color [0.0 0.0 0.0 0.0] }
+
 ## Speech Recognition Result File
 File in [Clojure EDN syntax](http://edn-format.org/) with file extension `.srr`.
 The content is a vector of speech recognition results.
@@ -146,16 +216,33 @@ and create the analysis result representation.
 * **output-dir**  
   _string_ file system path to the directory to save the analysis result 
   representation
+* **configuration**
+  _Configuration_ a configuration map which overwrites the default configuration
+  individually for each existing slot, can be nil or empty
 * **categories**  
   _vector_ of _category descriptions_
 * **videos**  
   _vector_ of _video descriptions_
 #### Example
+	{ :job-name "Archive 001"
+	  :job-description "The first part of the video archive."
+	  :output-dir "C:\\Videos\\Result"
+	  :configuration { ... } 
+	  :categories [ ... ] 
+      :video [ ... ] }
+
 ### Category Description
+Defines a category and all associated resources.
 #### Slots
 #### Example
 ### Video Description
+Defines a video and all associated resources.
 #### Slots
+* **id**
+* **name**
+* **video-file**
+* **audio-file**
+* **results-file**
 #### Example
 
 ## Analysis Results
