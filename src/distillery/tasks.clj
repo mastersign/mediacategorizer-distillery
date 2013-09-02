@@ -6,6 +6,7 @@
   (:require [distillery.files :refer :all])
   (:require [distillery.blacklist :refer :all])
   (:require [distillery.processing :as proc])
+  (:require [distillery.blacklist :as bl])
   (:require [distillery.view.html :refer (save-page)])
   (:require [distillery.view.dependencies :refer (save-dependencies)])
   (:require [distillery.view.base :refer (render)])
@@ -87,13 +88,25 @@
       :duration duration)))
 
 
+(def ^:private filter-map {:not-short proc/not-short?
+                :noun proc/noun?
+                :min-confidence proc/min-confidence?
+                :good-confidence proc/good-confidence?
+                :no-punctuation proc/no-punctuation?
+                :not-in-blacklist bl/not-in-blacklist?})
+
+(defn- word-predicate
+  "Create the word predicate for the video index."
+  [{:keys [configuration] :as job}]
+  (let [filters (map #(% filter-map) (cfg/value :index-filter configuration))]
+    (partial multi-filter filters)))
+
+
 (defn- build-video-index
   "Analyzes the speech recognition results of a single video and builds the video word index."
-  [video]
-  (print-progress "Building index for " (:id video))
-  (let [filters [proc/not-short? proc/noun? proc/min-confidence? proc/no-punctuation?]
-        predicate (partial multi-filter filters)
-        index (proc/video-word-index video :predicate predicate)]
+  [job video]
+  (trace-message "Building index for " (:id video))
+  (let [index (proc/video-word-index video :predicate (word-predicate job))]
     (assoc video :index index)))
 
 
@@ -106,12 +119,16 @@
 
 
 (defn analyze-speech-recognition-results
-  "Analyzes the speech recognition results an generates the index structures."
+  "Analyzes the speech recognition results and generates the index structures."
   [job]
   (long-task
    "Analyzing videos"
-   (let [job* (update-in job [:videos]
-                         #(vec ((map-fn) (comp build-video-statistics build-video-index) %)))
+   (let [job* (update-in
+               job [:videos]
+               (fn [videos]
+                 (vec ((map-fn)
+                       (fn [video] build-video-index job (build-video-statistics video))
+                       videos))))
          job* (assoc job*
                 :words (build-global-index job*))]
      job*)))
