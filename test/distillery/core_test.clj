@@ -101,15 +101,15 @@
     (print-word-list correction-list)
     ))
 
-(deftest test-resources
+(defn test-resources []
   (dt/prepare-output-dir job-descr))
 
-(deftest test-analyze
+(defn test-analyze []
   (-> job-descr
       dt/load-speech-recognition-results
       dt/analyze-speech-recognition-results))
 
-(deftest test-index
+(defn test-index []
   (let [job (-> job-descr
                 dt/load-speech-recognition-results
                 dt/analyze-speech-recognition-results)
@@ -123,7 +123,7 @@
        [task (vals tasks)]
        (task job)))))
 
-(deftest test-complete
+(defn test-complete []
   (let [job (-> job-descr
                 dt/load-speech-recognition-results
                 dt/analyze-speech-recognition-results)
