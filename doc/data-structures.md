@@ -1,35 +1,42 @@
 Data Structures
 ===============
+This document describes the most important data structures for the distillery
+system. 
 
-## Configuration File
+* [Configuration File](#Config)
+* [Job File](#Job)
+* [Speech Recognition Result File](#SpeechRecognitionResults)
+* [Analysis Results](#AnalysisResults)
+
+## Configuration File {#Config}
 File in [Clojure EDN syntax](http://edn-format.org/) with the extension `.cfg`. 
 The content is a map with the configuration structure.
 ### Configuration
 The configuration structure controls the processing of the 
 speech recognition results and the creation of the output. 
 #### Slots
-* **blacklist-resource**
+* **blacklist-resource**  
   _string_ the resource name for the blacklist
-* **blacklist-max-size**
+* **blacklist-max-size**  
   _integer number_ the maximum number of words to take from the blacklist
-* **min-confidence**
+* **min-confidence**  
   _floating point number_ `[0..1]` the minimal recognition confidence for a word to be
   used in the statistic analysis
-* **good-confidence**
+* **good-confidence**  
   _floating point number_ the minimal recognition confidence of words, 
   recognized "without a doubt"
-* **min-relative-appearance**
+* **min-relative-appearance**  
   _floating point number_ `[0..1]` the minimal relative appearance 
   (`max-appearance / appearance`) for correction candidates
-* **parallel-proc**
+* **parallel-proc**  
   _boolean_ a flag to activate the parallel processing
-* **skip-wordclouds**
+* **skip-wordclouds**  
   _boolean_ a flag to suppress the time consuming generation of word clouds
-* **main-cloud**
+* **main-cloud**  
   _Cloud Configuration_ the configuration map for the global word cloud
-* **category-cloud**
+* **category-cloud**  
   _Cloud Configuration_ the configuration map for the category word clouds
-* **video-cloud**
+* **video-cloud**  
   _Cloud Configuration_ the configuration map for the video word clouds
 #### Example
 	{ :blacklist-resource (resource "blacklist.txt"))
@@ -38,27 +45,40 @@ speech recognition results and the creation of the output.
 	  :good-confidence 0.7
 	  :parallel-proc true
       :skip-wordclouds false
-	  :main-cloud { ... } 
+	  :main-cloud { { :width 640
+                      :height 400
+                      :color [0.0 0.8 0.2]
+                      ... } } 
       :category-cloud { ... }
       :video-cloud { ... } }
 
 ### Cloud Configuration
 A cloud configuration controls the creation of a word cloud.
 #### Slots
-* **width**
+* **width**  
   _integer number_ the width of the word cloud image in pixels
-* **height**
+* **height**  
   _integer number_ the height of the word cloud image in pixels
-* **precision**
+* **precision**  
   _floating point number_ `[0..1]` the precision for finding a place for a word
-  in a word cloud
-* **order-priority**
-* **font-family**
-* **font-style**
-* **min-font-size**
-* **max-font-size**
-* **color**
-* **background-color**
+  in the word cloud
+* **order-priority**  
+  _floating point number_ `[0..1]` the priority of building an alphabetic order
+  in the word cloud
+* **font-family**  
+  _string_ the family name of the font to be used for the words in the word cloud 
+* **font-style**  
+  _vector_ vector with a combination of the following styles: `:bold`, `:italic`
+* **min-font-size**  
+  _integer number_ `[10..]` the font size of the smallest words in pixels 
+* **max-font-size**  
+  _integer number_ `[10..]` the font size of the largest words in pixels
+* **color**  
+  _vector_ a vector with three _floating point numbers_ `[0..1]` 
+  for red, green, and blue
+* **background-color**  
+  _vector_ a vector with four _floating point numbers_ `[0..1]` 
+  for red, green, blue, and alpha
 #### Example
 	{ :width 540
 	  :height 300
@@ -71,7 +91,75 @@ A cloud configuration controls the creation of a word cloud.
 	  :color [0.0 0.3 0.8]
 	  :background-color [0.0 0.0 0.0 0.0] }
 
-## Speech Recognition Result File
+## Job File {#Job}
+File in [Clojure EDN syntax](http://edn-format.org/) with file extension `.saj`.
+It is the input for the speech recognition result analysis and contains
+a job description structure. Part of a job is a name, 
+a number of categories, a number of videos, and additional parameters
+like the output directory.
+### Job Description
+A job description contains all information necessary to perform the analysis
+and create the analysis result representation.
+#### Slots
+* **job-name**  
+  _string_ short name for the job
+* **job-description**  
+  _string_ brief textual description of the job
+* **output-dir**  
+  _string_ file system path to the directory to save the analysis result 
+  representation
+* **configuration**
+  _Configuration_ a configuration map which overwrites the default configuration
+  individually for each existing slot, can be nil or empty
+* **categories**  
+  _vector_ of _category descriptions_
+* **videos**  
+  _vector_ of _video descriptions_
+#### Example
+	{ :job-name "Archive 001"
+	  :job-description "The first part of the video archive."
+	  :output-dir "C:\\Videos\\Result"
+	  :configuration { ... } 
+	  :categories [ ... ] 
+      :videos [ ... ] }
+
+### Category Description
+Defines a category and all associated resources.
+#### Slots
+* **id**  
+  _string_ a short identifier without white spaces and special chars
+* **name**  
+  _string_ the full name of the category
+* **resources**  
+  _vector_ a vector with category resource URLs
+#### Example
+	{ :id "comb"
+      :name "Combination"
+      :resources [ "http://en.wikipedia.org/wiki/Combination"
+                   "http://mathworld.wolfram.com/Combination.html" ] }
+
+### Video Description
+Defines a video and all associated resources.
+#### Slots
+* **id**  
+  _string_ a short identifier without white spaces and special chars
+* **name**  
+  _string_ the full name of the video
+* **video-file**  
+  _string_ the absolute path to the video file
+* **audio-file**  
+  _string_ the absolute path to the audio file `.wav` (PCM 16bit mono),
+  used for speech recognition  
+* **results-file**  
+  _string_ the absolute path to the speech recognition file `*.srr`
+#### Example
+	{ :id "C1-P3-Intro"
+      :name "Introduction"
+      :video-file "D:\\media\\c1\\p3_introduction.mp4"
+      :audio-file "D:\\media\\proc\\audio\\p3_introduction.wav"
+      :results-file "D:\\media\\proc\\transcript\\p3_introduction.srr" }
+
+## Speech Recognition Result File {#SpeechRecognitionResults}
 File in [Clojure EDN syntax](http://edn-format.org/) with file extension `.srr`.
 The content is a vector of speech recognition results.
 ### Example
@@ -93,11 +181,11 @@ The content is a vector of speech recognition results.
 ### Phrase
 A phrase is a sequence of recognized words.
 #### Slots
-* **confidence**
+* **confidence**  
   _floating point number_ `[0..1]` describing the overall confidence of this phrase
-* **text**
+* **text**  
   _string_ with the text of the words in this phrase
-* **words**
+* **words**  
   _vector_ of the _recognized words_ in this phrase
 ### Speech Recognition Result
 A speech recognition result describes the result yielded by the speech
@@ -110,20 +198,20 @@ phrases. The phrase with the highest confidence is typically used as the
 recognized phrase for the audio section.
 A speech recognition result is a _phrase_ as well.
 #### Slots
-* **no**
+* **no**  
   _integer number_ `[0..n]` identifying the result in the context of a video
-* **start**
+* **start**  
   _floating point number_ with the begin of the audio section in seconds
-* **duration**
+* **duration**  
   _floating point number_ with the duration of the audio section in seconds
-* **confidence**
+* **confidence**  
   _floating point number_ `[0..1]` describing the overall confidence of the
   _recognized phrase_ for the audio section
-* **text**
+* **text**  
   _string_ with the text of the words in the _recognized phrase_
-* **words**
+* **words**  
   _vector_ of the _recognized words_ in the _recognized phrase_
-* **alternates** (optional)
+* **alternates** (optional)  
   _vector_ with _alternate phrases_
 #### Example
 	{ :no 0
@@ -158,16 +246,16 @@ A recognized word is a word in the context of a recognition result. Every word
 is recognized with a certain confidence. The confidence values of the words
 in a phrase can be combined to an overall confidence for a phrase.
 #### Slots
-* **no**
+* **no**  
   _integer number_ `[0..n]` identifying the word in a phrase
-* **confidence**
+* **confidence**  
   _floating point number_ `[0..1]` describing the confidence for the recognition
   of this word
-* **text**
+* **text**  
   _string_ the text representation of the word in the context of the phrase
-* **lexical-form**
+* **lexical-form**  
   _string_ the lexical form of the word
-* **pronunciation**
+* **pronunciation**  
   _string_ the [IPA](http://en.wikipedia.org/wiki/International_Phonetic_Alphabet)
   pronunciation of the word in the context of the phrase
 #### Example
@@ -183,69 +271,23 @@ Reverse indexing adds numerical references pointing upwards in the hierarchy.
 For words in the recognized phrase of a result the reverse indexing adds
 one additional slot:
 
-* **result-no**
+* **result-no**  
   _integer number_ `[0..n]` identifying the result containing this word
 #### Reverse Indexed Alternate Phrase
 The reverse indexing adds one additional slot:
 
-* **result-no**
+* **result-no**  
   _integer number_ `[0..n]` identifying the result containing this phrase
 #### Reverse Indexed Phrase Word
 For words in an alternate phrase of a result the reverse indexing adds
 two additional slots:
 
-* **result-no**
+* **result-no**  
   _integer number_ `[0..n]` identifying the result containing the phrase
-* **alt-no**
+* **alt-no**  
   _integer number_ `[0..n]` identifying the alternate phrase in the result
 
-## Job File
-File in [Clojure EDN syntax](http://edn-format.org/) with file extension `.saj`.
-It is the input for the speech recognition result analysis and contains
-a job description structure. Part of a job is a name, 
-a number of categories, a number of videos, and additional parameters
-like the output directory.
-### Job Description
-A job description contains all information necessary to perform the analysis
-and create the analysis result representation.
-#### Slots
-* **job-name**  
-  _string_ short name for the job
-* **job-description**  
-  _string_ brief textual description of the job
-* **output-dir**  
-  _string_ file system path to the directory to save the analysis result 
-  representation
-* **configuration**
-  _Configuration_ a configuration map which overwrites the default configuration
-  individually for each existing slot, can be nil or empty
-* **categories**  
-  _vector_ of _category descriptions_
-* **videos**  
-  _vector_ of _video descriptions_
-#### Example
-	{ :job-name "Archive 001"
-	  :job-description "The first part of the video archive."
-	  :output-dir "C:\\Videos\\Result"
-	  :configuration { ... } 
-	  :categories [ ... ] 
-      :video [ ... ] }
-
-### Category Description
-Defines a category and all associated resources.
-#### Slots
-#### Example
-### Video Description
-Defines a video and all associated resources.
-#### Slots
-* **id**
-* **name**
-* **video-file**
-* **audio-file**
-* **results-file**
-#### Example
-
-## Analysis Results
+## Analysis Results {#AnalysisResults}
 ### Word Index
 A word index points from words to a number of occurrences 
 in video phrases. It is encoded as a map with the lexical form of a word
@@ -300,3 +342,11 @@ An occurrence is the address to a recognized word in video.
       :result-no 20 
       :word-no 3 
       :confidence 0.679 }
+
+
+*[EDN]: Extensible Data Notation
+*[HTML]: Hyper Text Markup Language
+*[IPA]: International Phonetic Alphabet
+*[PCM]: Pulse Code Modulation
+*[URL]: Uniform Resource Locator
+*[XML]: eXtensible Markup Language
