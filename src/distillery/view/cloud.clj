@@ -9,7 +9,7 @@
   "Transforms the word meta-data from an index
   into the input format for the cloud generator."
   [index]
-  (let [max-occurrence (double (dec (apply max (map #(count (:occurrences %)) (vals index)))))]
+  (let [max-occurrence (double (dec (apply max (cons 0 (map #(count (:occurrences %)) (vals index))))))]
     (vec
      (map
       (fn [w]
