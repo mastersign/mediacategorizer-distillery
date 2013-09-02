@@ -17,16 +17,16 @@
 
 ;; ## Task Tracing
 
-(defn print-progress
+(defn trace-message
   [& msg]
   (println (str "# " (apply str msg))))
 
-(defmacro long-task
+(defmacro trace-block
   [msg & body]
   `(do
-     (print-progress (str "BEGIN " ~msg "..."))
+     (trace-message (str "BEGIN " ~msg "..."))
      (let [result# (time (do ~@body))]
-       (print-progress (str "END   " ~msg))
+       (trace-message (str "END   " ~msg))
        result#)))
 
 
@@ -43,12 +43,12 @@
 
 ;; ## Task Functions
 
-;; ### Preprocessing and Dependencies
+;; ### Dependencies
 
 (defn prepare-output-dir
   "Prepares the output directory by creating a number of sub directories and copying site dependencies."
   [{:keys [output-dir]}]
-  (print-progress "Preparing output directory " output-dir)
+  (trace-message "Preparing output directory " output-dir)
   (create-dir output-dir)
   (create-dir output-dir "categories")
   (create-dir output-dir "videos")
@@ -59,7 +59,7 @@
 (defn- load-speech-recognition-result
   "Loads the speech recognition results for a video."
   [{:keys [id results-file] :as video}]
-  (print-progress "Loading results of " id)
+  (trace-message "Loading results of " id)
   (let [results (-> results-file
                     load-data
                     proc/strip-alternates
@@ -70,7 +70,7 @@
 (defn load-speech-recognition-results
   "Loads the speech recognition results for the videos."
   [job]
-  (long-task
+  (trace-block
    "Loading speech recognition results"
    (update-in job [:videos]
               #(vec ((map-fn) load-speech-recognition-result %)))))
@@ -78,7 +78,7 @@
 
 (defn- build-video-statistics
   [{:keys [id results] :as video}]
-  (print-progress "Building statistics for " id)
+  (trace-message "Building statistics for " id)
   (let [last-result (last results)
         duration (+ (:start last-result) (:duration last-result))]
     (assoc video
@@ -113,7 +113,7 @@
 (defn- build-global-index
   "Merges the video indexes into one global word index."
   [{:keys [videos]}]
-  (long-task
+  (trace-block
    "Merging indexes"
    (apply (partial merge-with proc/merge-index-entries) (map :index videos))))
 
@@ -121,7 +121,7 @@
 (defn analyze-speech-recognition-results
   "Analyzes the speech recognition results and generates the index structures."
   [job]
-  (long-task
+  (trace-block
    "Analyzing videos"
    (let [job* (update-in
                job [:videos]
@@ -165,7 +165,7 @@
 (defn create-word-includes
   "Create includes for all words of the project."
   [{:keys [output-dir words] :as job}]
-  (long-task
+  (trace-block
    "Creating global word includes"
    (let [words-path "words"]
      (create-dir (combine-path output-dir words-path))
@@ -178,8 +178,8 @@
   "Creates the word cloud the global context."
   [{:keys [output-dir configuration words] :as job}]
   (if (cfg/value :skip-wordclouds configuration)
-    (do (print-progress "Skipping global wordcloud") [])
-    (long-task
+    (do (trace-message "Skipping global wordcloud") [])
+    (trace-block
      "Creating global wordcloud"
      (build-cloud-ui-data (create-cloud (build-cloud-word-data words)
                                         (combine-path output-dir "cloud.png")
@@ -190,7 +190,7 @@
 (defn create-index-page
   "Creates the main page for the site."
   [job]
-  (print-progress "Creating index page")
+  (trace-message "Creating index page")
   (let [cloud (create-main-cloud job)
         job* (assoc job :cloud cloud)
         pwords (proc/partition-index (:words job*))
@@ -202,21 +202,21 @@
 (defn create-categories-page
   "Creates the overview page for all categories."
   [job]
-  (print-progress "Creating categories overview page")
+  (trace-message "Creating categories overview page")
   (create-page "categories.html" v-index/render-categories-page job))
 
 
 (defn create-category-pages
   "Creates one page for every category."
   [job]
-  (long-task "Creating category pages"
+  (trace-block "Creating category pages"
              (println "TODO: category pages")))
 
 
 (defn create-videos-page
   "Creates the overview page for all videos."
   [job]
-  (print-progress "Creating videos overview page")
+  (trace-message "Creating videos overview page")
   (create-page "videos.html" v-index/render-videos-page job))
 
 
@@ -232,7 +232,7 @@
 (defn create-video-word-includes
   "Create includes for all words of a video."
   [{:keys [output-dir] :as job} {:keys [id index path] :as video}]
-  (long-task
+  (trace-block
    (str "Creating video word includes for " id)
    (let [words-path (combine-path path "words")]
      (create-dir (combine-path output-dir words-path))
@@ -245,8 +245,8 @@
   "Creates the word cloud for a video."
   [{:keys [output-dir configuration] :as job} {:keys [id index path] :as video}]
   (if (cfg/value :skip-wordclouds configuration)
-    (do (print-progress "Skipping wordcloud for " id) [])
-    (long-task
+    (do (trace-message "Skipping wordcloud for " id) [])
+    (trace-block
      (str "Creating wordcloud for " id)
      (build-cloud-ui-data (create-cloud (build-cloud-word-data index)
                                         (combine-path output-dir path "cloud.png")
@@ -257,7 +257,7 @@
 (defn create-video-page
   "Create the main page for a certain video."
   [{:keys [output-dir] :as job} {:keys [id index video-file] :as video}]
-  (print-progress "Creating video page for " id)
+  (trace-message "Creating video page for " id)
   (let [video-path (combine-path "videos" id)]
 
     (create-dir (combine-path output-dir video-path))
@@ -284,7 +284,7 @@
 (defn create-video-pages
   "Creates one page for every video."
   [job]
-  (long-task
+  (trace-block
    "Creating video pages"
    (doall
     ((map-fn)

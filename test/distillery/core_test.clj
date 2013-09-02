@@ -117,7 +117,7 @@
                :main-page dt/create-index-page
                :categories-page dt/create-categories-page
                :videos-page dt/create-videos-page}]
-    (dt/long-task
+    (dt/trace-block
      "Index run"
      (doseq
        [task (vals tasks)]
@@ -133,10 +133,7 @@
                :categories dt/create-category-pages
                :videos-page dt/create-videos-page
                :videos dt/create-video-pages}]
-    (dt/long-task
+    (dt/trace-block
      "Complete run"
      (doall ((dt/map-fn) #(% job) (vals tasks))))))
-
-
-
 
