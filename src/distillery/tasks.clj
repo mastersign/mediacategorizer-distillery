@@ -120,18 +120,19 @@
       :duration duration)))
 
 
-(def ^:private filter-map {:not-short proc/not-short?
-                :noun proc/noun?
-                :min-confidence proc/min-confidence?
-                :good-confidence proc/good-confidence?
-                :no-punctuation proc/no-punctuation?
-                :not-in-blacklist bl/not-in-blacklist?})
+(def ^:private filter-map
+  {:not-short proc/not-short?
+   :noun proc/noun?
+   :min-confidence proc/min-confidence?
+   :good-confidence proc/good-confidence?
+   :no-punctuation proc/no-punctuation?
+   :not-in-blacklist bl/not-in-blacklist?})
 
 (defn- word-predicate
   "Create the word predicate for the video index."
   [{:keys [configuration] :as job}]
   (let [filters (map #(% filter-map) (cfg/value :index-filter configuration))]
-    (partial multi-filter filters)))
+    (partial multi-filter (filter #(not (nil? %)) filters))))
 
 
 (defn- build-video-index
@@ -159,7 +160,7 @@
                job [:videos]
                (fn [videos]
                  (vec ((map-fn)
-                       (fn [video] build-video-index job (build-video-statistics video))
+                       (fn [video] (build-video-index job (build-video-statistics video)))
                        videos))))
          job* (assoc job*
                 :words (build-global-index job*))]
