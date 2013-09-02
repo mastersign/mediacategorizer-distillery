@@ -131,12 +131,21 @@ Defines a category and all associated resources.
 * **name**  
   _string_ the full name of the category
 * **resources**  
-  _vector_ a vector with category resource URLs
+  _vector_ a vector with _Category Resource Descriptions_
 #### Example
 	{ :id "comb"
       :name "Combination"
-      :resources [ "http://en.wikipedia.org/wiki/Combination"
-                   "http://mathworld.wolfram.com/Combination.html" ] }
+      :resources [ {:type :html, :url "http://en.wikipedia.org/wiki/Combination"}
+                   {:type :html, :url "http://mathworld.wolfram.com/Combination.html"}
+                   {:type :plain, :url "file://D:\\text\\combination.txt"} ] }
+
+### Category Resource Description
+The reference to a category resource.
+#### Slots
+* **type**  
+  _:plain_ | _:html_ the text type of the resource
+* **url**  
+  _string_ the URL to the resource
 
 ### Video Description
 Defines a video and all associated resources.
