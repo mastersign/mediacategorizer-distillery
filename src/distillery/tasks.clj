@@ -56,6 +56,38 @@
   (save-dependencies output-dir))
 
 
+;; ### Preprocessing, Analysis
+
+(defn- load-category-resource
+  "Loads a single resource for a category."
+  [{:keys [id]} {:keys [type url] :as resource}]
+  (trace-message "Loading category resource " url)
+  (assoc resource :words
+    (case type
+      :plain (load-words url)
+      :html (load-words-from-html url))))
+
+
+(defn- load-category-resources
+  "Loads the resources for a category."
+  [{:keys [id resources] :as category}]
+  (trace-message "Loading category resources for '" id "'")
+  (let [resources* (doall (map #(load-category-resource category %) resources))
+        words (apply concat (map :words resources*))]
+    (assoc category
+      :resources resources*
+      :words words)))
+
+
+(defn load-categories
+  "Loads the resources of the categories."
+  [{:keys [categories] :as job}]
+  (trace-block
+   "Loading category resources"
+   (assoc job :categories
+     (doall (map #(load-category-resources %) categories)))))
+
+
 (defn- load-speech-recognition-result
   "Loads the speech recognition results for a video."
   [{:keys [id results-file] :as video}]

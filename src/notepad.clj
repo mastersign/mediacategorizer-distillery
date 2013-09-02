@@ -15,6 +15,8 @@
 
 ;(distillery.core-test/test-analyze)
 
+;(distillery.core-test/test-categories)
+
 ;(distillery.core-test/test-index)
 
 ;(distillery.core-test/test-complete)

@@ -58,7 +58,24 @@
                         :audio-file (str root "Media\\Audio\\de-DE\\" name ".wav")
                         :results-file (str root "Media\\Audio\\de-DE\\transcript\\" name ".srr")}))
                 (vec))
-   :categories []})
+   :categories [ {:id "Info"
+                  :name "Informatik"
+                  :resources [{:type :html, :url "http://de.wikipedia.org/wiki/Informatik"}
+                              {:type :html, :url "http://de.wikipedia.org/wiki/Theoretische_Informatik"}
+                              {:type :html, :url "http://de.wikipedia.org/wiki/Praktische_Informatik"}
+                              {:type :html, :url "http://de.wikipedia.org/wiki/Technische_Informatik"}]}
+                 {:id "Math"
+                  :name "Mathematik"
+                  :resources [{:type :html, :url "http://de.wikipedia.org/wiki/Mathematik"}
+                              {:type :html, :url "http://de.wikipedia.org/wiki/Rechnen"}
+                              {:type :html, :url "http://de.wikipedia.org/wiki/Zahl"}
+                              {:type :html, :url "http://de.wikipedia.org/wiki/Arithmetik"}]}
+                 {:id "Oeko"
+                  :name "Wirtschaft"
+                  :resources [{:type :html, :url "http://de.wikipedia.org/wiki/Wirtschaft"}
+                              {:type :html, :url "http://de.wikipedia.org/wiki/Wirtschaftswissenschaft"}
+                              {:type :html, :url "http://de.wikipedia.org/wiki/Bank"}
+                              {:type :html, :url "http://de.wikipedia.org/wiki/Geld"}]}]})
 
 (deftest test-playground
   (let [path (nth paths 14)
@@ -100,6 +117,10 @@
     ;; Print correction list
     (print-word-list correction-list)
     ))
+
+(defn test-categories []
+  (-> job-descr
+      dt/load-categories))
 
 (defn test-resources []
   (dt/prepare-output-dir job-descr))
