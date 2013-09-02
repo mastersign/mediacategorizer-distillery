@@ -322,7 +322,8 @@
    (doall
     ((map-fn)
      #(create-video-page job %)
-     (:videos job)))))
+     (:videos job))))
+  nil)
 
 
 (defn print-reverse-indexed-results

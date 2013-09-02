@@ -156,5 +156,7 @@
                :videos dt/create-video-pages}]
     (dt/trace-block
      "Complete run"
-     (doall ((dt/map-fn) #(% job) (vals tasks))))))
+     (doall ((dt/map-fn) #(% job) (vals tasks)))))
+  nil)
+
 
