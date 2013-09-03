@@ -128,35 +128,41 @@
 (defn test-analyze []
   (-> job-descr
       dt/load-speech-recognition-results
-      dt/analyze-speech-recognition-results))
+      dt/analyze-speech-recognition-results
+      dt/load-categories))
 
 (defn test-index []
   (let [job (-> job-descr
                 dt/load-speech-recognition-results
-                dt/analyze-speech-recognition-results)
-        tasks {:prep dt/prepare-output-dir
-               :main-page dt/create-index-page
-               :categories-page dt/create-categories-page
-               :videos-page dt/create-videos-page}]
+                dt/analyze-speech-recognition-results
+                dt/load-categories)]
     (dt/trace-block
      "Index run"
-     (doseq
-       [task (vals tasks)]
-       (task job)))))
+     (dt/prepare-output-dir job)
+     (doall ((dt/map-fn) #(% job)
+             [dt/create-index-page
+              dt/create-categories-page
+              dt/create-videos-page]))
+     (dt/show-main-page job)))
+  nil)
 
 (defn test-complete []
   (let [job (-> job-descr
                 dt/load-speech-recognition-results
-                dt/analyze-speech-recognition-results)
-        tasks {:prep dt/prepare-output-dir
-               :main-page dt/create-index-page
-               :categories-page dt/create-categories-page
-               :categories dt/create-category-pages
-               :videos-page dt/create-videos-page
-               :videos dt/create-video-pages}]
+                dt/analyze-speech-recognition-results
+                dt/load-categories)]
     (dt/trace-block
      "Complete run"
-     (doall ((dt/map-fn) #(% job) (vals tasks)))))
+     (dt/prepare-output-dir job)
+     (doall ((dt/map-fn) #(% job)
+             [dt/create-index-page
+              dt/create-categories-page
+              dt/create-category-pages
+              dt/create-videos-page
+              dt/create-video-pages]))
+     (dt/show-main-page job)))
   nil)
 
 
+(defn test-show-main-page []
+  (dt/show-main-page job-descr))

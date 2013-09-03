@@ -1,6 +1,7 @@
 (ns distillery.tasks
   (:require [clojure.string :as string])
   (:require [clojure.pprint :as pp])
+  (:require [clojure.java.browse :refer (browse-url)])
   (:require [distillery.config :as cfg])
   (:require [distillery.data :refer :all])
   (:require [distillery.files :refer :all])
@@ -86,6 +87,13 @@
    "Loading category resources"
    (assoc job :categories
      (doall (map #(load-category-resources %) categories)))))
+
+
+(defn analyze-categories
+  "Analyzes the categories and generates the index structures."
+  [job]
+  (println "TODO: tasks/analyze-categories")
+  job)
 
 
 (defn- load-speech-recognition-result
@@ -326,11 +334,22 @@
   nil)
 
 
+;; ## Debug Tasks
+
+
 (defn print-reverse-indexed-results
   [{:keys [video]}]
   (let [results (load-data (:results-file video))]
     (pp/pprint (proc/reverse-index-results [(first results)]))))
 
+
+(defn show-main-page
+  [{:keys [output-dir]}]
+  (-> (combine-path output-dir "/index.html")
+      get-path
+      .toUri
+      .toString
+      browse-url))
 
 
 

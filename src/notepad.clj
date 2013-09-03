@@ -21,3 +21,4 @@
 
 ;(distillery.core-test/test-complete)
 
+;(distillery.core-test/test-show-main-page)
