@@ -277,9 +277,11 @@
    (str "Creating video word includes for " id)
    (let [words-path (combine-path path "words")]
      (create-dir (combine-path output-dir words-path))
-     (doseq [word (vals index)]
+     ((map-fn)
+      (fn [word]
        (let [word-path (combine-path words-path (:id word))]
-         (create-video-word-include job video (assoc word :path word-path)))))))
+         (create-video-word-include job video (assoc word :path word-path))))
+      (vals index)))))
 
 
 (defn- create-video-cloud
