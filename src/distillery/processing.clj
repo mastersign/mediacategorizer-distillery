@@ -213,6 +213,29 @@
         index (reduce-by-sorted :lexical-form add-occurrence nil ws)]
     (map-values compute-index-entry-stats index)))
 
+(defn- compute-category-index-entry-stats
+  [{:keys [occurrences] :as entry}]
+  (assoc entry
+    :occurrence-count (count occurrences)))
+
+(defn- category-words
+  [{:keys [words] :as category} & {:keys [predicate]}]
+  (filter predicate words))
+
+(defn category-index
+  "Builds an index for a sequence of category words."
+  [category & {:keys [predicate]}]
+  (let [ws (category-words category :predicate predicate)
+        add-occurrence (fn [props word]
+                        (let [props (or props {:id (word-identifier word)
+                                               :lexical-form (:lexical-form word)})]
+                          (assoc props :occurrences
+                            (conj (:occurrences props [])
+                                  {:category-id (:id category)
+                                   :no (:no word)}))))
+        index (reduce-by-sorted :lexical-form add-occurrence nil ws)]
+    (map-values compute-category-index-entry-stats index)))
+
 (defn- char-to-index-letter
   "Converts every alphabetic character in its upper case and all other characters into '?'."
   [c]
