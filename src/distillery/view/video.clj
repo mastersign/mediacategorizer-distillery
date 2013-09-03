@@ -64,10 +64,9 @@
 
 (defn- render-cloud
   "Create the HTML for the video word cloud."
-  [{{:keys [id index cloud] :as video} :video :as args}]
-  (let [];code (map #(div (str (first %) ": " (let [r (second %)] (str (.x r) ", " (.y r))))) cloud)]
-    (innerpage "cloud" "Wortwolke" false
-               (cloud/render-cloud id cloud))))
+  [{{:keys [id cloud] :as video} :video :as args}]
+  (innerpage "cloud" "Wortwolke" false
+               (cloud/render-cloud id cloud)))
 
 (defn- render-categories
   "Create the HTML for the video categories."
@@ -101,5 +100,6 @@
       (render-cloud args)
       (render-categories args)
       (render-video-word-frame args)]])
+
 
 
