@@ -120,7 +120,8 @@
 
 (defn test-categories []
   (-> job-descr
-      dt/load-categories))
+      dt/load-categories
+      dt/analyze-categories))
 
 (defn test-resources []
   (dt/prepare-output-dir job-descr))
@@ -129,13 +130,15 @@
   (-> job-descr
       dt/load-speech-recognition-results
       dt/analyze-speech-recognition-results
-      dt/load-categories))
+      dt/load-categories
+      dt/analyze-categories))
 
 (defn test-index []
   (let [job (-> job-descr
                 dt/load-speech-recognition-results
                 dt/analyze-speech-recognition-results
-                dt/load-categories)]
+                dt/load-categories
+                dt/analyze-categories)]
     (dt/trace-block
      "Index run"
      (dt/prepare-output-dir job)
@@ -150,7 +153,8 @@
   (let [job (-> job-descr
                 dt/load-speech-recognition-results
                 dt/analyze-speech-recognition-results
-                dt/load-categories)]
+                dt/load-categories
+                dt/analyze-categories)]
     (dt/trace-block
      "Complete run"
      (dt/prepare-output-dir job)
