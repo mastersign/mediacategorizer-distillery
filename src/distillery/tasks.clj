@@ -88,7 +88,7 @@
   "Loads the resources for a category."
   [{:keys [id resources] :as category}]
   (trace-message "Loading category resources for '" id "'")
-  (let [resources* (doall (map #(load-category-resource category %) resources))
+  (let [resources* ((map-fn) #(load-category-resource category %) resources)
         words (apply concat (map :words resources*))]
     (assoc category
       :resources resources*
