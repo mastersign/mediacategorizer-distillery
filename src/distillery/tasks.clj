@@ -165,7 +165,7 @@
 
 (defn- build-video-statistics
   [{:keys [id results] :as video}]
-  (trace-message "Building statistics for " id)
+  (trace-message "Building statistics for video '" id "'")
   (let [last-result (last results)
         duration (+ (:start last-result) (:duration last-result))]
     (assoc video
@@ -178,7 +178,7 @@
 (defn- build-video-index
   "Analyzes the speech recognition results of a single video and builds the video word index."
   [job video]
-  (trace-message "Building index for " (:id video))
+  (trace-message "Building index for video '" (:id video) "'")
   (let [index (proc/video-word-index video :predicate (word-predicate job))]
     (assoc video :index index)))
 
