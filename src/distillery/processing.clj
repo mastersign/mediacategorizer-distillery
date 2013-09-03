@@ -213,11 +213,6 @@
         index (reduce-by-sorted :lexical-form add-occurrence nil ws)]
     (map-values compute-index-entry-stats index)))
 
-(defn- compute-category-index-entry-stats
-  [{:keys [occurrences] :as entry}]
-  (assoc entry
-    :occurrence-count (count occurrences)))
-
 (defn- category-words
   [{:keys [words] :as category} & {:keys [predicate]}]
   (filter predicate words))
@@ -232,9 +227,10 @@
                           (assoc props :occurrences
                             (conj (:occurrences props [])
                                   {:category-id (:id category)
-                                   :no (:no word)}))))
+                                   :no (:no word)
+                                   :confidence 1}))))
         index (reduce-by-sorted :lexical-form add-occurrence nil ws)]
-    (map-values compute-category-index-entry-stats index)))
+    (map-values compute-index-entry-stats index)))
 
 (defn- char-to-index-letter
   "Converts every alphabetic character in its upper case and all other characters into '?'."
