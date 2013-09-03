@@ -57,7 +57,13 @@
           (.endsWith text ";")
           (= text "@")
           (= text "(")
-          (= text ")")))))
+          (= text ")")
+          (= text "[")
+          (= text "]")
+          (= text "{")
+          (= text "}")
+          (= text "§")
+          (= text "$")))))
 
 (defn not-short?
   "Checks whether a word is long enough to be relevant."
@@ -223,7 +229,4 @@
   (->> index
        (group-by (comp char-to-index-letter first first))
        (map-values #(apply sorted-map (apply concat %)))))
-
-
-
 
