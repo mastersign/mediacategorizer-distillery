@@ -88,9 +88,10 @@
   (let [clean-DE (fn [c] (case c \Ä \A \Ö \O \Ü \U \ß \S c))
         c (clean-DE (first (.toUpperCase text)))
         n (int c)
-        s (- (if (or (< n 64) (> n 90)) 64 n) 65)
-        a (* (/ Math/PI 13) s)]
-    (if (<= a Math/PI) (- Math/PI a) a)))
+        s (- (if (or (< n 64) (> n 90)) 64 n) 65)]
+    (if (< s 14)
+      (- Math/PI (/ Math/PI 28) (* (/ Math/PI 14) s))
+      (+ Math/PI (/ Math/PI 26) (* (/ Math/PI 12) (- s 14))))))
 
 (defn- ring-step
   [r prec]
