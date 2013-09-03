@@ -18,9 +18,14 @@
 
 ;; ## Task Tracing
 
+(def trace-agent (agent nil))
+
 (defn trace-message
   [& msg]
-  (println (str "# " (apply str msg))))
+  (let [text (apply str msg)]
+  (send-off trace-agent
+        (fn [state] (println (str "# " text))))
+  text))
 
 (defmacro trace-block
   [msg & body]
