@@ -39,7 +39,10 @@
   The configuration var `distillery.configuration/parallel-proc`
   controls whether `pmap` or `map` is returned."
   []
-  (if (cfg/value :parallel-proc) pmap map))
+  (if (cfg/value :parallel-proc)
+    #(doall (pmap %1 %2))
+    #(doall (map %1 %2))))
+
 (def ^:private filter-map
   {:not-short proc/not-short?
    :noun proc/noun?
