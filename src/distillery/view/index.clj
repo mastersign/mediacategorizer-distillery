@@ -54,10 +54,17 @@
       (render-main-glossary args)
       (render-main-word-frame args)]])
 
+(defn- render-categories-list-item
+  [{:keys [id name] :as category}]
+  (list-item (link (str "categories/" id "/index.html") name)))
+
 (defn- render-categories-list
   [{:keys [categories] :as args}]
-  (innerpage "overview" "Übersicht" true
-             [(TODO "Kategorieliste")]))
+  (->> categories
+       (into (sorted-set-by (key-comp :name)))
+       (map render-categories-list-item)
+       (ulist)
+       (innerpage "overview" "Übersicht" true)))
 
 (defn render-categories-page
   "Renders the categories main page."
@@ -68,7 +75,7 @@
      [(headline 2 "Kategorien")
       (render-categories-list args)]])
 
-(defn- render-video-list-item
+(defn- render-videos-list-item
   "Renders a video link as list item."
   [{:keys [id name] :as video}]
   (list-item (link (str "videos/" id "/index.html") name)))
@@ -77,7 +84,7 @@
   [{:keys [videos] :as args}]
   (let [video-list (into (sorted-set-by (key-comp :name)) videos)]
     (innerpage "overview" "Übersicht" true
-               (ulist (map render-video-list-item video-list)))))
+               (ulist (map render-videos-list-item video-list)))))
 
 (defn render-videos-page
   "Renders the videos main page."
@@ -87,4 +94,5 @@
    :page
      [(headline 2 "Videos")
       (render-videos-list args)]])
+
 
