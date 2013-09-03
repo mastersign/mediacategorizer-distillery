@@ -40,6 +40,19 @@
   controls whether `pmap` or `map` is returned."
   []
   (if (cfg/value :parallel-proc) pmap map))
+(def ^:private filter-map
+  {:not-short proc/not-short?
+   :noun proc/noun?
+   :min-confidence proc/min-confidence?
+   :good-confidence proc/good-confidence?
+   :no-punctuation proc/no-punctuation?
+   :not-in-blacklist bl/not-in-blacklist?})
+
+(defn- word-predicate
+  "Create the word predicate for the video index."
+  [{:keys [configuration] :as job}]
+  (let [filters (map #(% filter-map) (cfg/value :index-filter configuration))]
+    (partial multi-filter (filter #(not (nil? %)) filters))))
 
 
 ;; ## Task Functions
@@ -58,6 +71,8 @@
 
 
 ;; ### Preprocessing, Analysis
+
+;; #### Categories
 
 (defn- load-category-resource
   "Loads a single resource for a category."
@@ -89,11 +104,43 @@
      (doall (map #(load-category-resources %) categories)))))
 
 
+(defn- build-category-words
+  [{:keys [id words] :as category}]
+  (trace-message "Building words for category '" id "'")
+  (assoc category :words
+    (map-indexed
+     (fn [i w] {:no i
+                :text w
+                :lexical-form w
+                :confidence 1})
+     words)))
+
+
+(defn- build-category-index
+  [job category]
+  (trace-message "Building index for category '" (:id category) "'")
+  (let [index (proc/category-index category :predicate (word-predicate job))]
+    (assoc category :index index)))
+
+
 (defn analyze-categories
   "Analyzes the categories and generates the index structures."
   [job]
-  (println "TODO: tasks/analyze-categories")
-  job)
+  (trace-block
+   "Analyzing categories"
+   (let [job* (update-in
+               job [:categories]
+               (fn [categories]
+                 (vec ((map-fn)
+                       (fn [category]
+                         (build-category-index
+                          job
+                          (build-category-words category)))
+                       categories))))]
+     job*)))
+
+
+;; #### Speech Recognition Results
 
 
 (defn- load-speech-recognition-result
@@ -126,21 +173,6 @@
       :word-count (count (proc/words results))
       :confidence (mean (map :confidence results))
       :duration duration)))
-
-
-(def ^:private filter-map
-  {:not-short proc/not-short?
-   :noun proc/noun?
-   :min-confidence proc/min-confidence?
-   :good-confidence proc/good-confidence?
-   :no-punctuation proc/no-punctuation?
-   :not-in-blacklist bl/not-in-blacklist?})
-
-(defn- word-predicate
-  "Create the word predicate for the video index."
-  [{:keys [configuration] :as job}]
-  (let [filters (map #(% filter-map) (cfg/value :index-filter configuration))]
-    (partial multi-filter (filter #(not (nil? %)) filters))))
 
 
 (defn- build-video-index
