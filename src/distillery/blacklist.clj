@@ -9,11 +9,12 @@
        resource
        load-list
        (take (cfg/value :blacklist-max-size))
-       (map #(.toLowerCase %))
+       (map #(.toLowerCase ^String %))
        set))
 
 (defn not-in-blacklist?
   [word]
-  (let [text (.toLowerCase (word-text word))]
+  (let [text (.toLowerCase ^String (word-text word))]
     (not (contains? blacklist text))))
+
 

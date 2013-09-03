@@ -1,6 +1,6 @@
 (ns mastersign.imaging
   (:import [java.io File])
-  (:import [java.awt Color])
+  (:import [java.awt Color Graphics Graphics2D Image])
   (:import [java.awt.image BufferedImage])
   (:import [javax.swing JFrame JPanel])
   (:import [javax.imageio ImageIO]))
@@ -11,18 +11,18 @@
 
 (defn create-image
   [w h f]
-  (let [img (image w h)
-        g (.createGraphics img)]
+  (let [^BufferedImage img (image w h)
+        ^Graphics g (.createGraphics img)]
     (f g w h)
     (.dispose g)
     img))
 
 (defn save-image
-  [img path]
+  [^BufferedImage img ^String path]
   (ImageIO/write img "png" (File. path)))
 
 (defn show-image
-  [img]
+  [^Image img]
   (let [w (.getWidth img)
         h (.getHeight img)
         fw (+ w 32)
@@ -30,7 +30,7 @@
         frame (JFrame. "Image Display")
         panel (proxy [JPanel] []
                 (paintComponent
-                 [g]
+                 [^Graphics2D g]
                  (doto g
                    (.setColor (Color. 240 245 255))
                    (.fillRect 0 0 fw fh)
@@ -42,5 +42,7 @@
       (.setSize fw fh)
       (.setContentPane panel)
       (.setVisible true))))
+
+
 
 

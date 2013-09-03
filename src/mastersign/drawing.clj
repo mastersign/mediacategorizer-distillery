@@ -1,6 +1,9 @@
 (ns mastersign.drawing
-  (:import [java.awt Color Font])
-  (:import [java.awt.geom AffineTransform])
+  (:import [java.awt Color Font Graphics2D])
+  (:import [java.awt.geom
+            AffineTransform
+            Point2D Point2D$Float
+            Rectangle2D Rectangle2D$Float])
   (:require [mastersign.geom :refer :all]))
 
 (def default-font-size 16)
@@ -45,47 +48,47 @@
    (Font. (font-family-name family) (font-style styles) (float size))))
 
 (defn draw-dot
-  ([g p & {color :color
+  ([^Graphics2D g ^Point2D$Float p & {color :color
            :or {color Color/RED}}]
   (doto g
     (.setColor color)
     (.fill (ellipse (- (.x p) 1) (- (.y p) 1) 2 2)))))
 
 (defn draw-dots
-  [g ps o & {color :color
+  [^Graphics2D g ps o & {color :color
                  :or {color Color/RED}}]
   (doseq [p (map #(translate-point % o) ps)] (draw-dot g p :color color)))
 
 (defn draw-rect
-  [g r & {color :color
+  [^Graphics2D g ^Rectangle2D$Float r & {color :color
           :or {color Color/BLUE}}]
   (doto g
     (.setColor color)
     (.draw r)))
 
 (defn fill-rect
-  [g r & {color :color
+  [^Graphics2D g ^Rectangle2D$Float r & {color :color
           :or {color Color/GREEN}}]
   (doto g
     (.setColor color)
     (.fill r)))
 
 (defn draw-shape
-  [g s & {color :color
+  [^Graphics2D g s & {color :color
           :or {color Color/ORANGE}}]
   (doto g
     (.setColor color)
     (.draw s)))
 
 (defn fill-shape
-  [g s & {color :color
+  [^Graphics2D g s & {color :color
           :or {color Color/YELLOW}}]
   (doto g
     (.setColor color)
     (.fill s)))
 
 (defn draw-string
-  [g p text & {font :font
+  [^Graphics2D g ^Point2D$Float p ^String text & {font :font
                color :color
                :or {font default-font
                     color Color/BLACK}}]
@@ -95,58 +98,58 @@
     (.drawString text (.x p) (.y p))))
 
 (defn string-centered-offset
-  [g font text]
+  [^Graphics2D g ^Font font ^String text]
   (let [gv (.createGlyphVector font (.getFontRenderContext g) text)
         r (.getVisualBounds gv)
-        c (rect-center r)]
+        ^Point2D$Float c (rect-center r)]
      (point (- (.x c)) (- (.y c)))))
 
 (defn string-centered-bounds
-  ([g font text]
+  ([^Graphics2D g font text]
    (string-centered-bounds g font text 0 0))
-  ([g font text p]
+  ([^Graphics2D g font text ^Point2D$Float p]
    (string-centered-bounds g font text (.x p) (.y p)))
-  ([g font text x y]
+  ([^Graphics2D g ^Font font ^String text x y]
    (let [gv (.createGlyphVector font (.getFontRenderContext g) text)
-         r (.getVisualBounds gv)
-         c (rect-center r)]
+         ^Rectangle2D$Float r (.getVisualBounds gv)
+         ^Point2D$Float c (rect-center r)]
      (rectangle (- (+ x (.x r)) (.x c)) (- (+ y (.y r)) (.y c)) (.width r) (.height r)))))
 
 (defn string-centered-glyphbounds
-  ([g font text]
+  ([^Graphics2D g font text]
    (string-centered-glyphbounds g font text 0 0))
-  ([g font text p]
+  ([^Graphics2D g font text ^Point2D$Float p]
    (string-centered-glyphbounds g font text (.x p) (.y p)))
-  ([g font text x y]
+  ([^Graphics2D g ^Font font ^String text x y]
   (let [frc (.getFontRenderContext g)
         gv (.createGlyphVector font frc text)
         r (.getVisualBounds gv)
-        c (rect-center r)
+        ^Point2D$Float c (rect-center r)
         glyphbounds (map
                      #(.getBounds2D (.getGlyphOutline gv % (- x (.x c)) (- y (.y c))))
                      (range (.getNumGlyphs gv)))]
     (vec glyphbounds))))
 
 (defn string-centered-outline
-  ([g font text]
+  ([^Graphics2D g font text]
    (string-centered-outline g font text 0 0))
-  ([g font text p]
+  ([^Graphics2D g font text ^Point2D$Float p]
    (string-centered-outline g font text (.x p) (.y p)))
-  ([g font text x y]
+  ([^Graphics2D g ^Font font ^String text x y]
    (let [frc (.getFontRenderContext g)
          gv (.createGlyphVector font frc text)
          r (.getVisualBounds gv)
-         c (rect-center r)]
+         ^Point2D$Float c (rect-center r)]
      (.getOutline gv (- x (.x c)) (- y (.y c))))))
 
 (defn draw-string-centered
-  [g text p & {font :font
+  [^Graphics2D g ^String text ^Point2D$Float p & {font :font
                color :color
                rotation :rotation
                :or {font default-font,
                     color Color/BLACK
                     rotation 0}}]
-  (let [offset (string-centered-offset g font text)
+  (let [^Point2D$Float offset (string-centered-offset g font text)
         x (.x p)
         y (.y p)
         transform (AffineTransform/getRotateInstance (* rotation (/ Math/PI 180)) x y)]
@@ -158,3 +161,4 @@
                      (float (+ (.x p) (.x offset)))
                      (float (+ (.y p) (.y offset))))
         (.setTransform (AffineTransform.)))))
+

@@ -1,27 +1,27 @@
 (ns distillery.files
-  (:import [java.nio.file Paths Files StandardCopyOption LinkOption])
+  (:import [java.nio.file Paths Path Files StandardCopyOption LinkOption])
   (:import [java.nio.file.attribute FileAttribute]))
 
 (defn get-path
   [path & parts]
   (if (instance? java.net.URL path)
-    (Paths/get (.toURI path))
-    (Paths/get path (if parts (into-array parts) (make-array String 0)))))
+    (Paths/get (.toURI ^java.net.URL path))
+    (Paths/get ^String path (if parts (into-array parts) (make-array String 0)))))
 
 (defn combine-path
   [path & parts]
-  (.toString (apply get-path (cons path parts))))
+  (.toString ^Path (apply get-path (cons path parts))))
 
 (defn dir-name
   [path & parts]
-  (.toString (.getParent (apply get-path (cons path parts)))))
+  (.toString ^Path (.getParent ^Path (apply get-path (cons path parts)))))
 
 (defn file-name
   [path & parts]
-  (.toString (.getFileName (apply get-path (cons path parts)))))
+  (.toString ^Path (.getFileName ^Path (apply get-path (cons path parts)))))
 
 (defn copy-file
-  [src trg]
+  [^Path src ^Path trg]
   (Files/copy src trg (into-array [StandardCopyOption/REPLACE_EXISTING])))
 
 (defn create-dir
@@ -33,3 +33,4 @@
   [path & parts]
   (let [path (apply get-path (cons path parts))]
     (Files/exists path (make-array LinkOption 0))))
+

@@ -49,7 +49,7 @@
 (defn no-punctuation?
   "Checks whether the given word ends with a colon."
   [word]
-  (let [text (:text word)]
+  (let [^String text (:text word)]
     (not (or
           (.endsWith text ".")
           (.endsWith text ",")
@@ -74,8 +74,9 @@
 (defn noun?
   "Checks whether the given word is a noun."
   [word]
-  (let [text (word-text word)]
-    (java.lang.Character/isUpperCase (or (first text) \a))))
+  (let [text (word-text word)
+        ^Character c (or (first text) \a)]
+    (java.lang.Character/isUpperCase c)))
 
 (defn min-confidence?
   "Checks wheter the given word was recognized with a minimum of confidence."
@@ -172,7 +173,7 @@
 (defn word-identifier
   "Creates an identifier for a word.
    The identifier can be used as HTML/XML ID or as filename."
-  [{:keys [lexical-form] :as word}]
+  [{:keys [^String lexical-form] :as word}]
   (comment "TODO Needs to be improved for arbitrary characters!")
   (-> lexical-form
       (.replace " " "_")
@@ -234,7 +235,7 @@
 
 (defn- char-to-index-letter
   "Converts every alphabetic character in its upper case and all other characters into '?'."
-  [c]
+  [^Character c]
   (let [c (java.lang.Character/toUpperCase c)
         n (int c)]
     (if (and (>= n 65) (<= n 91)) c \?)))
@@ -248,4 +249,5 @@
   (->> index
        (group-by (comp char-to-index-letter first first))
        (map-values #(apply sorted-map (apply concat %)))))
+
 
