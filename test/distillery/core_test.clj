@@ -47,8 +47,9 @@
   {:job-name "Testlauf"
    :job-description "Ein Testprojekt für Testzwecke mit Testvideos und Testkategorien. Wird zum Testen verwendet."
    :output-dir (str root "Output")
-   ;:configuration {:main-cloud {:precision :medium}
-   ;                :video-cloud {:precision :low}}
+   :configuration {:main-cloud {:precision :low}
+                   :video-cloud {:precision :low}
+                   :category-cloud {:precision :low}}
    :videos (->> videos
                 (map (fn
                        [[id name]]

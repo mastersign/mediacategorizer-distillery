@@ -13,6 +13,7 @@
   (:require [distillery.view.base :refer (render)])
   (:require [distillery.view.cloud :refer (build-cloud-word-data build-cloud-ui-data create-cloud)])
   (:require [distillery.view.index :as v-index])
+  (:require [distillery.view.category :as v-category])
   (:require [distillery.view.video :as v-video])
   (:require [distillery.view.word :as v-word]))
 
@@ -235,6 +236,7 @@
          include-f
          (save-page target-file))))
 
+;; #### Main Pages
 
 (defn create-word-include
   "Creates the include file for a word in the global context."
@@ -252,7 +254,7 @@
    "Creating global word includes"
    (let [words-path "words"]
      (create-dir (combine-path output-dir words-path))
-     (map
+     ((map-fn)
       (fn [word]
         (let [word-path (combine-path words-path (:id word))]
           (create-word-include job (assoc word :path word-path))))
@@ -291,19 +293,87 @@
   (create-page "categories.html" v-index/render-categories-page job))
 
 
-(defn create-category-pages
-  "Creates one page for every category."
-  [job]
-  (trace-block "Creating category pages"
-             (println "TODO: category pages")))
-
-
 (defn create-videos-page
   "Creates the overview page for all videos."
   [job]
   (trace-message "Creating videos overview page")
   (create-page "videos.html" v-index/render-videos-page job))
 
+
+;; #### Category Pages
+
+(defn create-category-word-include
+  "Creates the include file for a word in the context of a category."
+  [{:keys [output-dir] :as job} category {:keys [path] :as word}]
+  (create-include
+    (str path ".inc.html")
+    v-word/render-category-word-include
+    (assoc job :category category :word word)))
+
+
+(defn create-category-word-includes
+  "Create includes for all words of a category."
+  [{:keys [output-dir] :as job} {:keys [id index path] :as category}]
+  (trace-block
+   (str "Creating word includes for category '" id "'")
+   (let [words-path (combine-path path "words")]
+     (create-dir (combine-path output-dir words-path))
+     ((map-fn)
+      (fn [word]
+       (let [word-path (combine-path words-path (:id word))]
+         (create-category-word-include job category (assoc word :path word-path))))
+      (vals index)))))
+
+
+(defn- create-category-cloud
+  "Creates the word cloud for a category."
+  [{:keys [output-dir configuration] :as job} {:keys [id index path] :as category}]
+  (if (cfg/value :skip-wordclouds configuration)
+    (do (trace-message "Skipping wordcloud for category '" id "'") [])
+    (trace-block
+     (str "Creating wordcloud for category '" id "'")
+     (build-cloud-ui-data (create-cloud (build-cloud-word-data index)
+                                        (combine-path output-dir path "cloud.png")
+                                        configuration
+                                        :category-cloud)))))
+
+
+(defn create-category-page
+  "Create the main page for a certain category."
+  [{:keys [output-dir] :as job} {:keys [id index] :as category}]
+  (trace-message "Creating category page for '" id "'")
+  (let [category-path (combine-path "categories" id)]
+
+    (create-dir (combine-path output-dir category-path))
+
+    (let [category* (assoc category :path category-path)
+          cloud (create-category-cloud job category*)
+          category* (assoc category* :cloud cloud)
+          pindex (proc/partition-index index)
+          category* (assoc category* :pindex pindex)
+          args (assoc job :category category*)]
+
+      (create-page
+       (combine-path category-path "index.html")
+       v-category/render-category-page
+       args)
+
+      (create-category-word-includes job category*))))
+
+
+(defn create-category-pages
+  "Creates one page for every category."
+  [job]
+  (trace-block
+   "Creating category pages"
+   (doall
+    ((map-fn)
+     #(create-category-page job %)
+     (:categories job))))
+  nil)
+
+
+;; #### Video Pages
 
 (defn create-video-word-include
   "Creates the include file for a word in the context of a video."
@@ -318,7 +388,7 @@
   "Create includes for all words of a video."
   [{:keys [output-dir] :as job} {:keys [id index path] :as video}]
   (trace-block
-   (str "Creating video word includes for " id)
+   (str "Creating word includes for video '" id "'")
    (let [words-path (combine-path path "words")]
      (create-dir (combine-path output-dir words-path))
      ((map-fn)
@@ -332,7 +402,7 @@
   "Creates the word cloud for a video."
   [{:keys [output-dir configuration] :as job} {:keys [id index path] :as video}]
   (if (cfg/value :skip-wordclouds configuration)
-    (do (trace-message "Skipping wordcloud for " id) [])
+    (do (trace-message "Skipping wordcloud for video '" id "'") [])
     (trace-block
      (str "Creating wordcloud for " id)
      (build-cloud-ui-data (create-cloud (build-cloud-word-data index)
@@ -344,7 +414,7 @@
 (defn create-video-page
   "Create the main page for a certain video."
   [{:keys [output-dir] :as job} {:keys [id index video-file] :as video}]
-  (trace-message "Creating video page for " id)
+  (trace-message "Creating video page for '" id "'")
   (let [video-path (combine-path "videos" id)]
 
     (create-dir (combine-path output-dir video-path))
@@ -396,6 +466,7 @@
       .toUri
       .toString
       browse-url))
+
 
 
 

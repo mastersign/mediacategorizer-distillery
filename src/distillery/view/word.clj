@@ -13,7 +13,7 @@
 (defn- render-word-statistic
   [{:keys [word] :as args}]
   (ulist "word_statistic"
-         [(list-item (str "Vorkommen: " (count (:occurrences word))))
+         [(list-item (str "Vorkommen: " (:occurrence-count word)))
           (list-item (format "Mittlere Erkennungssicherheit: %1.1f%%" (* 100 (:mean-confidence word)) "%"))]))
 
 (defn- render-video-word-statistic
@@ -25,7 +25,7 @@
 (defn- render-category-word-statistic
   [{:keys [category word] :as args}]
   (ulist "word_statistic"
-         [(list-item (str "Vorkommen: " "TODO"))]))
+         [(list-item (str "Vorkommen: " (:occurrence-count word)))]))
 
 (defn- render-video-word-phrases
   [{:keys [video word] :as args}]
@@ -46,14 +46,13 @@
         videos (filter #(contains? video-ids (:id %)) (:videos args))]
     (ulist (map (partial render-video-list-item word-id) videos))))
 
-(defn- render-category-word-video-list
-  [{:keys [word] :as args}]
-
-  (TODO "Category Word Video List"))
-
 (defn- render-word-category-list
   [{:keys [word] :as args}]
   (TODO "Word Category List"))
+
+(defn- render-category-word-video-list
+  [{:keys [word] :as args}]
+  (TODO "Category Word Video List"))
 
 (defn- render-video-word-category-list
   [{:keys [video word] :as args}]
@@ -84,9 +83,10 @@
 (defn render-category-word-include
   "Renders the include part for the word frame of a category page."
   [{:keys [word] :as args}]
-  (let [{:keys [text]} word]
-    [(headline 4 "word_headline" text)
+  (let [{:keys [lexical-form]} word]
+    [(headline 4 "word_headline" lexical-form)
      (render-category-word-statistic args)
      (headline 4 "Videos")
      (render-category-word-video-list args)]))
+
 

@@ -2,6 +2,8 @@
   (:require [clojure.string :as string])
   (:require [net.cgrand.enlive-html :as eh])
   (:require [distillery.files :refer :all])
+  (:require [distillery.view.cloud :as cloud])
+  (:require [distillery.view.glossary :as glossary])
   (:require [distillery.view.html :refer :all]))
 
 (defn- render-headline
@@ -13,25 +15,34 @@
   "Creates the HTML for the overview page."
   [{:keys [category]}]
   (innerpage "overview" "Übersicht" true
-             (TODO "Kategorieübersicht")))
+             (ulist "category_statistic"
+                    [(list-item (str "Quellen: " (count (:resources category))))
+                     (list-item (str "Gesamtanzahl Worte: " (count (:words category))))
+                     (list-item (str "Worte im Index: " (count (:index category))))])))
 
 (defn- render-glossary
   "Creates the HTML for the category glossary page."
-  [{:keys [category]}]
-  (innerpage "glossary" "Glossar" true
-             (TODO "Glossar der Kategorie")))
+  [{{:keys [pindex] :as category} :category :as args}]
+  (innerpage "glossary" "Glossar" false
+             (glossary/render-glossary pindex)))
 
 (defn- render-cloud
   "Creates the HTML for the overview page."
-  [{:keys [category]}]
-  (innerpage "cloud" "Wolke" true
-             (TODO "Wortwolke der Kategorie")))
+  [{{:keys [id cloud] :as category} :category :as args}]
+  (innerpage "cloud" "Wolke" false
+             (cloud/render-cloud id cloud)))
 
 (defn- render-videos
   "Creates the HTML for the overview page."
   [{:keys [category]}]
-  (innerpage "videos" "Videos" true
+  (innerpage "videos" "Videos" false
              (TODO "Videoliste der Kategories")))
+
+(defn- render-category-word-frame
+  "Create the HTML for the word frame.
+   The word frame is an empty container to load a category word page into."
+  [args]
+  (innerpage "word" "Wort" false nil))
 
 (defn render-category-page
   "Renders the main page for a category."
@@ -47,4 +58,5 @@
       (render-overview args)
       (render-glossary args)
       (render-cloud args)
-      (render-videos args)]])
+      (render-videos args)
+      (render-category-word-frame args)]])
