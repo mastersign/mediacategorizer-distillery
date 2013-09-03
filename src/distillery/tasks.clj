@@ -242,9 +242,11 @@
    "Creating global word includes"
    (let [words-path "words"]
      (create-dir (combine-path output-dir words-path))
-     (doseq [word (vals words)]
-       (let [word-path (combine-path words-path (:id word))]
-         (create-word-include job (assoc word :path word-path)))))))
+     (map
+      (fn [word]
+        (let [word-path (combine-path words-path (:id word))]
+          (create-word-include job (assoc word :path word-path))))
+      (vals words)))))
 
 
 (defn- create-main-cloud
