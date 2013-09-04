@@ -89,12 +89,12 @@
 
         ;; Filter predicates:
         ;; Words:        not-short? noun? not-in-blacklist? no-punctuation?
-        ;; Words groups: min-confidence?
+        ;; Words groups: min-confidence? good-confidence?
 
         ;; Group the words and compute stastics
         relevant-words (grouped-words results [not-short? noun? no-punctuation?] [min-confidence?])
 
-        ;; Frequent words which may be recognized fasley
+        ;; Frequent words which may be recognized falsely
         correction-list (correction-candidates relevant-words)
 
         ;; Map of words with lexical form as key
