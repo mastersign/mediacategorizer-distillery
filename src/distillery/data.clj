@@ -22,13 +22,6 @@
   [x opts]
   (apply slurp (cons x opts)))
 
-(defn- words-from-text
-  "Creates a sequence of words from a text."
-  [text]
-  (->> (string/split text #"\b")
-       (filter #(not (string/blank? %)))
-       (map string/trim)))
-
 ;; ### Public Functions
 
 ;; All `load-*` functions do have the same interface.
@@ -59,28 +52,52 @@
   (let [text (read-text x opts)]
     (string/split text #"[\s,]+")))
 
-(defn load-words
-  "Loads the content of an URL or file as a sequence of words."
-  [x & opts]
-  (words-from-text (read-text x opts)))
-
 (defn load-text-from-html
-  "Loads the textual content from an HTML page."
+  "Loads the textual content from an HTML page.
+  The optional `:selector` argument gives an enlive selector for the HTML nodes to use.
+  Example: `(load-text-from-html \"http://my-site.com\" :selector [[:section (attr= \"main\")]])`"
   [x & opts]
-  (let [nodes (-> (build-reader x opts)
+  (let [opts-map (apply hash-map opts)
+        selector (or (:selector opts-map) #{[:head :title] [:body]})
+        nodes (-> (build-reader x opts)
                   (eh/html-resource)
-                  (eh/select #{[:head :title] [:body]})
+                  (eh/select selector)
                   (eh/transform [:script] nil)
                   (eh/select [eh/text-node]))]
     (->> nodes
          (map eh/text)
+         (filter #(not (string/blank? %)))
          (map string/trim)
          (string/join " "))))
 
-(defn load-words-from-html
-  "Loads the content of an HTML page as a sequence of words."
-  [x & opts]
-  (words-from-text (apply load-text-from-html (cons x opts))))
+(defn load-text-from-wikipedia
+  "Loads the textual content from an Wikipedia page."
+  [url & opts]
+  (let [url (str url "?action=render")
+        nodes (-> (build-reader url opts)
+                  (eh/html-resource)
+                  (eh/transform #{[:script]
+                                  [:.noprint]
+                                  [:.mw-editsection]
+                                  [:.sisterproject]
+                                  [:#Siehe_auch]
+                                  [:#Literatur]
+                                  [:#Einzelnachweise]
+                                  [:#Weblinks]
+                                  [:#normdaten]} nil)
+                  (eh/select [eh/text-node]))]
+    (->> nodes
+         (map eh/text)
+         (filter #(not (string/blank? %)))
+         (map string/trim)
+         (string/join " "))))
+
+(defn words-from-text
+  "Creates a sequence of words from a text."
+  [text]
+  (->> (string/split text #"\b")
+       (filter #(not (string/blank? %)))
+       (map string/trim)))
 
 ;; ## Collection Processing
 ;; Basic helper functions to process maps and collections.

@@ -90,9 +90,11 @@
   [{:keys [id]} {:keys [type url] :as resource}]
   (trace-message "Loading category resource " url)
   (assoc resource :words
-    (case type
-      :plain (load-words url)
-      :html (load-words-from-html url))))
+    (-> (case type
+          :plain (load-text url)
+          :html (load-text-from-html url)
+          :wikipedia (load-text-from-wikipedia url))
+        words-from-text)))
 
 
 (defn- load-category-resources
