@@ -3,7 +3,7 @@
   (:require [distillery.data :refer :all])
   (:require [distillery.view.html :refer :all]))
 
-(defn render-hitlist
+(defn render-occurrence-hitlist
   [words occ-fn config cloud-key]
   (let [hitlist (take 10 (reverse (sort-by #(count (occ-fn %)) words)))
         max-occ (count (occ-fn (first hitlist)))

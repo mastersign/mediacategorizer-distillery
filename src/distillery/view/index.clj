@@ -9,7 +9,7 @@
 
 (defn- render-hitlist
   [{:keys [words configuration] :as args}]
-  (hitlist/render-hitlist
+  (hitlist/render-occurrence-hitlist
    (vals words)
    :occurrences
    configuration

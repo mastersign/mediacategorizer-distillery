@@ -34,7 +34,7 @@
 
 (defn- render-hitlist
   [{:keys [configuration] :as job} {:keys [id index] :as video}]
-  (hitlist/render-hitlist
+  (hitlist/render-occurrence-hitlist
    (vals index)
    (fn [w] (filter #(= id (:video-id %)) (:occurrences w)))
    configuration

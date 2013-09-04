@@ -14,7 +14,7 @@
 
 (defn- render-hitlist
   [{:keys [configuration] :as job} {:keys [id index] :as category}]
-  (hitlist/render-hitlist
+  (hitlist/render-occurrence-hitlist
    (vals index)
    :occurrences
    configuration
