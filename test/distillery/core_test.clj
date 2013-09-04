@@ -47,9 +47,7 @@
   {:job-name "Testlauf"
    :job-description "Ein Testprojekt für Testzwecke mit Testvideos und Testkategorien. Wird zum Testen verwendet."
    :output-dir (str root "Output")
-   :configuration {:skip-wordclouds false
-                   :skip-word-includes false
-                   :main-cloud {:precision :medium}
+   :configuration {:main-cloud {:precision :medium}
                    :video-cloud {:precision :medium}
                    :category-cloud {:precision :medium}}
    :videos (->> videos
@@ -91,12 +89,12 @@
 
         ;; Filter predicates:
         ;; Words:        not-short? noun? not-in-blacklist? no-punctuation?
-        ;; Words groups: min-confidence? good-confidence?
+        ;; Words groups: min-confidence?
 
         ;; Group the words and compute stastics
         relevant-words (grouped-words results [not-short? noun? no-punctuation?] [min-confidence?])
 
-        ;; Frequent words which may be recognized falsely
+        ;; Frequent words which may be recognized fasley
         correction-list (correction-candidates relevant-words)
 
         ;; Map of words with lexical form as key
