@@ -12,9 +12,9 @@
                   (let [minc (cfg/value :min-confidence config)
                         cnf* (/ (- cnf minc) (- 1 minc))]
                     (* cnf* cnf*)))
-        stats-str-fn (if (= 1.0 (mean (map :mean-confidence hitlist)))
+        stats-str-fn (if (== 1 (mean (map :mean-confidence hitlist)))
                        (fn [n c] (str n))
-                       (fn [n c] (str n " | " (format "%2.1f%%" (* 100 c)))))
+                       (fn [n c] (str n " | " (format "%2.1f%%" (* 100.0 c)))))
         item-gen (fn [{:keys [id lexical-form pronunciation mean-confidence] :as w}]
                    (let [num-occ (count (occ-fn w))]
                      (list-item
@@ -33,6 +33,4 @@
     (div "hitlist"
          [(headline 3 "Häufige Worte")
           (olist (map item-gen hitlist))])))
-
-
 
