@@ -79,6 +79,7 @@
                   (eh/transform #{[:script]
                                   [:.noprint]
                                   [:.mw-editsection]
+                                  [:.mw-magiclink-isbn]
                                   [:.sisterproject]
                                   [:#Siehe_auch]
                                   [:#Literatur]
