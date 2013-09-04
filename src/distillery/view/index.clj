@@ -8,10 +8,12 @@
   (:require [distillery.view.hitlist :as hitlist]))
 
 (defn- render-hitlist
-  [{:keys [words] :as args}]
+  [{:keys [words configuration] :as args}]
   (hitlist/render-hitlist
    (vals words)
-   (fn [w] (:occurrences w))))
+   :occurrences
+   configuration
+   :main-cloud))
 
 (defn- render-main-overview
   [{:keys [job-description videos categories words] :as args}]

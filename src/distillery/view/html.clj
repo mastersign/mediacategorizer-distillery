@@ -174,11 +174,11 @@
               :content (safe-content content)}]})
 
 (defn bar
-  ([text v]
-   (bar text v 1))
-  ([text v1 v2]
+  ([text color v]
+   (bar text color v 1))
+  ([text [r g b] v1 v2]
    (let [iv (int (* 100 v1))
-         c (str "rgba(10,100,255," (float v2) ")")]
+         c (str "rgba(" (int (* 255 r)) "," (int (* 255 g)) "," (int (* 255 b)) "," (float v2) ")")]
      (div "bar"
           [(div "bar_text" text)
            (div "bar_client"

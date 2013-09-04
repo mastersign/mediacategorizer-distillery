@@ -33,14 +33,16 @@
                  :type "video/mp4" }}]}]})
 
 (defn- render-hitlist
-  [{:keys [id index]}]
+  [{:keys [configuration] :as job} {:keys [id index] :as video}]
   (hitlist/render-hitlist
    (vals index)
-   (fn [w] (filter #(= id (:video-id %)) (:occurrences w)))))
+   (fn [w] (filter #(= id (:video-id %)) (:occurrences w)))
+   configuration
+   :video-cloud))
 
 (defn- render-overview
   "Creates the HTML for the overview page."
-  [{:keys [video]}]
+  [{:keys [video] :as job}]
   (innerpage "overview" "Übersicht" true
              [(ulist "video_statistic"
                      [(list-item (str "Länge: " (transcript/format-time (:duration video))))
@@ -48,7 +50,7 @@
                       (list-item (str "Erkannte Worte: " (:word-count video)))
                       (list-item (str "Worte im Glossar: " (count (:index video))))
                       (list-item (format "Mittlere Erkennungssicherheit: %1.1f%%" (* 100 (:confidence video))))])
-              (render-hitlist video)]))
+              (render-hitlist job video)]))
 
 (defn- render-video-transcript
   "Creates the HTML for the transcript with all phrases."
