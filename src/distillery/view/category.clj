@@ -4,6 +4,7 @@
   (:require [distillery.files :refer :all])
   (:require [distillery.view.cloud :as cloud])
   (:require [distillery.view.glossary :as glossary])
+  (:require [distillery.view.hitlist :as hitlist])
   (:require [distillery.view.html :refer :all]))
 
 (defn- render-headline
@@ -11,14 +12,23 @@
   [{:keys [category]}]
   (headline 2 (:name category)))
 
+(defn- render-hitlist
+  [{:keys [configuration] :as job} {:keys [id index] :as category}]
+  (hitlist/render-hitlist
+   (vals index)
+   :occurrences
+   configuration
+   :category-cloud))
+
 (defn- render-overview
   "Creates the HTML for the overview page."
-  [{:keys [category]}]
+  [{:keys [category] :as job}]
   (innerpage "overview" "Übersicht" true
-             (ulist "category_statistic"
+             [(ulist "category_statistic"
                     [(list-item (str "Quellen: " (count (:resources category))))
                      (list-item (str "Gesamtanzahl Worte: " (count (:words category))))
-                     (list-item (str "Worte im Index: " (count (:index category))))])))
+                     (list-item (str "Worte im Index: " (count (:index category))))])
+              (render-hitlist job category)]))
 
 (defn- render-glossary
   "Creates the HTML for the category glossary page."
