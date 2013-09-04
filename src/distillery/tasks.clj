@@ -249,16 +249,18 @@
 
 (defn create-word-includes
   "Create includes for all words of the project."
-  [{:keys [output-dir words] :as job}]
-  (trace-block
-   "Creating global word includes"
-   (let [words-path "words"]
-     (create-dir (combine-path output-dir words-path))
-     ((map-fn)
-      (fn [word]
-        (let [word-path (combine-path words-path (:id word))]
-          (create-word-include job (assoc word :path word-path))))
-      (vals words)))))
+  [{:keys [output-dir configuration words] :as job}]
+  (if (cfg/value :skip-word-includes configuration)
+    (trace-message "Skipping global word includes")
+    (trace-block
+     "Creating global word includes"
+     (let [words-path "words"]
+       (create-dir (combine-path output-dir words-path))
+       ((map-fn)
+        (fn [word]
+          (let [word-path (combine-path words-path (:id word))]
+            (create-word-include job (assoc word :path word-path))))
+        (vals words))))))
 
 
 (defn- create-main-cloud
@@ -313,16 +315,18 @@
 
 (defn create-category-word-includes
   "Create includes for all words of a category."
-  [{:keys [output-dir] :as job} {:keys [id index path] :as category}]
-  (trace-block
-   (str "Creating word includes for category '" id "'")
-   (let [words-path (combine-path path "words")]
-     (create-dir (combine-path output-dir words-path))
-     ((map-fn)
-      (fn [word]
-       (let [word-path (combine-path words-path (:id word))]
-         (create-category-word-include job category (assoc word :path word-path))))
-      (vals index)))))
+  [{:keys [output-dir configuration] :as job} {:keys [id index path] :as category}]
+  (if (cfg/value :skip-word-includes configuration)
+    (trace-message "Skipping word includes for category '" id "'")
+    (trace-block
+     (str "Creating word includes for category '" id "'")
+     (let [words-path (combine-path path "words")]
+       (create-dir (combine-path output-dir words-path))
+       ((map-fn)
+        (fn [word]
+          (let [word-path (combine-path words-path (:id word))]
+            (create-category-word-include job category (assoc word :path word-path))))
+        (vals index))))))
 
 
 (defn- create-category-cloud
@@ -386,16 +390,18 @@
 
 (defn create-video-word-includes
   "Create includes for all words of a video."
-  [{:keys [output-dir] :as job} {:keys [id index path] :as video}]
-  (trace-block
-   (str "Creating word includes for video '" id "'")
-   (let [words-path (combine-path path "words")]
-     (create-dir (combine-path output-dir words-path))
-     ((map-fn)
-      (fn [word]
-       (let [word-path (combine-path words-path (:id word))]
-         (create-video-word-include job video (assoc word :path word-path))))
-      (vals index)))))
+  [{:keys [output-dir configuration] :as job} {:keys [id index path] :as video}]
+  (if (cfg/value :skip-word-includes configuration)
+    (trace-message "Skipping word includes for video '" id "'")
+    (trace-block
+     (str "Creating word includes for video '" id "'")
+     (let [words-path (combine-path path "words")]
+       (create-dir (combine-path output-dir words-path))
+       ((map-fn)
+        (fn [word]
+          (let [word-path (combine-path words-path (:id word))]
+            (create-video-word-include job video (assoc word :path word-path))))
+        (vals index))))))
 
 
 (defn- create-video-cloud
