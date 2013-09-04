@@ -132,8 +132,7 @@
 (defn- build-category-index
   [job category]
   (trace-message "Building index for category '" (:id category) "'")
-  (let [index (proc/category-index category :predicate (word-predicate job))]
-    (assoc category :index index)))
+  (proc/add-category-word-index category :predicate (word-predicate job)))
 
 
 (defn analyze-categories
@@ -192,8 +191,7 @@
   "Analyzes the speech recognition results of a single video and builds the video word index."
   [job video]
   (trace-message "Building index for video '" (:id video) "'")
-  (let [index (proc/video-word-index video :predicate (word-predicate job))]
-    (assoc video :index index)))
+  (proc/add-video-word-index video :predicate (word-predicate job)))
 
 
 (defn- build-global-index
@@ -218,6 +216,32 @@
          job* (assoc job*
                 :words (build-global-index job*))]
      job*)))
+
+
+;; #### Similarity Matching
+
+(defn match-videos
+  "Matches the video indexes against the category indexes
+  and adds the matching scores to the videos."
+  [{:keys [videos] :as job}]
+  (trace-block
+   "Matching videos against categories"
+   (assoc job
+     :videos (vec ((map-fn)
+                   (partial proc/match-video job)
+                   videos)))))
+
+
+(defn lookup-categories-matches
+  "Looks up the matching scores from the videos
+  and adds them to the categories."
+  [{:keys [categories] :as job}]
+  (trace-block
+   "Looking up category matching scores against videos"
+   (assoc job
+     :categories (vec (map
+                       (partial proc/lookup-category-match job)
+                       categories)))))
 
 
 ;; ### Output Generation

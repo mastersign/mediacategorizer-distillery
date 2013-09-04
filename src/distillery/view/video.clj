@@ -72,9 +72,16 @@
 
 (defn- render-categories
   "Create the HTML for the video categories."
-  [args]
-  (innerpage "categories" "Kategorien" false
-             (TODO "Videokategorien")))
+  [{:keys [categories video] :as args}]
+  (let [category-fn (fn [cid] (first (filter #(= cid (:id %)) categories)))]
+    (innerpage "categories" "Kategorien" false
+               (ulist (map
+                       #(list-item [(format "%2.4f  "  (second %))
+                                    " "
+                                    (link
+                                     (str "../../categories/" (first %) "/index.html")
+                                     (:name (category-fn (first %))))])
+                       (reverse (sort-by second (:matches video))))))))
 
 (defn- render-video-word-frame
   "Create the HTML for the word frame.

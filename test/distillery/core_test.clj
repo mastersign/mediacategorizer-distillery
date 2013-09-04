@@ -47,7 +47,9 @@
   {:job-name "Testlauf"
    :job-description "Ein Testprojekt für Testzwecke mit Testvideos und Testkategorien. Wird zum Testen verwendet."
    :output-dir (str root "Output")
-   :configuration {:main-cloud {:precision :medium}
+   :configuration {:skip-wordclouds false
+                   :skip-word-includes false
+                   :main-cloud {:precision :medium}
                    :video-cloud {:precision :medium}
                    :category-cloud {:precision :medium}}
    :videos (->> videos
@@ -132,14 +134,18 @@
       dt/load-speech-recognition-results
       dt/analyze-speech-recognition-results
       dt/load-categories
-      dt/analyze-categories))
+      dt/analyze-categories
+      dt/match-videos
+      dt/lookup-categories-matches))
 
 (defn test-index []
   (let [job (-> job-descr
                 dt/load-speech-recognition-results
                 dt/analyze-speech-recognition-results
                 dt/load-categories
-                dt/analyze-categories)]
+                dt/analyze-categories
+                dt/match-videos
+                dt/lookup-categories-matches)]
     (dt/trace-block
      "Index run"
      (dt/prepare-output-dir job)
@@ -155,7 +161,9 @@
                 dt/load-speech-recognition-results
                 dt/analyze-speech-recognition-results
                 dt/load-categories
-                dt/analyze-categories)]
+                dt/analyze-categories
+                dt/match-videos
+                dt/lookup-categories-matches)]
     (dt/trace-block
      "Complete run"
      (dt/prepare-output-dir job)

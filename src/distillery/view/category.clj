@@ -44,9 +44,15 @@
 
 (defn- render-videos
   "Creates the HTML for the overview page."
-  [{:keys [category]}]
-  (innerpage "videos" "Videos" false
-             (TODO "Videoliste der Kategories")))
+  [{:keys [videos category]}]
+  (let [video-fn (fn [mid] (first (filter #(= mid (:id %)) videos)))]
+    (innerpage "videos" "Videos" false
+               (ulist (map
+                       #(list-item [(format "%2.4f  "  (second %))
+                                    (link
+                                     (str "../../videos/" (first %) "/index.html")
+                                     (:name (video-fn (first %))))])
+                       (reverse (sort-by second (:matches category))))))))
 
 (defn- render-category-word-frame
   "Create the HTML for the word frame.

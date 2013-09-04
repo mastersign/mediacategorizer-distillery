@@ -189,6 +189,14 @@
     :occurrence-count (count occurrences)
     :mean-confidence (mean (map :confidence occurrences))))
 
+(defn- compute-index-entry-match-value
+  [{:keys [max-occurrence-count] :as index-stats}
+   {:keys [mean-confidence occurrence-count] :as entry}]
+  (assoc entry
+    :match-value (* (double mean-confidence)
+                    (/ (double occurrence-count)
+                       (double max-occurrence-count)))))
+
 (defn merge-index-entries
   "Merges two index entries for the same word into one."
   [a b]
@@ -197,7 +205,7 @@
       compute-index-entry-stats)]
     res))
 
-(defn video-word-index
+(defn add-video-word-index
   "Builds an index of words for a sequence of recognition results."
   [video & {:keys [predicate]}]
   (let [ws (words (:results video) :predicate predicate)
@@ -211,14 +219,21 @@
                                     :result-no (:result-no word)
                                     :word-no (:no word)
                                     :confidence (:confidence word)}))))
-        index (reduce-by-sorted :lexical-form add-occurrence nil ws)]
-    (map-values compute-index-entry-stats index)))
+        index (->> ws
+                   (reduce-by-sorted :lexical-form add-occurrence nil)
+                   (map-values compute-index-entry-stats))
+        index-stats {:count (count index)
+                     :max-occurrence-count (apply max (map :occurrence-count (vals index)))}
+        index (map-values (partial compute-index-entry-match-value index-stats) index)]
+    (assoc video
+      :index index
+      :index-stats index-stats)))
 
 (defn- category-words
   [{:keys [words] :as category} & {:keys [predicate]}]
   (filter predicate words))
 
-(defn category-index
+(defn add-category-word-index
   "Builds an index for a sequence of category words."
   [category & {:keys [predicate]}]
   (let [ws (category-words category :predicate predicate)
@@ -230,8 +245,15 @@
                                   {:category-id (:id category)
                                    :no (:no word)
                                    :confidence 1}))))
-        index (reduce-by-sorted :lexical-form add-occurrence nil ws)]
-    (map-values compute-index-entry-stats index)))
+        index (->> ws
+                   (reduce-by-sorted :lexical-form add-occurrence nil)
+                   (map-values compute-index-entry-stats))
+        index-stats {:count (count index)
+                     :max-occurrence-count (apply max (map :occurrence-count (vals index)))}
+        index (map-values (partial compute-index-entry-match-value index-stats) index)]
+    (assoc category
+      :index index
+      :index-stats index-stats)))
 
 (defn- char-to-index-letter
   "Converts every alphabetic character in its upper case and all other characters into '?'."
@@ -250,4 +272,32 @@
        (group-by (comp char-to-index-letter first first))
        (map-values #(apply sorted-map (apply concat %)))))
 
+(defn- compute-matching-score
+  [video category]
+  (let [cidx (:index category)
+        midx (:index video)]
+    (apply + (map
+              #(* (:match-value (get midx %) 0.0) (:match-value (get cidx %) 0.0))
+              (keys midx)))))
+
+(defn match-video
+  [{:keys [categories configuration] :as job} video]
+  (assoc video
+    :matches (->> categories
+                  (map #(vector (:id %) (compute-matching-score video %)))
+                  (filter #(>= (second %) (cfg/value :min-match-score configuration)))
+                  (apply concat)
+                  (apply sorted-map))))
+
+(defn- lookup-matching-score
+  [category video]
+  (get-in video [:matches (:id category)] 0.0))
+
+(defn lookup-category-match
+  [{:keys [videos] :as job} category]
+  (assoc category
+    :matches (->> videos
+                  (map #(vector (:id %) (lookup-matching-score category %)))
+                  (apply concat)
+                  (apply sorted-map))))
 
