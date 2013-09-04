@@ -66,8 +66,8 @@
   [:base-path "../../"
    :title job-name
    :secondary-menu [["Übersicht" (jshref "innerpage('overview')")]
+                    ["Wortwolke" (jshref "innerpage('cloud')")]
                     ["Videos" (jshref "innerpage('videos')")]
-                    ["Cloud" (jshref "innerpage('cloud')")]
                     ["Glossar" (jshref "innerpage('glossary')")]]
    :page
      [(render-headline args)
