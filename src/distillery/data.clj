@@ -72,8 +72,10 @@
 
 (defn load-text-from-wikipedia
   "Loads the textual content from an Wikipedia page."
-  [url & opts]
-  (let [url (str url "?action=render")
+  [^String url & opts]
+  (let [url (if (.startsWith url "file://")
+              url
+              (str url "?action=render"))
         nodes (-> (build-reader url opts)
                   (eh/html-resource)
                   (eh/transform #{[:script]
