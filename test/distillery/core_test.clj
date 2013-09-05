@@ -48,7 +48,9 @@
   {:job-name "Testlauf"
    :job-description "Ein Testprojekt für Testzwecke mit Testvideos und Testkategorien. Wird zum Testen verwendet."
    :output-dir (str root "Output")
-   :configuration {:skip-wordclouds false
+   :configuration {:parallel-proc: true
+                   :skip-media-copy false
+                   :skip-wordclouds false
                    :skip-word-includes false
                    :main-cloud {:precision :medium}
                    :video-cloud {:precision :medium}

@@ -424,7 +424,7 @@
 
 (defn create-video-page
   "Create the main page for a certain video."
-  [{:keys [output-dir] :as job} {:keys [id index video-file] :as video}]
+  [{:keys [output-dir configuration] :as job} {:keys [id index video-file] :as video}]
   (trace-message "Creating video page for '" id "'")
   (let [video-path (combine-path "videos" id)]
 
@@ -437,9 +437,12 @@
           video* (assoc video* :pindex pindex)
           args (assoc job :video video*)]
 
-      (let [video-target-file (combine-path output-dir video-path (str id ".mp4"))]
-        (when (not (file-exists? video-target-file))
-          (copy-file (get-path video-file) (get-path video-target-file)))      )
+      (if (cfg/value :skip-media-copy configuration)
+        (trace-message "Skipping copy mediafile for video '" id "'")
+        (let [video-target-file (combine-path output-dir video-path (str id ".mp4"))]
+          (trace-message "Copy mediafile for video '" id "'")
+          (when (not (file-exists? video-target-file))
+            (copy-file (get-path video-file) (get-path video-target-file)))))
 
       (create-page
        (combine-path video-path "index.html")
