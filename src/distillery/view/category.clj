@@ -64,7 +64,7 @@
   "Renders the main page for a category."
   [{:keys [job-name category] :as args}]
   [:base-path "../../"
-   :title job-name
+   :title (str job-name " - " "Kategorie")
    :secondary-menu [["Übersicht" (jshref "innerpage('overview')")]
                     ["Wortwolke" (jshref "innerpage('cloud')")]
                     ["Videos" (jshref "innerpage('videos')")]
