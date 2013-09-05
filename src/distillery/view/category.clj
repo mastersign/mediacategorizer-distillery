@@ -48,11 +48,11 @@
   (let [video-fn (fn [mid] (first (filter #(= mid (:id %)) videos)))]
     (innerpage "videos" "Videos" false
                (ulist (map
-                       #(list-item [(format "%2.4f  "  (second %))
+                       #(list-item [(format "%2.4f  "  (:score %))
                                     (link
-                                     (str "../../videos/" (first %) "/index.html")
-                                     (:name (video-fn (first %))))])
-                       (reverse (sort-by second (:matches category))))))))
+                                     (str "../../videos/" (:video-id %) "/index.html")
+                                     (:name (video-fn (:video-id %))))])
+                       (reverse (sort-by :score (vals (:matches category)))))))))
 
 (defn- render-category-word-frame
   "Create the HTML for the word frame.

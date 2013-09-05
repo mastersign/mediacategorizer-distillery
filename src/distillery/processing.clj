@@ -274,24 +274,36 @@
 
 (defn- compute-matching-score
   [video category]
-  (let [cidx (:index category)
-        midx (:index video)]
-    (apply + (map
-              #(* (:match-value (get midx %) 0.0) (:match-value (get cidx %) 0.0))
-              (keys midx)))))
+  (let [cwidx (:index category)
+        mwidx (:index video)
+        wordscores (->> (keys mwidx)
+                     (map (fn [wid] [wid
+                                     (* (:match-value (get mwidx wid) 0.0)
+                                        (:match-value (get cwidx wid) 0.0))]))
+                     (filter #(> (second %) 0))
+                     (apply concat)
+                     (apply hash-map))
+        score (double (apply + (vals wordscores)))]
+    {:category-id (:id category)
+     :wordscores wordscores
+     :score score}))
 
 (defn match-video
   [{:keys [categories configuration] :as job} video]
   (assoc video
     :matches (->> categories
-                  (map #(vector (:id %) (compute-matching-score video %)))
-                  (filter #(>= (second %) (cfg/value :min-match-score configuration)))
+                  (map #(compute-matching-score video %))
+                  (filter #(>= (:score %) (cfg/value :min-match-score configuration)))
+                  (map #(vector (:category-id %) %))
                   (apply concat)
                   (apply sorted-map))))
 
 (defn- lookup-matching-score
   [category video]
-  (get-in video [:matches (:id category)] 0.0))
+  (-> video
+      (get-in [:matches (:id category)] 0.0)
+      (dissoc :category-id)
+      (assoc :video-id (:id video))))
 
 (defn lookup-category-match
   [{:keys [videos] :as job} category]
@@ -300,4 +312,5 @@
                   (map #(vector (:id %) (lookup-matching-score category %)))
                   (apply concat)
                   (apply sorted-map))))
+
 
