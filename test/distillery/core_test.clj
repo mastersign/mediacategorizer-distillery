@@ -6,6 +6,7 @@
   (:require [distillery.data :refer :all])
   (:require [distillery.blacklist :refer :all])
   (:require [distillery.processing :refer :all])
+  (:require [distillery.trace :refer :all])
   (:require [distillery.tasks :as dt])
   (:require [distillery.core :refer :all]))
 
@@ -146,7 +147,7 @@
                 dt/analyze-categories
                 dt/match-videos
                 dt/lookup-categories-matches)]
-    (dt/trace-block
+    (trace-block
      "Index run"
      (dt/prepare-output-dir job)
      (doall ((dt/map-fn) #(% job)
@@ -164,7 +165,7 @@
                 dt/analyze-categories
                 dt/match-videos
                 dt/lookup-categories-matches)]
-    (dt/trace-block
+    (trace-block
      "Complete run"
      (dt/prepare-output-dir job)
      (doall ((dt/map-fn) #(% job)

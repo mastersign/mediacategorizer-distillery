@@ -2,6 +2,7 @@
   (:require [clojure.string :as string])
   (:require [clojure.pprint :as pp])
   (:require [clojure.java.browse :refer (browse-url)])
+  (:require [distillery.trace :refer :all])
   (:require [distillery.config :as cfg])
   (:require [distillery.data :refer :all])
   (:require [distillery.files :refer :all])
@@ -16,28 +17,6 @@
   (:require [distillery.view.category :as v-category])
   (:require [distillery.view.video :as v-video])
   (:require [distillery.view.word :as v-word]))
-
-;; ## Task Tracing
-
-(def trace-agent (agent nil))
-
-(defn trace-message
-  [& msg]
-  (let [text (apply str msg)]
-  (send-off trace-agent
-        (fn [state] (println (str "# " text))))
-  text))
-
-(defmacro trace-block
-  [msg & body]
-  `(do
-     (trace-message (str "BEGIN " ~msg "..."))
-     (let [start# (System/nanoTime)
-           result# (do ~@body)
-           end# (/ (- (System/nanoTime) start#) 1000000.0)]
-       (trace-message (str "END   " ~msg " after " end# " msecs"))
-       result#)))
-
 
 ;; ## Helper
 
