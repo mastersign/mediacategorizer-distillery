@@ -210,7 +210,7 @@
   [video & {:keys [predicate]}]
   (let [ws (words (:results video) :predicate predicate)
         add-occurrence (fn [props word]
-                         (let [props (or props {:id (word-identifier word)
+                         (let [props (or props {:id (:id word)
                                                 :lexical-form (:lexical-form word)
                                                 :pronunciation (:pronunciation word)})]
                            (assoc props :occurrences
@@ -220,7 +220,8 @@
                                     :word-no (:no word)
                                     :confidence (:confidence word)}))))
         index (->> ws
-                   (reduce-by-sorted :lexical-form add-occurrence nil)
+                   (map #(assoc % :id (word-identifier %)))
+                   (reduce-by-sorted :id add-occurrence nil)
                    (map-values compute-index-entry-stats))
         index-stats {:count (count index)
                      :max-occurrence-count (apply max (map :occurrence-count (vals index)))}
@@ -238,7 +239,7 @@
   [category & {:keys [predicate]}]
   (let [ws (category-words category :predicate predicate)
         add-occurrence (fn [props word]
-                        (let [props (or props {:id (word-identifier word)
+                        (let [props (or props {:id (:id word)
                                                :lexical-form (:lexical-form word)})]
                           (assoc props :occurrences
                             (conj (:occurrences props [])
@@ -246,7 +247,8 @@
                                    :no (:no word)
                                    :confidence 1}))))
         index (->> ws
-                   (reduce-by-sorted :lexical-form add-occurrence nil)
+                   (map #(assoc % :id (word-identifier %)))
+                   (reduce-by-sorted :id add-occurrence nil)
                    (map-values compute-index-entry-stats))
         index-stats {:count (count index)
                      :max-occurrence-count (apply max (map :occurrence-count (vals index)))}
@@ -276,16 +278,16 @@
   [video category]
   (let [cwidx (:index category)
         mwidx (:index video)
-        wordscores (->> (keys mwidx)
-                     (map (fn [wid] [wid
-                                     (* (:match-value (get mwidx wid) 0.0)
-                                        (:match-value (get cwidx wid) 0.0))]))
-                     (filter #(> (second %) 0))
-                     (apply concat)
-                     (apply hash-map))
-        score (double (apply + (vals wordscores)))]
+        word-scores (->> (keys mwidx)
+                         (map (fn [wid] [wid
+                                         (* (:match-value (get mwidx wid) 0.0)
+                                            (:match-value (get cwidx wid) 0.0))]))
+                         (filter #(> (second %) 0))
+                         (apply concat)
+                         (apply hash-map))
+        score (double (apply + (vals word-scores)))]
     {:category-id (:id category)
-     :wordscores wordscores
+     :word-scores word-scores
      :score score}))
 
 (defn match-video

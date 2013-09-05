@@ -51,12 +51,44 @@
   (TODO "Word Category List"))
 
 (defn- render-category-word-video-list
-  [{:keys [word] :as args}]
-  (TODO "Category Word Video List"))
+  [{:keys [videos category word] :as args}]
+  (let [video-fn (fn [id] (first (filter #(= id (:id %)) videos)))
+        category-id (:id category)
+        word-id (:id word)
+        items (->> (vals (:matches category))
+                   (map (fn [{:keys [video-id word-scores] :as match}]
+                          [video-id
+                           (get word-scores word-id)]))
+                   (filter #(not (nil? (second %))))
+                   (map (fn [[video-id score]]
+                          (let [video (video-fn video-id)]
+                            (list-item
+                             [(format "%2.4f  " score)
+                              (link (str "../../videos/" video-id "/index.html?word=" word-id)
+                                    (:name video))])))))]
+    (if (> (count items) 0)
+      (ulist items)
+      (paragraph "Dieses Wort kommt in keinem Video vor."))))
 
 (defn- render-video-word-category-list
-  [{:keys [video word] :as args}]
-  (TODO "Video Word Category List"))
+  [{:keys [categories video word] :as args}]
+  (let [category-fn (fn [id] (first (filter #(= id (:id %)) categories)))
+        video-id (:id video)
+        word-id (:id word)
+        items (->> (vals (:matches video))
+                   (map (fn [{:keys [category-id word-scores] :as match}]
+                          [category-id
+                           (get word-scores word-id)]))
+                   (filter #(not (nil? (second %))))
+                   (map (fn [[category-id score]]
+                          (let [category (category-fn category-id)]
+                            (list-item
+                             [(format "%2.4f  " score)
+                              (link (str "../../categories/" category-id "/index.html?word=" word-id)
+                                    (:name category))])))))]
+    (if (> (count items) 0)
+      (ulist items)
+      (paragraph "Dieses Wort kommt in keiner Kategorie vor."))))
 
 (defn render-word-include
   "Renders the include part for the word frame."
