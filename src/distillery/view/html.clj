@@ -193,7 +193,7 @@
   (let [w (java.io.StringWriter.)]
     (pprint x w)
     (let [txt (.toString w)]
-      (trace-message "DEBUG: " txt)
+      (trace-message "DEBUG:\n" txt)
       {:tag :pre
        :content [{:tag :strong :content "DEBUG\n" }
                  {:tag :code
