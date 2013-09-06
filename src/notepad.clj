@@ -27,7 +27,7 @@
 ; -----------------
 
 ;(let [dldir "C:\\Temp\\wiki\\"] (download-resources dldir) (adjust-job-for-offline dldir))
-;(adjust-job-for-offline "C:\\Temp\wiki\\")
+;(adjust-job-for-offline "C:\\Temp\\wiki\\")
 
 (defn download-resources
   "Downloads all resources into dldir."
