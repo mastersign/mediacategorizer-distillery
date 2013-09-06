@@ -1,6 +1,8 @@
 (ns distillery.view.html
+  (:require [clojure.pprint :refer (pprint)])
   (:require [clojure.java.io :refer (resource)])
-  (:require [net.cgrand.enlive-html :refer (html-resource transform content emit*)]))
+  (:require [net.cgrand.enlive-html :refer (html-resource transform content emit*)])
+  (:require [distillery.trace :refer :all]))
 
 (defn template
   "Loads a html template from the 'view' folder by its name without extension."
@@ -186,8 +188,19 @@
                  :attrs {:class "bar_beam"
                          :style (str "width:" iv "%; background-color: " c ";")}})]))))
 
+(defn DEBUG
+  [x]
+  (let [w (java.io.StringWriter.)]
+    (pprint x w)
+    (let [txt (.toString w)]
+      (trace-message "DEBUG: " txt)
+      {:tag :pre
+       :content [{:tag :strong :content "DEBUG\n" }
+                 {:tag :code
+                  :content [txt]}]})))
+
 (defn TODO
   [text]
-  ;(println (format "TODO: %s" text))
+  (trace-message "TODO: " text)
   {:tag :div :attrs {:class "todo"} :content text})
 
