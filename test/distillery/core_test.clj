@@ -139,7 +139,8 @@
       dt/load-categories
       dt/analyze-categories
       dt/match-videos
-      dt/lookup-categories-matches))
+      dt/lookup-categories-matches
+      dt/matching-stats))
 
 (defn test-index []
   (let [job (-> job-descr
@@ -148,7 +149,8 @@
                 dt/load-categories
                 dt/analyze-categories
                 dt/match-videos
-                dt/lookup-categories-matches)]
+                dt/lookup-categories-matches
+                dt/matching-stats)]
     (trace-block
      "Index run"
      (dt/prepare-output-dir job)
@@ -166,7 +168,8 @@
                 dt/load-categories
                 dt/analyze-categories
                 dt/match-videos
-                dt/lookup-categories-matches)]
+                dt/lookup-categories-matches
+                dt/matching-stats)]
     (trace-block
      "Complete run"
      (dt/prepare-output-dir job)

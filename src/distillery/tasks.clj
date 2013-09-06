@@ -223,6 +223,17 @@
                        categories)))))
 
 
+(defn matching-stats
+  "Builds some statistic values over the matching scores."
+  [job]
+  (let [matches (mapcat #(vals (:matches %)) (:videos job))
+        scores (map :score matches)
+        word-scores (mapcat #(vals (:word-scores %)) matches)]
+        (assoc job
+          :max-score (apply max scores)
+          :max-word-score (apply max word-scores))))
+
+
 ;; ### Output Generation
 
 (defn- create-page
