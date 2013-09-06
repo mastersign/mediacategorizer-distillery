@@ -3,8 +3,8 @@
 
 (defn- render-glossary-word
   "Creates the HTML for a glossary entry."
-  [[lexical {:keys [id occurrences] :as word}]]
-  (list-item (jslink (str "word('" id "')") lexical)))
+  [{:keys [id lexical-form occurrences] :as word}]
+  (list-item (jslink (str "word('" id "')") lexical-form)))
 
 (defn- glossary-partition-id
   "Creates an identifier for a glossary partition by its letter."
@@ -27,7 +27,7 @@
   [[letter index-part]]
   {:tag :div
    :attrs {:id (str "glossary-part-" (glossary-partition-id letter)) :class "glossary-part"}
-   :content [(ulist "glossary" (map render-glossary-word index-part))]})
+   :content [(ulist "glossary" (map render-glossary-word (vals index-part)))]})
 
 (defn render-glossary
   "Create the HTML for a glossary."
