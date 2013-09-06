@@ -1,7 +1,7 @@
 (ns distillery.view.word
   (:require [clojure.string :as string])
   (:require [net.cgrand.enlive-html :as eh])
-  (:require [distillery.data :refer [key-comp]])
+  (:require [distillery.data :refer [key-comp any?]])
   (:require [distillery.files :refer :all])
   (:require [distillery.view.html :refer :all])
   (:require [distillery.view.transcript :as transcript]))
@@ -47,8 +47,28 @@
     (ulist (map (partial render-video-list-item word-id) videos))))
 
 (defn- render-word-category-list
-  [{:keys [word] :as args}]
-  (TODO "Word Category List"))
+  [{:keys [categories word] :as args}]
+  (let [word-id (:id word)
+        tmp (map
+             (fn [{:keys [matches] :as category}]
+                (vals matches))
+             categories)
+        cats (filter
+              (fn [{:keys [matches] :as category}]
+                (any?
+                 (fn [{:keys [word-scores] :as match}]
+                   (contains? (set (keys word-scores)) word-id))
+                 (vals matches)))
+              categories)
+        items (map
+               (fn [{:keys [id name] :as category}]
+                 (list-item
+                  (link (str "categories/" id "/index.html?word=" word-id)
+                        name)))
+               cats)]
+    (if (> (count items) 0)
+      (ulist items)
+      (paragraph "Dieses Wort kommt in keiner Kategorie vor."))))
 
 (defn- render-category-word-video-list
   [{:keys [videos category word] :as args}]
