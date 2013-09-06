@@ -23,14 +23,15 @@
 (defn- render-word
   "Creates the HTML for a recognized word."
   [{:keys [text lexical-form confidence pronunciation] :as word} & {:keys [index pivot]}]
-  (let [highlight (= pivot lexical-form)
+  (let [id (word-identifier word)
+        highlight (= pivot lexical-form)
         color (if highlight "#FF0000" (confidence-color (* confidence confidence)))
         html {:tag :span
               :attrs {:style (str "color:" color)
                       :title pronunciation}
               :content (str text " ")}]
-    (if (contains? index lexical-form)
-      (jslink (str "word('" (word-identifier word) "')") html)
+    (if (contains? index id)
+      (jslink (str "word('" id "')") html)
       html)))
 
 (defn- render-phrase
