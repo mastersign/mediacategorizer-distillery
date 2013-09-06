@@ -57,7 +57,7 @@
               (fn [{:keys [matches] :as category}]
                 (any?
                  (fn [{:keys [word-scores] :as match}]
-                   (contains? (set (keys word-scores)) word-id))
+                   (contains? word-scores word-id))
                  (vals matches)))
               categories)
         items (map
