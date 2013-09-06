@@ -5,24 +5,24 @@
   ;(:require [mastersign.wordcloud-test])
   ;(:require [distillery.data :refer :all])
   ;(:require [distillery.tasks :refer :all])
-  (:require [distillery.core-test])
+  (:require [distillery.core-test :as ct])
   )
 
 ;(run-tests 'mastersign.wordcloud-test)
 
-;(distillery.core-test/test-playground)
+;(ct/test-playground)
 
-;(distillery.core-test/test-resources)
+;(ct/test-resources)
 
-;(distillery.core-test/test-analyze)
+;(ct/test-analyze)
 
-;(distillery.core-test/test-categories)
+;(ct/test-categories)
 
-;(distillery.core-test/test-index)
+;(ct/test-index)
 
-;(distillery.core-test/test-complete)
+;(ct/test-complete)
 
-;(distillery.core-test/test-show-main-page)
+;(ct/test-show-main-page)
 
 ; -----------------
 
@@ -34,7 +34,7 @@
   [dldir]
   (let [ress (mapcat (fn [c] (map #(vector (:type %) (:url %))
                                   (:resources c)))
-                     (:categories distillery.core-test/job-descr))]
+                     (:categories ct/job-descr))]
     (doseq [[typ url] ress]
       (let [url* (java.net.URL. url)
             p (.getPath url*)]
@@ -49,7 +49,7 @@
   [dldir]
   (intern 'distillery.core-test 'job-descr
     (update-in
-     distillery.core-test/job-descr [:categories]
+     ct/job-descr [:categories]
      (fn [cats]
        (vec (map
              (fn [cat]
