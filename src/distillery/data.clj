@@ -107,6 +107,11 @@
 
 ;; ### General
 
+(defn any?
+  "Returns true if the predicate returns true for at least one value in coll; otherwise false."
+  [pred coll]
+  (not (empty? (filter pred coll))))
+
 (defmacro key-comp
   "Creates a comparator, defined by a function which takes an element and returns the key."
   [f-key]
