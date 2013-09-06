@@ -44,13 +44,13 @@
 
 (defn- render-videos
   "Creates the HTML for the overview page."
-  [{:keys [videos category]}]
+  [{:keys [videos category max-score] :as args}]
   (let [video-fn (fn [mid] (first (filter #(= mid (:id %)) videos)))]
     (innerpage "videos" "Videos" false
                (ulist (map
-                       #(list-item [(format "%2.4f  "  (:score %))
-                                    (link
-                                     (str "../../videos/" (:video-id %) "/index.html")
+                       #(list-item [(format "%.4f  " (/ (:score %) max-score))
+                                    (jslink
+                                     (str "match('" (:video-id %) "');")
                                      (:name (video-fn (:video-id %))))])
                        (reverse (sort-by :score (vals (:matches category)))))))))
 
@@ -59,6 +59,12 @@
    The word frame is an empty container to load a category word page into."
   [args]
   (innerpage "word" "Wort" false nil))
+
+(defn- render-category-match-frame
+  "Create the HTML for the match frame.
+   The word frame is an empty container to load a category match page into."
+  [args]
+  (innerpage "match" "Übereinstimmung" false nil))
 
 (defn render-category-page
   "Renders the main page for a category."
@@ -75,4 +81,5 @@
       (render-glossary args)
       (render-cloud args)
       (render-videos args)
-      (render-category-word-frame args)]])
+      (render-category-word-frame args)
+      (render-category-match-frame args)]])

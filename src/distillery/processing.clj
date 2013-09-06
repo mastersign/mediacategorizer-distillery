@@ -295,7 +295,7 @@
   (assoc video
     :matches (->> categories
                   (map #(compute-matching-score video %))
-                  (filter #(>= (:score %) (cfg/value :min-match-score configuration)))
+                  (filter #(>= (:score %) 0.0))
                   (map #(vector (:category-id %) %))
                   (apply concat)
                   (apply sorted-map))))
@@ -303,7 +303,7 @@
 (defn- lookup-matching-score
   [category video]
   (-> video
-      (get-in [:matches (:id category)] 0.0)
+      (get-in [:matches (:id category)] {:word-scores {} :score 0.0})
       (dissoc :category-id)
       (assoc :video-id (:id video))))
 
@@ -311,7 +311,9 @@
   [{:keys [videos] :as job} category]
   (assoc category
     :matches (->> videos
-                  (map #(vector (:id %) (lookup-matching-score category %)))
+                  (map #(lookup-matching-score category %))
+                  (filter #(>= (:score %) 0.0))
+                  (map #(vector (:video-id %) %))
                   (apply concat)
                   (apply sorted-map))))
 

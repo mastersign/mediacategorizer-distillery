@@ -71,7 +71,7 @@
       (paragraph "Dieses Wort kommt in keiner Kategorie vor."))))
 
 (defn- render-category-word-video-list
-  [{:keys [videos category word] :as args}]
+  [{:keys [videos category word max-word-score] :as args}]
   (let [video-fn (fn [id] (first (filter #(= id (:id %)) videos)))
         category-id (:id category)
         word-id (:id word)
@@ -83,7 +83,7 @@
                    (map (fn [[video-id score]]
                           (let [video (video-fn video-id)]
                             (list-item
-                             [(format "%2.4f  " score)
+                             [(format "%.4f  " (/ score max-word-score))
                               (link (str "../../videos/" video-id "/index.html?word=" word-id)
                                     (:name video))])))))]
     (if (> (count items) 0)
@@ -91,7 +91,7 @@
       (paragraph "Dieses Wort kommt in keinem Video vor."))))
 
 (defn- render-video-word-category-list
-  [{:keys [categories video word] :as args}]
+  [{:keys [categories video word max-word-score] :as args}]
   (let [category-fn (fn [id] (first (filter #(= id (:id %)) categories)))
         video-id (:id video)
         word-id (:id word)
@@ -103,7 +103,7 @@
                    (map (fn [[category-id score]]
                           (let [category (category-fn category-id)]
                             (list-item
-                             [(format "%2.4f  " score)
+                             [(format "%.4f  " (/ score max-word-score))
                               (link (str "../../categories/" category-id "/index.html?word=" word-id)
                                     (:name category))])))))]
     (if (> (count items) 0)

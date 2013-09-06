@@ -52,7 +52,8 @@
                    :skip-media-copy false
                    :skip-wordclouds false
                    :skip-word-includes false
-                   :main-cloud {:precision :medium}
+                   :skip-match-includes false
+                   :main-cloud {:precision :high}
                    :video-cloud {:precision :medium}
                    :category-cloud {:precision :medium}}
    :videos (->> videos

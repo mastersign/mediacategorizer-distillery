@@ -5,7 +5,8 @@
   (:require [distillery.view.html :refer :all])
   (:require [distillery.view.glossary :as glossary])
   (:require [distillery.view.cloud :as cloud])
-  (:require [distillery.view.hitlist :as hitlist]))
+  (:require [distillery.view.hitlist :as hitlist])
+  (:require [distillery.view.match :as match]))
 
 (defn- render-hitlist
   [{:keys [words configuration] :as args}]
@@ -42,17 +43,24 @@
   (innerpage "glossary" "Globaler Glossar" false
              (glossary/render-glossary pwords)))
 
+(defn- render-main-matching-matrix
+  [args]
+   (innerpage "matrix" "Übereinstimmungsmatrix" false
+              (match/render-match-matrix args)))
+
 (defn render-main-page
   "Renders the main page for the site."
   [{:keys [job-name] :as args}]
   [:title job-name
    :secondary-menu {"Übersicht" (jshref "innerpage('overview')")
                     "Wortwolke" (jshref "innerpage('cloud')")
+                    "Matrix" (jshref "innerpage('matrix')")
                     "Glossar" (jshref "innerpage('glossary')")}
    :page
      [(headline 2 "Projekt")
       (render-main-overview args)
       (render-main-cloud args)
+      (render-main-matching-matrix args)
       (render-main-glossary args)
       (render-main-word-frame args)]])
 

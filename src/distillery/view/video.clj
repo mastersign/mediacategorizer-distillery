@@ -72,14 +72,14 @@
 
 (defn- render-categories
   "Create the HTML for the video categories."
-  [{:keys [categories video] :as args}]
+  [{:keys [categories video max-score] :as args}]
   (let [category-fn (fn [cid] (first (filter #(= cid (:id %)) categories)))]
     (innerpage "categories" "Kategorien" false
                (ulist (map
-                       #(list-item [(format "%2.4f  "  (:score %))
+                       #(list-item [(format "%.4f  "  (/ (:score %) max-score))
                                     " "
                                     (link
-                                     (str "../../categories/" (:category-id %) "/index.html")
+                                     (str "../../categories/" (:category-id %) "/index.html?match=" (:id video))
                                      (:name (category-fn (:category-id %))))])
                        (reverse (sort-by :score (vals (:matches video)))))))))
 

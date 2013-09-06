@@ -1,6 +1,7 @@
 function parse_request() {
   return { innerpage: get_query_variable("ipage"),
-           word: get_query_variable("word") };
+           word: get_query_variable("word"),
+          match: get_query_variable("match")};
 }
 
 function build_request_url(request) {
@@ -14,6 +15,10 @@ function build_request_url(request) {
   if (request.word) {
     if (query == "") { query += "?"; } else { query += "&"; }
     query += "word=" + request.word;
+  }
+  if (request.match) {
+    if (query == "") { query += "?"; } else { query += "&"; }
+    query += "match=" + request.match;
   }
   return query;
 }
@@ -63,9 +68,24 @@ function word(word_id, with_history) {
   });
 }
 
+function match(video_id, with_history) {
+  with_history = typeof with_history !== 'undefined' ? with_history : true;
+  $("#match .innerpage").load("matches/" + video_id + ".inc.html", function(text, status) {
+    innerpage("match", false);
+    if (with_history) {
+      var title = $("#match h3:first").innerText;
+      add_history_entry({ match: video_id }, title);
+    }
+  });
+}
+
 function process_request(request, with_history) {
   with_history = typeof with_history !== 'undefined' ? with_history : true;
   if (request) {
+    if (request.match) {
+      match(request.match, with_history);
+      return;
+    }
     if (request.word) {
       word(request.word, with_history);
       return;
@@ -152,10 +172,9 @@ function get_query_variable(variable) {
 $(function() {
   $(window).on("popstate", history_handler);
   $.each($("figure.wordcloud"), register_cloud_handler);
-
   var request = parse_request();
-  if (request.innerpage || request.word) {
-    process_request(request);
+  if (request.innerpage || request.word || request.match) {
+    process_request(request, false);
   }
 });
 

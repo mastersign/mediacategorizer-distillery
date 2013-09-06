@@ -16,7 +16,8 @@
   (:require [distillery.view.index :as v-index])
   (:require [distillery.view.category :as v-category])
   (:require [distillery.view.video :as v-video])
-  (:require [distillery.view.word :as v-word]))
+  (:require [distillery.view.word :as v-word])
+  (:require [distillery.view.match :as v-match]))
 
 ;; ## Helper
 
@@ -345,6 +346,31 @@
         (vals index))))))
 
 
+(defn- create-category-match-include
+   "Creates the include file for a match in the context of a category."
+  [{:keys [output-dir] :as job} category {:keys [path] :as match}]
+  (create-include
+    (str path ".inc.html")
+    v-match/render-category-match-include
+    (assoc job :category category :match match)))
+
+
+(defn create-category-match-includes
+  "Create includes for all video matches of a category."
+  [{:keys [output-dir configuration] :as job} {:keys [id matches path] :as category}]
+  (if (cfg/value :skip-match-includes configuration)
+    (trace-message "Skipping match includes for category '" id "'")
+    (trace-block
+     (str "Creating match includes for category '" id "'")
+     (let [matches-path (combine-path path "matches")]
+       (create-dir (combine-path output-dir matches-path))
+       ((map-fn)
+        (fn [match]
+          (let [match-path (combine-path matches-path (:video-id match))]
+            (create-category-match-include job category (assoc match :path match-path))))
+        (vals matches))))))
+
+
 (defn- create-category-cloud
   "Creates the word cloud for a category."
   [{:keys [output-dir configuration] :as job} {:keys [id index path] :as category}]
@@ -378,7 +404,8 @@
        v-category/render-category-page
        args)
 
-      (create-category-word-includes job category*))))
+      (create-category-word-includes job category*)
+      (create-category-match-includes job category*))))
 
 
 (defn create-category-pages

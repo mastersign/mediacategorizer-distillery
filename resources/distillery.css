@@ -140,6 +140,31 @@ ul.main_statistic li, ul.video_statistic li, ul.word_statistic li {
   text-align: right;
 }
 
+table.match-matrix {
+}
+
+table.match-matrix thead th {
+  vertical-align: center;
+  text-align: center;
+  /*transform: rotate(-90deg);*/
+  /*height: 5em;*/
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+table.match-matrix tbody th {
+  text-align: left;
+  /*white-space: nowrap;*/
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 8em;
+}
+
+table.match-matrix td a {
+  color: #000;
+}
+
 .todo {
   display: block;
   font-weight: bold;
