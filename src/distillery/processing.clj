@@ -292,13 +292,15 @@
 
 (defn match-video
   [{:keys [categories configuration] :as job} video]
-  (assoc video
-    :matches (->> categories
+  (let [matches (->> categories
                   (map #(compute-matching-score video %))
                   (filter #(>= (:score %) 0.0))
                   (map #(vector (:category-id %) %))
                   (apply concat)
-                  (apply sorted-map))))
+                  (apply sorted-map))]
+  (assoc video
+    :matches matches
+    :max-score (apply max (map :score (vals matches))))))
 
 (defn- lookup-matching-score
   [category video]
@@ -309,12 +311,13 @@
 
 (defn lookup-category-match
   [{:keys [videos] :as job} category]
-  (assoc category
-    :matches (->> videos
+  (let [matches (->> videos
                   (map #(lookup-matching-score category %))
                   (filter #(>= (:score %) 0.0))
                   (map #(vector (:video-id %) %))
                   (apply concat)
-                  (apply sorted-map))))
-
+                  (apply sorted-map))]
+  (assoc category
+    :matches matches
+    :max-score (apply max (map :score (vals matches))))))
 
