@@ -1,7 +1,7 @@
 function parse_request() {
-  return { innerpage: get_query_variable("ipage"),
+  return { innerpage: get_query_variable("innerpage"),
            word: get_query_variable("word"),
-          match: get_query_variable("match")};
+           match: get_query_variable("match")};
 }
 
 function build_request_url(request) {
