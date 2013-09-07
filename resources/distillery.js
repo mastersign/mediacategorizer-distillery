@@ -1,3 +1,13 @@
+$(function() {
+  $(window).on("popstate", history_handler);
+  $.each($("figure.wordcloud"), register_cloud_handler);
+  var request = parse_request();
+  if (request.innerpage || request.word || request.match) {
+    process_request(request, false);
+  }
+});
+
+
 function parse_request() {
   return { innerpage: get_query_variable("innerpage"),
            word: get_query_variable("word"),
@@ -82,6 +92,11 @@ function match(video_id, with_history) {
 function process_request(request, with_history) {
   with_history = typeof with_history !== 'undefined' ? with_history : true;
   if (request) {
+    /*
+    alert("match: " + request.match + "\n" +
+          "word: " + request.word + "\n" +
+          "innerpage: " + request.innerpage)
+    */
     if (request.match) {
       match(request.match, with_history);
       return;
@@ -168,14 +183,4 @@ function get_query_variable(variable) {
   }
   return null;
 }
-
-$(function() {
-  $(window).on("popstate", history_handler);
-  $.each($("figure.wordcloud"), register_cloud_handler);
-  var request = parse_request();
-  if (request.innerpage || request.word || request.match) {
-    process_request(request, false);
-  }
-});
-
 
