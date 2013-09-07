@@ -48,19 +48,23 @@
    :content
    (vec (cons {:tag :th
                :attrs {:class ""}
-               :content [(link (str "videos/" id "/index.html")
-                               name)]}
+               :content [{:tag :a
+                          :attrs {:href (str "videos/" id "/index.html")
+                                  :title name}
+                          :content name}]}
               (map
                (fn [category-id]
-                 (let [match (get-in matrix [category-id id])]
+                 (let [match (get-in matrix [category-id id])
+                       score (:score match)
+                       normalized-score (/ score (:max-score video))]
                    (if match
                      {:tag :td
                       :attrs {:class "match"
                               :data-video-id id
                               :data-category-id category-id
-                              :style (str "background-color: rgba(0,76,204," (:score-normalized match) ")")}
+                              :style (str "background-color: rgba(234,30,106," normalized-score ")")}
                       :content [(link (str "categories/" category-id "/index.html?match=" id)
-                                 (format "%.4f" (:score-normalized match)))]}
+                                 (format "%.1f%%" (* 100 score)))]}
                      {:tag :td :content []})))
                category-ids)))})
 
@@ -77,7 +81,7 @@
                                  (get (:matches video) (:id category))]))
                              (map
                               (fn [[video-id match]]
-                                [video-id (assoc match :score-normalized (/ (:score match) max-score))]))
+                                [video-id match]))
                              (apply concat)
                              (apply hash-map))]))
                     (apply concat)
