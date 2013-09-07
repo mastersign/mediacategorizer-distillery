@@ -141,6 +141,8 @@ ul.main_statistic li, ul.video_statistic li, ul.word_statistic li {
 }
 
 table.match-matrix {
+  width: 100%;
+  table-layout: auto;
 }
 
 table.match-matrix thead th {
@@ -151,17 +153,23 @@ table.match-matrix thead th {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  padding: 0.5em 0.5em;
 }
 
 table.match-matrix tbody th {
   text-align: left;
-  /*white-space: nowrap;*/
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  width: 8em;
+  max-width: 20em;
 }
 
-table.match-matrix td a {
+td.match {
+  padding: 0.4em 0.5em;
+  overflow: hidden;
+}
+
+td.match a {
   color: #000;
 }
 
