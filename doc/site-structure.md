@@ -7,21 +7,29 @@ Path: `/index.html`
 * Multiple Categories
 * Multiple Videos
 ### Views
-* Overview
-	* Description
-	* Statistics
+* Project
+	* Overview
+		* Description
+		* Statistics
+		* Word Hitlist -> Project:Word
+	* Cloud
+		* Cloud Word -> Project:Word 
+	* Matrix
+		* Row -> Video:Overview
+		* Column -> Category:Overview
+		* Cell -> Category:Match 
+	* Glossary
 * Categories
-	* List -> Category
+	* Overview 
+		* List -> Category:Overview
 * Videos
-	* List -> Video
-* Glossary
-	* List -> Index:Word
-	* Cloud -> Index:Word
+	* Overview	
+		* List -> Video:Overview
 * Word*  
-  Path: `/words/<word>.part.html`
+  Path: `/words/<word>.inc.html`
 	* Statistics
-	* Categories (subset) -> Category
-	* Videos (subset) -> Video
+	* Videos (subset) -> Video:Word
+	* Categories (subset) -> Category:Word
 
 ## Category*
 Path: `/categories/<category>/index.html`
@@ -29,18 +37,24 @@ Path: `/categories/<category>/index.html`
 * Single Category
 * Multiple Videos (subset)
 ### Views
-* Category
+* Category (Overview)
 	* Description
 	* Statistics
+	* Word Hitlist -> Category:Word
+* Cloud
+	* Cloud Word -> Category:Word
 * Videos
-	* List -> Video
+	* List -> Category:Match
 * Glossary
 	* List -> Category:Word
-	* Cloud -> Category:Word
 * Word*  
-  Path: `/categories/<category>/words/<word>.part.html`
+  Path: `/categories/<category>/words/<word>.inc.html`
 	* Statistics
-	* Videos (subset) -> Video
+	* Videos (subset) -> Video:Word
+* Match*  
+  Path: `/categories/<category>/matches/<video>.inc.html`
+	* Match Score
+	* Word List -> Category:Word
 
 ## Video*
 Path: `/videos/<video>/index.html`  
@@ -52,15 +66,19 @@ Video-Path: `/video/<video>/<video>.mp4`
 * Video
 	* Description
 	* Statistics
-* Phrases
-	* Transcript -> Playback Position, Video:Word
+	* Word Hitlist
+* Cloud
+	* Cloud Word -> Video:Word 
+* Transcript
+	* Phrase Time -> Playback Position
+	* Phrase Word -> Video:Word
 * Categories
-	* List -> Category
+	* List Item -> Category:Match
 * Glossary
-	* List -> Video:Word
-	* Cloud -> Video:Word
+	* List Item -> Video:Word
 * Word*  
-  Path: `/videos/<video>/words/<word>.part.html`
+  Path: `/videos/<video>/words/<word>.inc.html`
 	* Statistics
 	* Occurrences -> Playback Position
+	* Categories -> Category:Word
 
