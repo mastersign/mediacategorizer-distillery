@@ -33,7 +33,13 @@
         "Parabeln_Quadratische Funktion_en Übersicht (Scheitelpunkt,Stauchung,Streckung,etc.) (720)"]))
 
 (def videos [
+             ["11-01" "11.01 Theoretische, technische, praktische, angewandte Informatik"]
              ["12-01-1" "12.01.1 Datenstrukturen, Array, Queue, Stack"]
+             ["12-01-2" "12.01.2 Baum als Datenstruktur"]
+             ["Algo1" "Algorithmen und Datenstrukturen 001"]
+             ["Algo2" "Algorithmen und Datenstrukturen 002"]
+             ["Algo3" "Algorithmen und Datenstrukturen 003"]
+             ["Algo4" "Algorithmen und Datenstrukturen 004"]
              ["Bernoulli" "Binomialverteilung_Formel von Bernoulli, Stochastik, Nachhilfe online, Hilfe in Mathe (720)"]
              ["Hypothesentest" "Einseitiger(rechtsseitiger) Hypothesentest_mit Ablesen aus der Tabelle, Stochastik, Nachhilfe online (720)"]
              ["Parabeln" "Parabeln_Quadratische Funktion_en Übersicht (Scheitelpunkt,Stauchung,Streckung,etc.) (720)"]
@@ -41,7 +47,7 @@
              ["Lambda" "Der Lambda-Kalkül (720)"]
              ["IS-Kurve" "IS-Kurve im Vier-Quadrantenschema Die Herleitung (720)"]
              ["Makrooekonomie" "Makroökonomie online lernen - VWL Tutorium (360)"]
-             ;["Bankgeheimnis" "Bernd Senf 3. Bankgeheimnis Geldschöpfung - Monetative als Lösung (720)"]
+             ["Bankgeheimnis" "Bernd Senf 3. Bankgeheimnis Geldschöpfung - Monetative als Lösung (720)"]
              ])
 
 (def job-descr
@@ -53,7 +59,9 @@
                    :skip-wordclouds false
                    :skip-word-includes false
                    :skip-match-includes false
-                   :main-cloud {:precision :high}
+                   :main-cloud {:precision :medium
+                                :width 540
+                                :height 350}
                    :video-cloud {:precision :medium}
                    :category-cloud {:precision :medium}}
    :videos (->> videos
@@ -71,6 +79,16 @@
                               {:type :wikipedia, :url "http://de.wikipedia.org/wiki/Theoretische_Informatik"}
                               {:type :wikipedia, :url "http://de.wikipedia.org/wiki/Praktische_Informatik"}
                               {:type :wikipedia, :url "http://de.wikipedia.org/wiki/Technische_Informatik"}]}
+                 {:id "Queue"
+                  :name "Datenstrukturen - Warteschlange"
+                  :resources [{:type :wikipedia, :url "http://de.wikipedia.org/wiki/Warteschlange_%28Datenstruktur%29"}]}
+                 {:id "Stack"
+                  :name "Datenstrukturen - Stapel"
+                  :resources [{:type :wikipedia, :url "http://de.wikipedia.org/wiki/Stapelspeicher"}]}
+                 {:id "Tree"
+                  :name "Datenstrukturen - Baum"
+                  :resources [{:type :wikipedia, :url "http://de.wikipedia.org/wiki/Baum_%28Graphentheorie%29"}]}
+
                  {:id "Math"
                   :name "Mathematik"
                   :resources [{:type :wikipedia, :url "http://de.wikipedia.org/wiki/Mathematik"}
