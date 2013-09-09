@@ -146,12 +146,12 @@ table.match-matrix {
 }
 
 table.match-matrix thead th {
-  vertical-align: center;
-  text-align: center;
+  vertical-align: top;
+  text-align: left;
   /*transform: rotate(-90deg);*/
   /*height: 5em;*/
-  white-space: nowrap;
-  overflow: hidden;
+  /*white-space: nowrap;*/
+  /*overflow: hidden;*/
   text-overflow: ellipsis;
   padding: 0.5em 0.5em;
 }
@@ -161,7 +161,7 @@ table.match-matrix tbody th {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 20em;
+  max-width: 16em;
 }
 
 td.match {
