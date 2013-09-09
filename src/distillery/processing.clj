@@ -62,8 +62,17 @@
           (= text "]")
           (= text "{")
           (= text "}")
+          (= text "<")
+          (= text ">")
+          (= text "=")
           (= text "§")
-          (= text "$")))))
+          (= text "$")
+          (= text "&")
+          (= text "%")
+          (= text "?")
+          (= text "!")
+          (= text "/")
+          (= text "\\")))))
 
 (defn not-short?
   "Checks whether a word is long enough to be relevant."
