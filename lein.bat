@@ -2,7 +2,7 @@
 
 setLocal EnableExtensions EnableDelayedExpansion
 
-set LEIN_VERSION=2.2.0
+set LEIN_VERSION=2.3.3
 
 if "%LEIN_VERSION:~-9%" == "-SNAPSHOT" (
     set SNAPSHOT=YES
@@ -21,13 +21,14 @@ if "%DIR_CONTAINING%" neq "" cd "%DIR_CONTAINING%"
 :: LEIN_JAR and LEIN_HOME variables can be set manually.
 
 if "x%LEIN_HOME%" == "x" (
-    set LEIN_HOME=%USERPROFILE%\.lein
+    set LEIN_HOME=!USERPROFILE!\.lein
 )
 
-if "x%LEIN_JAR%" == "x" set LEIN_JAR=!LEIN_HOME!\self-installs\leiningen-!LEIN_VERSION!-standalone.jar
+if "x%LEIN_JAR%" == "x" set "LEIN_JAR=!LEIN_HOME!\self-installs\leiningen-!LEIN_VERSION!-standalone.jar"
 
 if "%1" == "self-install" goto SELF_INSTALL
 if "%1" == "upgrade"      goto UPGRADE
+if "%1" == "downgrade"    goto UPGRADE
 	
 if exist "%~dp0..\src\leiningen\version.clj" (
     :: Running from source checkout.
@@ -136,21 +137,29 @@ goto RUN
 
 :DownloadFile
 rem parameters: TargetFileName Address
+if NOT "x%HTTP_CLIENT%" == "x" (
+    %HTTP_CLIENT% %1 %2
+    goto EOF
+)
+wget >nul 2>&1
+if NOT ERRORLEVEL 9009 (
+    wget --no-check-certificate -O %1 %2
+    goto EOF
+)
+curl >nul 2>&1
+if NOT ERRORLEVEL 9009 (
+    rem We set CURL_PROXY to a space character below to pose as a no-op argument
+    set CURL_PROXY= 
+    if NOT "x%HTTPS_PROXY%" == "x" set CURL_PROXY="-x %HTTPS_PROXY%"
+    curl %CURL_PROXY% --insecure -f -L -o  %1 %2
+    goto EOF
+)
 powershell -? >nul 2>&1
 if NOT ERRORLEVEL 9009 (
     powershell -Command "& {param($a,$f) (new-object System.Net.WebClient).DownloadFile($a, $f)}" ""%2"" ""%1""
-) else (
-    wget >nul 2>&1
-    if NOT ERRORLEVEL 9009 (
-        wget --no-check-certificate -O %1 %2
-    ) else (
-        curl>nul 2>&1
-        if ERRORLEVEL 9009 goto NO_HTTP_CLIENT
-        curl --insecure -f -L -o  %1 %2
-    )
+    goto EOF
 )
-
-goto EOF
+goto NO_HTTP_CLIENT
 
 
 :NO_LEIN_JAR
@@ -201,7 +210,9 @@ goto EOF
 
 :UPGRADE
 set LEIN_BAT=%~dp0%~nx0
-echo The script at %LEIN_BAT% will be upgraded to the latest version in series %LEIN_VERSION%.
+set TARGET_VERSION=%2
+if "x%2" == "x" set TARGET_VERSION=stable
+echo The script at %LEIN_BAT% will be upgraded to the latest %TARGET_VERSION% version.
 set /P ANSWER=Do you want to continue (Y/N)?
 if /i {%ANSWER%}=={y}   goto YES_UPGRADE
 if /i {%ANSWER%}=={yes} goto YES_UPGRADE
@@ -212,7 +223,7 @@ exit /B 1
 :YES_UPGRADE
 echo Downloading latest Leiningen batch script...
 
-set LEIN_BAT_URL=https://raw.github.com/technomancy/leiningen/stable/bin/lein.bat
+set LEIN_BAT_URL=https://github.com/technomancy/leiningen/raw/%TARGET_VERSION%/bin/lein.bat
 set TEMP_BAT=%~dp0temp-lein-%RANDOM%%RANDOM%.bat
 call :DownloadFile "%LEIN_BAT%.pending" "%LEIN_BAT_URL%"
 if ERRORLEVEL 1 (
