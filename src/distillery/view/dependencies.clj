@@ -1,5 +1,6 @@
 (ns distillery.view.dependencies
-  (:require [clojure.java.io :refer (resource)])
+  (:import java.nio.file.Files)
+  (:require [clojure.java.io :as io])
   (:require [distillery.files :refer :all]))
 
 (def static-resources
@@ -19,15 +20,20 @@
 ;   "vjs.svg"
    ])
 
-(defn save-dependency
+(defn- copy-stream-to-file
+  [^java.io.InputStream s ^java.nio.file.Path p]
+  (java.nio.file.Files/copy s p (into-array java.nio.file.CopyOption [])))
+
+(defn- save-dependency
   "Saves a static resource dependency relative to the given HTML file path."
-  [^String target-dir ^String resource]
-  (let [src (get-path resource)
-        trg (get-path target-dir (file-name resource))]
-    (copy-file src trg)))
+  [^String target-dir ^String rn]
+  (let [src-s (.getResourceAsStream (.getContextClassLoader (Thread/currentThread)) rn)
+        trg (get-path target-dir rn)]
+    (copy-stream-to-file src-s trg)
+    (.close src-s)))
 
 (defn save-dependencies
   "Saves all static resource dependencies relative to the given HTML file path."
   [^String target-dir]
   (doseq [rn static-resources]
-    (save-dependency target-dir (resource rn))))
+    (save-dependency target-dir rn)))
