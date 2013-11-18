@@ -22,7 +22,7 @@
 
 (defn- copy-stream-to-file
   [^java.io.InputStream s ^java.nio.file.Path p]
-  (java.nio.file.Files/copy s p (into-array java.nio.file.CopyOption [])))
+  (java.nio.file.Files/copy s p (into-array java.nio.file.CopyOption [java.nio.file.StandardCopyOption/REPLACE_EXISTING])))
 
 (defn- save-dependency
   "Saves a static resource dependency relative to the given HTML file path."
