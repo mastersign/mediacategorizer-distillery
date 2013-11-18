@@ -31,6 +31,27 @@
     #(doall (pmap %1 %2))
     #(doall (map %1 %2))))
 
+(defmacro process-pipeline
+  [pipe-name x & fs]
+  (let [trc (gensym "trc")]
+  `(let [~trc (fn [x# no#] (trace-message ~(str "PIPELINE_STEP " pipe-name " ") (inc no#)) x#)]
+     (trace-message ~(str "PIPELINE " pipe-name " [" (count fs) "]"))
+     ~(cons `->
+            (cons x
+                  (apply concat
+                         (map-indexed
+                          (fn [i f]
+                            [f `(~trc ~(inc i))])
+                          fs)))))))
+
+(defmacro process-task-group
+  [group-name f xs]
+  `(let [f# (fn [x#] (let [res# (~f x#)] (trace-message ~(str "TASK_END " group-name)) res#))]
+     (trace-message ~(str "TASKGROUP " group-name " [" (count xs) "]"))
+     (let [resv# (doall ((map-fn) f# ~xs))]
+     (trace-message ~(str "TASKGROUP_END " group-name))
+       resv#)))
+
 (def ^:private filter-map
   {:not-short proc/not-short?
    :noun proc/noun?
