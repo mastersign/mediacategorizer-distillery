@@ -24,7 +24,7 @@
 (defn map-fn
   "This HOF returns the map function that should be
   used for time consuming transformations.
-  The configuration var `distillery.configuration/parallel-proc`
+  The configuration value `:parallel-proc`
   controls whether `pmap` or `map` is returned."
   []
   (if (cfg/value :parallel-proc)
