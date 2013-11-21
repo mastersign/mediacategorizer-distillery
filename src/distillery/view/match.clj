@@ -39,7 +39,7 @@
   [categories]
   {:tag :tr
    :content (vec (cons
-                  {:tag :th :content ""}
+                  {:tag :td :content ""}
                   (map render-match-matrix-head-cell categories)))})
 
 (defn- render-match-matrix-row
@@ -47,7 +47,6 @@
   {:tag :tr
    :content
    (vec (cons {:tag :th
-               :attrs {:class ""}
                :content [{:tag :a
                           :attrs {:href (str "videos/" id "/index.html")
                                   :title name}
@@ -60,8 +59,7 @@
                        video-normalized-score (/ score (:max-score video))]
                    (if match
                      {:tag :td
-                      :attrs {:class "match"
-                              :data-video-id id
+                      :attrs {:data-video-id id
                               :data-category-id category-id
                               :style (str "background-color: rgba(234,30,106," video-normalized-score ")")}
                       :content [(link (str "categories/" category-id "/index.html?match=" id)

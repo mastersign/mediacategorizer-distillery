@@ -141,19 +141,38 @@ ul.main_statistic li, ul.video_statistic li, ul.word_statistic li {
 }
 
 table.match-matrix {
-  width: 100%;
-  table-layout: auto;
+  table-layout: fixed;
+}
+
+table.match-matrix thead td {
+  width: 16em;
 }
 
 table.match-matrix thead th {
-  vertical-align: top;
+  vertical-align: bottom;
   text-align: left;
-  /*transform: rotate(-90deg);*/
-  /*height: 5em;*/
-  /*white-space: nowrap;*/
-  /*overflow: hidden;*/
+  overflow: hidden;
+  width: 3em;
+  height: 14em;
+}
+
+table.match-matrix thead th a {
+  transform:rotate(-90deg);
+  transform-origin: top left;
+  -moz-transform:rotate(-90deg);
+  -moz-transform-origin: top left;
+  -webkit-transform: rotate(-90deg);
+  -webkit-transform-origin: top left;
+  -o-transform: rotate(-90deg);
+  -o-transform-origin:  top left;
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
   text-overflow: ellipsis;
-  padding: 0.5em 0.5em;
+  width: 13em;
+  top: 0.75em;
+  left: 0.9em;
 }
 
 table.match-matrix tbody th {
@@ -161,15 +180,14 @@ table.match-matrix tbody th {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 16em;
 }
 
-td.match {
+table.match-matrix tbody td {
   padding: 0.4em 0.5em;
   overflow: hidden;
 }
 
-td.match a {
+table.match-matrix tbody td a {
   color: #000;
 }
 
@@ -188,3 +206,6 @@ td.match a {
   content: "\23E9  ";
 }
 
+
+
+
