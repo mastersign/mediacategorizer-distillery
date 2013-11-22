@@ -21,7 +21,7 @@
      "Output generation"
      (dt/prepare-output-dir job)
      (dt/process-task-group
-      "Output" #(% job)
+      "Output" job #(% job)
       [dt/create-index-page
        dt/create-categories-page
        dt/create-category-pages

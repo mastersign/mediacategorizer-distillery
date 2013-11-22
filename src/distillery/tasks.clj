@@ -26,8 +26,8 @@
   used for time consuming transformations.
   The configuration value `:parallel-proc`
   controls whether `pmap` or `map` is returned."
-  []
-  (if (cfg/value :parallel-proc)
+  [job]
+  (if (cfg/value [:configuration :parallel-proc] job)
     #(doall (pmap %1 %2))
     #(doall (map %1 %2))))
 
@@ -45,10 +45,10 @@
                           fs)))))))
 
 (defmacro process-task-group
-  [group-name f xs]
+  [group-name job f xs]
   `(let [f# (fn [x#] (let [res# (~f x#)] (trace-message ~(str "TASK_END " group-name)) res#))]
      (trace-message ~(str "TASKGROUP " group-name " [" (count xs) "]"))
-     (let [resv# (doall ((map-fn) f# ~xs))]
+     (let [resv# (doall ((map-fn ~job) f# ~xs))]
      (trace-message ~(str "TASKGROUP_END " group-name))
        resv#)))
 
@@ -100,9 +100,9 @@
 
 (defn- load-category-resources
   "Loads the resources for a category."
-  [{:keys [id resources] :as category}]
+  [job {:keys [id resources] :as category}]
   (trace-message "Loading category resources for '" id "'")
-  (let [resources* ((map-fn) #(load-category-resource category %) resources)
+  (let [resources* ((map-fn job) #(load-category-resource category %) resources)
         words (apply concat (map :words resources*))]
     (assoc category
       :resources resources*
@@ -115,7 +115,7 @@
   (trace-block
    "Loading category resources"
    (assoc job :categories
-     (doall (map #(load-category-resources %) categories)))))
+     (vec ((map-fn job) #(load-category-resources job %) categories)))))
 
 
 (defn- build-category-words
@@ -144,7 +144,7 @@
    (let [job* (update-in
                job [:categories]
                (fn [categories]
-                 (vec ((map-fn)
+                 (vec ((map-fn job)
                        (fn [category]
                          (build-category-index
                           job
@@ -173,7 +173,7 @@
   (trace-block
    "Loading speech recognition results"
    (update-in job [:videos]
-              #(vec ((map-fn) load-speech-recognition-result %)))))
+              #(vec ((map-fn job) load-speech-recognition-result %)))))
 
 
 (defn- build-video-statistics
@@ -211,7 +211,7 @@
    (let [job* (update-in
                job [:videos]
                (fn [videos]
-                 (vec ((map-fn)
+                 (vec ((map-fn job)
                        (fn [video] (build-video-index job (build-video-statistics video)))
                        videos))))
          job* (assoc job*
@@ -228,7 +228,7 @@
   (trace-block
    "Matching videos against categories"
    (assoc job
-     :videos (vec ((map-fn)
+     :videos (vec ((map-fn job)
                    (partial proc/match-video job)
                    videos)))))
 
@@ -294,7 +294,7 @@
      "Creating global word includes"
      (let [words-path "words"]
        (create-dir (combine-path output-dir words-path))
-       ((map-fn)
+       ((map-fn job)
         (fn [word]
           (let [word-path (combine-path words-path (:id word))]
             (create-word-include job (assoc word :path word-path))))
@@ -360,7 +360,7 @@
      (str "Creating word includes for category '" id "'")
      (let [words-path (combine-path path "words")]
        (create-dir (combine-path output-dir words-path))
-       ((map-fn)
+       ((map-fn job)
         (fn [word]
           (let [word-path (combine-path words-path (:id word))]
             (create-category-word-include job category (assoc word :path word-path))))
@@ -385,7 +385,7 @@
      (str "Creating match includes for category '" id "'")
      (let [matches-path (combine-path path "matches")]
        (create-dir (combine-path output-dir matches-path))
-       ((map-fn)
+       ((map-fn  job)
         (fn [match]
           (let [match-path (combine-path matches-path (:video-id match))]
             (create-category-match-include job category (assoc match :path match-path))))
@@ -435,7 +435,7 @@
   (trace-block
    "Creating category pages"
    (doall
-    ((map-fn)
+    ((map-fn job)
      #(create-category-page job %)
      (:categories job))))
   nil)
@@ -461,7 +461,7 @@
      (str "Creating word includes for video '" id "'")
      (let [words-path (combine-path path "words")]
        (create-dir (combine-path output-dir words-path))
-       ((map-fn)
+       ((map-fn job)
         (fn [word]
           (let [word-path (combine-path words-path (:id word))]
             (create-video-word-include job video (assoc word :path word-path))))
@@ -517,7 +517,7 @@
   (trace-block
    "Creating video pages"
    (doall
-    ((map-fn)
+    ((map-fn job)
      #(create-video-page job %)
      (:videos job))))
   nil)
@@ -543,3 +543,4 @@
 
 
 
+
