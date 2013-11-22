@@ -30,13 +30,13 @@
   [pindex]
   (let [index-letters (map first pindex)]
     (->> (letter-list)
-         (map (fn [l] (map #(== % l) index-letters)))
+         (map (fn [l] (map #(= % l) index-letters)))
          first)))
 
 (defn- render-glossary-partition
   "Creates the HTML for a partion of a glossary."
   [first-letter [letter index-part]]
-  (let [is-first-letter (== letter first-letter)]
+  (let [is-first-letter (= letter first-letter)]
     {:tag :div
      :attrs {:id (str "glossary-part-" (glossary-partition-id letter))
              :class "glossary-part"
@@ -50,4 +50,4 @@
     (vec (cons
           (render-glossary-navigation pindex)
           (map (partial render-glossary-partition fl) pindex)))))
-
+
