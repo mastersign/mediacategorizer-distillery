@@ -1,4 +1,4 @@
-(defproject distillery "0.1.0"
+(defproject distillery "0.2.0-SNAPSHOT"
   :description "A Clojure application to filter the most relevant words from speech recognition results."
   :url "http://informatik.fh-brandenburg.de/~kiertsch/"
   :license {:name "None"
