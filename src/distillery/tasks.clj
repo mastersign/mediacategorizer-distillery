@@ -9,6 +9,7 @@
   (:require [distillery.blacklist :refer :all])
   (:require [distillery.processing :as proc])
   (:require [distillery.blacklist :as bl])
+  (:require [distillery.xmlresult :as xr])
   (:require [distillery.view.html :refer (save-page)])
   (:require [distillery.view.dependencies :refer (save-dependencies)])
   (:require [distillery.view.base :refer (render)])
@@ -523,6 +524,13 @@
   nil)
 
 
+(defn save-result-as-xml
+  [{:keys [output-dir result-file] :as job}]
+  (let [path (combine-path output-dir result-file)]
+    (xr/save-result path job))
+  nil)
+
+
 ;; ## Debug Tasks
 
 
@@ -539,8 +547,4 @@
       .toUri
       .toString
       browse-url))
-
-
-
-
 

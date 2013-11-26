@@ -54,7 +54,9 @@
   {:job-name "Testlauf"
    :job-description "Ein Testprojekt für Testzwecke mit Testvideos und Testkategorien. Wird zum Testen verwendet."
    :output-dir (str root "Output")
+   :result-file ""
    :configuration {:parallel-proc: true
+                   :visualize-result: false
                    :skip-media-copy false
                    :skip-wordclouds false
                    :skip-word-includes false
@@ -181,26 +183,32 @@
   nil)
 
 (defn test-complete []
-  (let [job (-> job-descr
-                dt/load-speech-recognition-results
-                dt/analyze-speech-recognition-results
-                dt/load-categories
-                dt/analyze-categories
-                dt/match-videos
-                dt/lookup-categories-matches
-                dt/matching-stats)]
+  (let [job (dt/process-pipeline
+             "Preparation"
+             job-descr
+             dt/load-speech-recognition-results
+             dt/analyze-speech-recognition-results
+             dt/load-categories
+             dt/analyze-categories
+             dt/match-videos
+             dt/lookup-categories-matches
+             dt/matching-stats)]
     (trace-block
-     "Complete run"
-     (dt/prepare-output-dir job)
-     (doall ((dt/map-fn) #(% job)
-             [dt/create-index-page
-              dt/create-categories-page
-              dt/create-category-pages
-              dt/create-videos-page
-              dt/create-video-pages]))
-     (dt/show-main-page job)))
+     "Result Output"
+     (dt/save-result-as-xml job))
+    (when (get-in job [:configuration :visualize-results])
+      (trace-block
+       "Result Visualization"
+       (dt/prepare-output-dir job)
+       (dt/process-task-group
+        "Output" job #(% job)
+        [dt/create-index-page
+         dt/create-categories-page
+         dt/create-category-pages
+         dt/create-videos-page
+         dt/create-video-pages]))))
   nil)
-
 
 (defn test-show-main-page []
   (dt/show-main-page job-descr))
+
