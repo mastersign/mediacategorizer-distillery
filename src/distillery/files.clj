@@ -1,11 +1,12 @@
 (ns distillery.files
+  (:import [java.net URL])
   (:import [java.nio.file Paths Path Files StandardCopyOption LinkOption])
   (:import [java.nio.file.attribute FileAttribute]))
 
 (defn get-path
   [path & parts]
-  (if (instance? java.net.URL path)
-    (Paths/get (.toURI ^java.net.URL path))
+  (if (instance? URL path)
+    (Paths/get (.toURI ^URL path))
     (Paths/get ^String path (if parts (into-array parts) (make-array String 0)))))
 
 (defn combine-path
