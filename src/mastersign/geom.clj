@@ -8,7 +8,8 @@
 
 (defn point
   ([] (point 0 0))
-  ([x y] (Point2D$Float. (float x) (float y))))
+  (^Point2D$Float
+   [x y] (Point2D$Float. (float x) (float y))))
 
 (defn polar-point
   [r a]
@@ -16,12 +17,14 @@
 
 (defn rectangle
   ([] (rectangle 0 0 0 0))
-  ([x y w h] (Rectangle2D$Float. (float x) (float y) (float w) (float h)))
+  (^Rectangle2D$Float
+   [x y w h] (Rectangle2D$Float. (float x) (float y) (float w) (float h)))
   ([^Point2D$Float p w h] (rectangle (.x p) (.y p) w h)))
 
 (defn ellipse
   ([] (ellipse 0 0 0 0))
-  ([x y w h] (Ellipse2D$Float. (float x) (float y) (float w) (float h)))
+  (^Ellipse2D$Float
+   [x y w h] (Ellipse2D$Float. (float x) (float y) (float w) (float h)))
   ([^Point2D$Float p w h] (ellipse (.x p) (.y p) w h)))
 
 (defn rect-center
@@ -52,9 +55,12 @@
    (ellipse (+ (.x e) x) (+ (.y e) y) (.width e) (.height e))))
 
 (defn area
-  ([] (Area.))
-  ([s] (Area. s))
-  ([s & shapes]
+  (^Area
+   [] (Area.))
+  (^Area
+   [s] (Area. s))
+  (^Area
+   [s & shapes]
    (let [*a* (Area. s)]
      (doseq [s shapes]
        (.add *a* (Area. s)))
@@ -63,9 +69,9 @@
 (defn translate-area
   ([area ^Point2D$Float o]
    (translate-area area (.x o) (.y o)))
-  ([^Area area x y]
+  (^Area
+   [^Area area x y]
    (.createTransformedArea
     area
     (AffineTransform/getTranslateInstance (double x) (double y)))))
-
-
+

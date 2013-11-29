@@ -1,5 +1,6 @@
 (ns mastersign.wordcloud
   (:import [java.awt Graphics Graphics2D Color RenderingHints Font])
+  (:import [java.awt.image BufferedImage])
   (:import [java.awt.geom Area
             Rectangle2D Rectangle2D$Float
             Point2D Point2D$Float
@@ -37,11 +38,11 @@
 
 (defn- calc-font-size
   [{:keys [min-font-size max-font-size]} v]
-  (float (+ min-font-size (* (- max-font-size min-font-size) v v))))
+  (double (+ min-font-size (* (- max-font-size min-font-size) v v))))
 
 (defn- get-font
-  [{:keys [font] :as args} v]
-  (.deriveFont font (calc-font-size args v)))
+  [{:keys [^Font font] :as args} v]
+  (.deriveFont font ^double (calc-font-size args v)))
 
 (defn- get-color
   [{:keys [color-fn]} v]
@@ -74,7 +75,7 @@
     word-infos))
 
 (defn- setup-graphics-context
-  [g]
+  [^Graphics2D g]
   (doto g
     (.setRenderingHint RenderingHints/KEY_ANTIALIASING RenderingHints/VALUE_ANTIALIAS_ON)
     (.setRenderingHint RenderingHints/KEY_TEXT_ANTIALIASING RenderingHints/VALUE_TEXT_ANTIALIAS_ON)))
@@ -84,7 +85,7 @@
    ([n] (lazy-seq (cons n (lazy-numbers (inc n))))))
 
 (defn- priority-angle
-  [text]
+  [^String text]
   (let [clean-DE (fn [c] (case c \Ä \A \Ö \O \Ü \U \ß \S c))
         c (clean-DE (first (.toUpperCase text)))
         n (int c)
@@ -133,12 +134,12 @@
              (rand (* Math/PI 2)))
         rings (map #(test-ring % precision pa order-priority) radii)
         boundaries (rectangle (- (/ width 2.0)) (- (/ height 2.0)) width height)
-        reject-pred (fn [p] (.contains boundaries (.x p) (.y p)))]
+        reject-pred (fn [^Point2D$Float p] (.contains boundaries (.x p) (.y p)))]
     (filter reject-pred (cons (point) (apply concat rings)))))
 
 (defn- rotate-rect
-  [r c a]
-  (if (= a 0)
+  [^Rectangle2D$Float r ^Point2D$Float c ^double a]
+  (if (== a 0)
     r
     (let [x (.x r)
           y (.y r)
@@ -165,10 +166,10 @@
     rects))
 
 (defn- check-position
-  [args test-area boundaries word-info pos rotation]
+  [args ^Area test-area ^Area boundaries word-info pos rotation]
   (let [rects (get-word-rects args word-info pos rotation false)]
     (if (and
-         (every? #(.contains boundaries %) rects)
+         (every? #(.contains boundaries ^Rectangle2D$Float %) rects)
          (every? #(not (.intersects test-area %)) rects))
       [pos rotation]
       nil)))
@@ -183,7 +184,7 @@
        (recur-seq f args*)))))
 
 (defn- approach
-  [check-fn ref-pos pos rotation]
+  [check-fn ^Point2D$Float ref-pos ^Point2D$Float pos ^double rotation]
   (let [sign #(if (< % 0) -1 1)
         rx (int (.x ref-pos))
         ry (int (.y ref-pos))
@@ -191,7 +192,7 @@
         dy (- ry (int (.y pos)))
         sx (sign dx)
         sy (sign dy)
-        step-fn (fn [p r]
+        step-fn (fn [^Point2D$Float p ^double r]
                   (let [px (int (.x p))
                         py (int (.y p))
                         x (+ px sx)
@@ -215,7 +216,7 @@
       [p a])))
 
 (defn- add-word-to-area!
-  [args *area* word-info pos rotation]
+  [args ^Area *area* word-info pos rotation]
   (let [rects (get-word-rects args word-info pos rotation true)]
     (.add *area* (apply area rects))))
 
@@ -273,4 +274,4 @@
         target-file (:target-file args)]
     (when target-file (save-image img target-file))
     (assoc cloud-info :image img)))
-
+
