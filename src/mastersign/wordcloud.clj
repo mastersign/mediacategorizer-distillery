@@ -150,9 +150,9 @@
           dx (- x cx)
           dy (- y cy)]
       (case a
-        90 (rectangle (- cx dy h) (+ cy dx) h w)
-        180 (rectangle (- cx dx w) (- cy dy h) w h)
-        270 (rectangle (+ cx dy) (- cy dx w) h w)))))
+        90.0 (rectangle (- cx dy h) (+ cy dx) h w)
+        180.0 (rectangle (- cx dx w) (- cy dy h) w h)
+        270.0 (rectangle (+ cx dy) (- cy dx w) h w)))))
 
 (defn- get-word-rects
   [{:keys [shape-mode padding]} word-info pos rotation use-padding]
@@ -274,4 +274,6 @@
         target-file (:target-file args)]
     (when target-file (save-image img target-file))
     (assoc cloud-info :image img)))
+
+
 

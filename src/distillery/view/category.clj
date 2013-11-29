@@ -1,6 +1,7 @@
 (ns distillery.view.category
   (:require [clojure.string :as string])
   (:require [net.cgrand.enlive-html :as eh])
+  (:require [mastersign.html :refer :all])
   (:require [distillery.files :refer :all])
   (:require [distillery.view.cloud :as cloud])
   (:require [distillery.view.glossary :as glossary])
@@ -83,3 +84,4 @@
       (render-videos args)
       (render-category-word-frame args)
       (render-category-match-frame args)]])
+

@@ -1,4 +1,5 @@
 (ns distillery.view.glossary
+  (:require [mastersign.html :refer :all])
   (:require [distillery.view.html :refer :all]))
 
 (defn- render-glossary-word
@@ -51,3 +52,4 @@
           (render-glossary-navigation pindex)
           (map (partial render-glossary-partition fl) pindex)))))
 
+

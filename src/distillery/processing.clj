@@ -42,7 +42,8 @@
     (get results (:result-no word))))
 
 (defn word-text
-  "Returns the text of a word. The word can be a string or a map with a the key :lexical-form."
+  "Returns the text of a word.
+  The word can be a string or a map with a the key `:lexical-form.`"
   [word]
   (or (if (map? word) (:lexical-form word) word) ""))
 
@@ -330,3 +331,4 @@
     :matches matches
     :max-score (apply max (map :score (vals matches))))))
 
+

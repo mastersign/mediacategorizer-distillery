@@ -1,5 +1,6 @@
 (ns distillery.view.index
   (:require [net.cgrand.enlive-html :as eh])
+  (:require [mastersign.html :refer :all])
   (:require [distillery.data :refer [key-comp]])
   (:require [distillery.files :refer :all])
   (:require [distillery.view.html :refer :all])
@@ -106,3 +107,4 @@
       (render-videos-list args)]])
 
 
+

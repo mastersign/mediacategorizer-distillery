@@ -1,5 +1,6 @@
 (ns distillery.view.dependencies
-  (:import java.nio.file.Files)
+  (:import [java.io InputStream])
+  (:import [java.nio.file Path Files CopyOption StandardCopyOption])
   (:require [clojure.java.io :as io])
   (:require [distillery.files :refer :all]))
 
@@ -21,8 +22,8 @@
    ])
 
 (defn- copy-stream-to-file
-  [^java.io.InputStream s ^java.nio.file.Path p]
-  (java.nio.file.Files/copy s p (into-array java.nio.file.CopyOption [java.nio.file.StandardCopyOption/REPLACE_EXISTING])))
+  [^InputStream s ^Path p]
+  (Files/copy s p (into-array CopyOption [StandardCopyOption/REPLACE_EXISTING])))
 
 (defn- save-dependency
   "Saves a static resource dependency relative to the given HTML file path."
@@ -37,3 +38,6 @@
   [^String target-dir]
   (doseq [rn static-resources]
     (save-dependency target-dir rn)))
+
+
+

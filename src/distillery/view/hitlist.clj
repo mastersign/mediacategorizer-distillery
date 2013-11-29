@@ -1,4 +1,5 @@
 (ns distillery.view.hitlist
+  (:require [mastersign.html :refer :all])
   (:require [distillery.config :as cfg])
   (:require [distillery.data :refer :all])
   (:require [distillery.view.html :refer :all]))
@@ -34,3 +35,4 @@
          [(headline 3 "Häufige Worte")
           (olist (map item-gen hitlist))])))
 
+

@@ -1,8 +1,14 @@
+;; # The Namespace for Tasks
+;; A task is a high-level processing step in this application.
+;; Every task deals with a well delimited portion of the processing.
+;; The tasks are used by [distillery.core](#distillery.core).
+
 (ns distillery.tasks
   (:require [clojure.string :as string])
   (:require [clojure.pprint :as pp])
   (:require [clojure.java.browse :refer (browse-url)])
-  (:require [distillery.trace :refer :all])
+  (:require [mastersign.html :refer (save-page)])
+  (:require [mastersign.trace :refer :all])
   (:require [distillery.config :as cfg])
   (:require [distillery.data :refer :all])
   (:require [distillery.files :refer :all])
@@ -10,7 +16,6 @@
   (:require [distillery.processing :as proc])
   (:require [distillery.blacklist :as bl])
   (:require [distillery.xmlresult :as xr])
-  (:require [distillery.view.html :refer (save-page)])
   (:require [distillery.view.dependencies :refer (save-dependencies)])
   (:require [distillery.view.base :refer (render)])
   (:require [distillery.view.cloud :refer (build-cloud-word-data build-cloud-ui-data create-cloud)])
@@ -33,6 +38,16 @@
     #(doall (map %1 %2))))
 
 (defmacro process-pipeline
+  "This macro allows the definition of a pipeline
+  similar to `->`, but with the automatic generation
+  of tracing messages which allow the monitoring of
+  the pipeline during execution.
+
+  The first argument `pipe-name` is the name of the pipeline,
+  the second `x` is the initial argument for the first function
+  in the pipeline,
+  and the all following arguments `fs` are functions,
+  defining the process steps."
   [pipe-name x & fs]
   (let [trc (gensym "trc")]
   `(let [~trc (fn [x# no#] (trace-message ~(str "PIPELINE_STEP " pipe-name " ") (inc no#)) x#)]
@@ -46,13 +61,25 @@
                           fs)))))))
 
 (defmacro process-task-group
+  "This macro allows a group of potentially parallel tasks
+  be executed, and monitored by automatically generated
+  trace messages.
+
+  The first argument `group-name` is a name for the process group,
+  the second argument `job` is a job description and contains the configuration
+  for the parallelization,
+  the third argument `f` is a function which is called for every task in the group,
+  and all following arguments are process tasks."
   [group-name job f xs]
   `(let [f# (fn [x#] (let [res# (~f x#)] (trace-message ~(str "TASK_END " group-name)) res#))]
      (trace-message ~(str "TASKGROUP " group-name " [" (count xs) "]"))
-     (let [resv# (doall ((map-fn ~job) f# ~xs))]
+     (let [resv# ((map-fn ~job) f# ~xs)]
      (trace-message ~(str "TASKGROUP_END " group-name))
        resv#)))
 
+;; The private var `filter-map` holds a look-up-table
+;; mapping the filter keywords from the configuration to
+;; actual predicates.
 (def ^:private filter-map
   {:not-short proc/not-short?
    :noun proc/noun?
@@ -69,11 +96,30 @@
 
 
 ;; ## Task Functions
+;; The following public functions represent all process tasks used by the
+;; core tasks in [distillery.core](#distillery.core).
+;; The task functions are accompanied by some private functions,
+;; helping to organize the code of the tasks.
+;;
+;; The task functions are grouped by the following goals:
+;;
+;;  * Dependencies
+;;  * Preprocessing and Analysis
+;;      + Categories
+;;      + Speech Recognition Results
+;;      + Similarity Matching
+;;  * XML Result Generation
+;;  * Website Generation
+;;      + Main Pages
+;;      + Category Pages
+;;      + Video Pages
+
 
 ;; ### Dependencies
 
 (defn prepare-output-dir
-  "Prepares the output directory by creating a number of sub directories and copying site dependencies."
+  "Prepares the output directory by creating
+  a number of sub directories and copying site dependencies."
   [{:keys [output-dir]}]
   (trace-message "Preparing output directory " output-dir)
   (create-dir output-dir)
@@ -83,12 +129,23 @@
   (save-dependencies output-dir))
 
 
-;; ### Preprocessing, Analysis
+;; ### Preprocessing and Analysis
 
 ;; #### Categories
 
 (defn- load-category-resource
-  "Loads a single resource for a category."
+  "Loads a single resource for a category.
+  The resource is defined by an URL and can have on the following formats:
+
+  * `:plain` A plain text file, which can be simply tokenized to extract the words
+  * `:html` A HTML file, where the text is extracted by taking the page body
+    and concatenating all textual content from the markup.
+  * `:wikipedia` A Wikipedia page, which is preprocessed
+    to remove the navigation elements and some common headlines
+    which occur in every Wikipedia page.
+
+  The preprocessing functions to extract the words from the resources
+  reside in [distillery.data](#distillery.data)."
   [{:keys [id]} {:keys [type url] :as resource}]
   (trace-message "Loading category resource " url)
   (assoc resource :words
@@ -100,7 +157,7 @@
 
 
 (defn- load-category-resources
-  "Loads the resources for a category."
+  "Loads all resources for one category."
   [job {:keys [id resources] :as category}]
   (trace-message "Loading category resources for '" id "'")
   (let [resources* ((map-fn job) #(load-category-resource category %) resources)
@@ -111,7 +168,7 @@
 
 
 (defn load-categories
-  "Loads the resources of the categories."
+  "**TASK** - Loads all resources for all categories."
   [{:keys [categories] :as job}]
   (trace-block
    "Loading category resources"
@@ -120,6 +177,9 @@
 
 
 (defn- build-category-words
+  "Extends a [Category Description](data-structures.html#CategoryDescription)
+  by adding the slot `:words` with a collection of
+  [Descriptive Words](data-structures.html#DescriptiveWord)."
   [{:keys [id words] :as category}]
   (trace-message "Building words for category '" id "'")
   (assoc category :words
@@ -132,13 +192,17 @@
 
 
 (defn- build-category-index
+  "Extends a [Category Description](data-structures.html#CategoryDescription)
+  by adding the slot `:index` with a map pointing to
+  [Category Words](data-structures.html#CategoryWords) and
+  the slot `:index-stats` with the [Index Statistics](data-structures.html#IndexStatistics)."
   [job category]
   (trace-message "Building index for category '" (:id category) "'")
   (proc/add-category-word-index category :predicate (word-predicate job)))
 
 
 (defn analyze-categories
-  "Analyzes the categories and generates the index structures."
+  "**TASK** - Analyzes the categories and generates the index structures."
   [job]
   (trace-block
    "Analyzing categories"
@@ -158,7 +222,9 @@
 
 
 (defn- load-speech-recognition-result
-  "Loads the speech recognition results for a video."
+  "Loads the [Speech Recognition Result](data-structures.html#SpeechRecognitionResult)
+  for a video and extends the [Video Description](data-structures.html#VideoDescription)
+  by the slot `:results`."
   [{:keys [id results-file] :as video}]
   (trace-message "Loading results of " id)
   (let [results (-> results-file
@@ -169,7 +235,7 @@
 
 
 (defn load-speech-recognition-results
-  "Loads the speech recognition results for the videos."
+  "**TASK** - Loads the speech recognition results for all videos."
   [job]
   (trace-block
    "Loading speech recognition results"
@@ -178,26 +244,27 @@
 
 
 (defn- build-video-statistics
+  "Extends a [Video Description](data-structures.html#VideoDescription)
+  by the slots `:phrase-count`, `:word-count`, and `:confidence`."
   [{:keys [id results] :as video}]
   (trace-message "Building statistics for video '" id "'")
-  (let [last-result (last results)
-        duration (+ (:start last-result) (:duration last-result))]
-    (assoc video
-      :phrase-count (count results)
-      :word-count (count (proc/words results))
-      :confidence (mean (map :confidence results))
-      :duration duration)))
+  (assoc video
+    :phrase-count (count results)
+    :word-count (count (proc/words results))
+    :confidence (mean (map :confidence results))))
 
 
 (defn- build-video-index
-  "Analyzes the speech recognition results of a single video and builds the video word index."
+  "Extends a [Video Description](data-structures.html#VideoDescription)
+  by the slot `:index`, which is a map, pointing to [Video Words](data-structures.html#VideoWord),
+  and by the slot `:index-stats`, which holds the [Index Statistics](data-structures.html#IndexStatistics)."
   [job video]
   (trace-message "Building index for video '" (:id video) "'")
   (proc/add-video-word-index video :predicate (word-predicate job)))
 
 
 (defn- build-global-index
-  "Merges the video indexes into one global word index."
+  "Merges the video indexes into one global [Word Index](data-structures.html#WordIndex)."
   [{:keys [videos]}]
   (trace-block
    "Merging indexes"
@@ -205,7 +272,7 @@
 
 
 (defn analyze-speech-recognition-results
-  "Analyzes the speech recognition results and generates the index structures."
+  "**TASK** - Analyzes the speech recognition results and generates the index structures."
   [job]
   (trace-block
    "Analyzing videos"
@@ -257,7 +324,17 @@
           :max-word-score (apply max word-scores))))
 
 
-;; ### Output Generation
+;; ### XML Result Generation
+
+(defn save-result-as-xml
+  "Writes the essential analysis and matching results to a XML file,
+  specified by the [Job Description](data-structures.html#JobDescription)."
+  [{:keys [output-dir result-file] :as job}]
+  (let [path (combine-path output-dir result-file)]
+    (xr/save-result path job))
+  nil)
+
+;; ### Website Generation
 
 (defn- create-page
   [page-name page-f {:keys [output-dir] :as args}]
@@ -524,13 +601,6 @@
   nil)
 
 
-(defn save-result-as-xml
-  [{:keys [output-dir result-file] :as job}]
-  (let [path (combine-path output-dir result-file)]
-    (xr/save-result path job))
-  nil)
-
-
 ;; ## Debug Tasks
 
 
@@ -547,4 +617,8 @@
       .toUri
       .toString
       browse-url))
+
+
+
+
 

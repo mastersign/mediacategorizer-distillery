@@ -1,6 +1,7 @@
 (ns distillery.view.transcript
   (:require [clojure.string :as string])
   (:require [net.cgrand.enlive-html :as eh])
+  (:require [mastersign.html :refer :all])
   (:require [distillery.processing :refer [word-identifier]])
   (:require [distillery.view.html :refer :all]))
 
@@ -49,3 +50,4 @@
   "Creates the HTML for a sequence of phrases."
   [results & {:keys [index pivot]}]
   (div "transcript" (map #(render-result % :index index :pivot pivot) results)))
+

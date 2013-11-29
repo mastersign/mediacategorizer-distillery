@@ -1,9 +1,10 @@
 (ns distillery.view.cloud
   (:require [clojure.string :as string])
-  (:require [distillery.config :as cfg])
-  (:require [distillery.view.html :refer :all])
   (:require [mastersign.drawing :as mdr])
-  (:require [mastersign.wordcloud :as mwc]))
+  (:require [mastersign.wordcloud :as mwc])
+  (:require [mastersign.html :refer :all])
+  (:require [distillery.config :as cfg])
+  (:require [distillery.view.html :refer :all]))
 
 (defn build-cloud-word-data
   "Transforms the word meta-data from an index
@@ -29,7 +30,7 @@
        (->> word-infos
             (sort-by :v1)
             (map (fn
-                   [{:keys [id rect]}]
+                   [{:keys [id ^java.awt.geom.Rectangle2D$Float rect]}]
                    (str "{id:'" id "',r:{x:"(.x rect)",y:"(.y rect)",w:"(.width rect)",h:"(.height rect)"}}")))
             (string/join ","))
        "]"))
@@ -59,3 +60,4 @@
                       :max-font-size (ccv :max-font-size)
                       :color-fn #(apply mdr/color (concat (take 3 (ccv :color)) [(+ 0.25 (* % 0.75))]))
                       :background-color (apply mdr/color (ccv :background-color)))))
+

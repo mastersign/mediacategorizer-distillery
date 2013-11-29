@@ -1,5 +1,6 @@
 (ns distillery.view.base
   (:require [net.cgrand.enlive-html :as eh])
+  (:require [mastersign.html :refer :all])
   (:require [distillery.files :refer :all])
   (:require [distillery.view.defaults :as defaults])
   (:require [distillery.view.html :refer :all]))
@@ -63,3 +64,4 @@
 	    [:header] (eh/content head)
 	    [:#page] (eh/content page)
 	    [:footer] (eh/content foot))))
+

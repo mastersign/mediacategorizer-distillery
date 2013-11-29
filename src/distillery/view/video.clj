@@ -1,6 +1,7 @@
 (ns distillery.view.video
   (:require [clojure.string :as string])
   (:require [net.cgrand.enlive-html :as eh])
+  (:require [mastersign.html :refer :all])
   (:require [distillery.config :as cfg])
   (:require [distillery.files :refer :all])
   (:require [distillery.view.html :refer :all])
@@ -112,3 +113,4 @@
 
 
 
+

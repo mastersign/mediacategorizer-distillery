@@ -1,6 +1,7 @@
 (ns distillery.view.match
   (:require [clojure.string :as string])
   (:require [net.cgrand.enlive-html :as eh])
+  (:require [mastersign.html :refer :all])
   (:require [distillery.data :refer [key-comp any?]])
   (:require [distillery.view.html :refer :all]))
 
@@ -98,3 +99,4 @@
          :content
          (vec (map (partial render-match-matrix-row matrix max-score category-ids) videos))}]}]}))
 
+

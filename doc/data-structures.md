@@ -198,7 +198,7 @@ The reference to a category resource.
 * **url**  
   _string_ the URL to the resource
 
-### Video Description
+### Video Description {#VideoDescription}
 Defines a video and all associated resources.
 #### Slots
 * **id**  
@@ -363,7 +363,8 @@ in _[Alternate Phrases](#AlternatePhrase)_ of a result:
   _integer number_ `[0..n]` identifying the alternate phrase in the result
 
 ## Analysis Results {#AnalysisResults}
-The analysis process takes a _[Job Description](#JobDescription)_, loads the
+The analysis steps in [distillery.core/prepare-and-analyze](api.html#distillery.core)
+takes a _[Job Description](#JobDescription)_, loads the
 necessary resources and generates additional data. This additional data
 is attached to the _[Job Description](#JobDescription)_ structure and its children. 
 
