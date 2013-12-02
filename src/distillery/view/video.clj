@@ -2,8 +2,8 @@
   (:require [clojure.string :as string])
   (:require [net.cgrand.enlive-html :as eh])
   (:require [mastersign.html :refer :all])
+  (:require [mastersign.files :refer :all])
   (:require [distillery.config :as cfg])
-  (:require [distillery.files :refer :all])
   (:require [distillery.view.html :refer :all])
   (:require [distillery.view.cloud :as cloud])
   (:require [distillery.view.transcript :as transcript])
@@ -110,6 +110,8 @@
       (render-cloud args)
       (render-categories args)
       (render-video-word-frame args)]])
+
+
 
 
 

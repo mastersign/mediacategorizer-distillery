@@ -71,7 +71,14 @@
          (string/join " "))))
 
 (defn load-text-from-wikipedia
-  "Loads the textual content from an Wikipedia page."
+  "Loads the textual content from an Wikipedia page.
+
+  Takes the resource directly if the given URL uses the file protocol;
+  otherwise appends the query `?action=render` to the URL to get
+  a stripped version of the wikipedia page.
+
+  Removes a number of typical elements from the page
+  which occures in most wikipedia paged."
   [^String url & opts]
   (let [url (if (.startsWith url "file://")
               url
@@ -96,7 +103,7 @@
          (string/join " "))))
 
 (defn words-from-text
-  "Creates a sequence of words from a text."
+  "Creates a sequence of words from a plain text."
   [text]
   (->> (string/split text #"\b")
        (filter #(not (string/blank? %)))
@@ -174,3 +181,4 @@
   [xs] (apply + (map #(* % %) xs)))
 
 
+

@@ -1,8 +1,8 @@
 (ns distillery.view.index
   (:require [net.cgrand.enlive-html :as eh])
   (:require [mastersign.html :refer :all])
+  (:require [mastersign.files :refer :all])
   (:require [distillery.data :refer [key-comp]])
-  (:require [distillery.files :refer :all])
   (:require [distillery.view.html :refer :all])
   (:require [distillery.view.glossary :as glossary])
   (:require [distillery.view.cloud :as cloud])
@@ -105,6 +105,8 @@
    :page
      [(headline 2 "Videos")
       (render-videos-list args)]])
+
+
 
 
 

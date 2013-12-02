@@ -285,6 +285,8 @@
        (map-values #(apply sorted-map (apply concat %)))))
 
 (defn- compute-matching-score
+  "Builds a [Category Match](data-structures.html#CategoryMatch) between
+  the given `video` and `category`."
   [video category]
   (let [cwidx (:index category)
         mwidx (:index video)
@@ -301,6 +303,9 @@
      :score score}))
 
 (defn match-video
+  "Builds the matches between all categories in the
+  [Analysis Results](data-structures.html#AnalysisResults) `job`
+  and the given `video`."
   [{:keys [categories configuration] :as job} video]
   (let [matches (->> categories
                   (map #(compute-matching-score video %))
@@ -330,5 +335,7 @@
   (assoc category
     :matches matches
     :max-score (apply max (map :score (vals matches))))))
+
+
 
 

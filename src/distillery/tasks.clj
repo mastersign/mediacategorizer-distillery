@@ -9,9 +9,9 @@
   (:require [clojure.java.browse :refer (browse-url)])
   (:require [mastersign.html :refer (save-page)])
   (:require [mastersign.trace :refer :all])
+  (:require [mastersign.files :refer :all])
   (:require [distillery.config :as cfg])
   (:require [distillery.data :refer :all])
-  (:require [distillery.files :refer :all])
   (:require [distillery.blacklist :refer :all])
   (:require [distillery.processing :as proc])
   (:require [distillery.blacklist :as bl])
@@ -272,7 +272,8 @@
 
 
 (defn analyze-speech-recognition-results
-  "**TASK** - Analyzes the speech recognition results and generates the index structures."
+  "**TASK** - Analyzes the speech recognition results and generates the index structures including
+  the [Video Words](data-structures.html#VideoWord) and the [Word Index](data-structures.html#WordIndex)."
   [job]
   (trace-block
    "Analyzing videos"
@@ -289,9 +290,12 @@
 
 ;; #### Similarity Matching
 
+
 (defn match-videos
-  "Matches the video indexes against the category indexes
-  and adds the matching scores to the videos."
+  "**TASK** - Matches the [Video Words](data-structures.html#VideoWord) of all videos against
+  the [Category Words](data-structures.html#CategoryWords) of all categories
+  and completes the given [Video Results](data-structures.html#VideoResult)
+  with the slots `:matches` and `:max-score`."
   [{:keys [videos] :as job}]
   (trace-block
    "Matching videos against categories"
@@ -302,8 +306,8 @@
 
 
 (defn lookup-categories-matches
-  "Looks up the matching scores from the videos
-  and adds them to the categories."
+  "**TASK** - Looks up the matching scores from the [Video Results](data-structures.html#VideoResult)
+  and adds them to the [Category Results](data-structures.html#CategoryResult)."
   [{:keys [categories] :as job}]
   (trace-block
    "Looking up category matching scores against videos"
@@ -314,7 +318,10 @@
 
 
 (defn matching-stats
-  "Builds some statistic values over the matching scores."
+  "**TASK** - Builds some statistic values over the matching scores for the whole job.
+
+  Completes the given [Analysis Results](data-structures.html#AnalysisResults)
+  by adding the slots `:max-score` and `:max-word-score`."
   [job]
   (let [matches (mapcat #(vals (:matches %)) (:videos job))
         scores (map :score matches)
@@ -326,8 +333,9 @@
 
 ;; ### XML Result Generation
 
+
 (defn save-result-as-xml
-  "Writes the essential analysis and matching results to a XML file,
+  "**TASK** - Writes the essential analysis and matching results to a XML file,
   specified by the [Job Description](data-structures.html#JobDescription)."
   [{:keys [output-dir result-file] :as job}]
   (let [path (combine-path output-dir result-file)]
@@ -337,6 +345,10 @@
 ;; ### Website Generation
 
 (defn- create-page
+  "Generates a HTML page by calling the page function `page-f`
+  with the [Analysis Results](data-structures.html#AnalysisResults) `args`.
+  Saves the generated page in the `output-dir` of the job.
+  The filename of the page is specified by the `page-name`."
   [page-name page-f {:keys [output-dir] :as args}]
   (let [target-file (combine-path output-dir page-name)]
     (->> args
@@ -346,6 +358,10 @@
 
 
 (defn- create-include
+  "Generates a HTML include file by calling the include function `include-f`
+  with the [Analysis Results](data-structures.html#AnalysisResults) `args`.
+  Saves the generated include in the `output-dir` of the job.
+  The filename of the include is specified by the `include-name`."
   [include-name include-f {:keys [output-dir] :as args}]
   (let [target-file (combine-path output-dir include-name)]
     (->> args
@@ -354,7 +370,7 @@
 
 ;; #### Main Pages
 
-(defn create-word-include
+(defn- create-word-include
   "Creates the include file for a word in the global context."
   [{:keys [output-dir] :as job} {:keys [path] :as word}]
   (create-include
@@ -363,8 +379,8 @@
     (assoc job :word word)))
 
 
-(defn create-word-includes
-  "Create includes for all words of the project."
+(defn- create-word-includes
+  "Create the include files for all words of the project."
   [{:keys [output-dir configuration words] :as job}]
   (if (cfg/value :skip-word-includes configuration)
     (trace-message "Skipping global word includes")
@@ -380,7 +396,7 @@
 
 
 (defn- create-main-cloud
-  "Creates the word cloud the global context."
+  "Creates the word cloud for the global context."
   [{:keys [output-dir configuration words] :as job}]
   (if (cfg/value :skip-wordclouds configuration)
     (do (trace-message "Skipping global wordcloud") [])
@@ -393,7 +409,8 @@
 
 
 (defn create-index-page
-  "Creates the main page for the site."
+  "**TASK** - Creates the main page for the website including the
+  global word cloud and the include files for all words."
   [job]
   (trace-message "Creating index page")
   (let [cloud (create-main-cloud job)
@@ -405,14 +422,14 @@
 
 
 (defn create-categories-page
-  "Creates the overview page for all categories."
+  "**TASK** - Creates the overview page for all categories."
   [job]
   (trace-message "Creating categories overview page")
   (create-page "categories.html" v-index/render-categories-page job))
 
 
 (defn create-videos-page
-  "Creates the overview page for all videos."
+  "**TASK** - Creates the overview page for all videos."
   [job]
   (trace-message "Creating videos overview page")
   (create-page "videos.html" v-index/render-videos-page job))
@@ -420,7 +437,7 @@
 
 ;; #### Category Pages
 
-(defn create-category-word-include
+(defn- create-category-word-include
   "Creates the include file for a word in the context of a category."
   [{:keys [output-dir] :as job} category {:keys [path] :as word}]
   (create-include
@@ -429,7 +446,7 @@
     (assoc job :category category :word word)))
 
 
-(defn create-category-word-includes
+(defn- create-category-word-includes
   "Create includes for all words of a category."
   [{:keys [output-dir configuration] :as job} {:keys [id index path] :as category}]
   (if (cfg/value :skip-word-includes configuration)
@@ -454,7 +471,7 @@
     (assoc job :category category :match match)))
 
 
-(defn create-category-match-includes
+(defn- create-category-match-includes
   "Create includes for all video matches of a category."
   [{:keys [output-dir configuration] :as job} {:keys [id matches path] :as category}]
   (if (cfg/value :skip-match-includes configuration)
@@ -483,7 +500,7 @@
                                         :category-cloud)))))
 
 
-(defn create-category-page
+(defn- create-category-page
   "Create the main page for a certain category."
   [{:keys [output-dir] :as job} {:keys [id index] :as category}]
   (trace-message "Creating category page for '" id "'")
@@ -508,7 +525,8 @@
 
 
 (defn create-category-pages
-  "Creates one page for every category."
+  "**TASK** - Creates one page for every category
+  including the word clouds and the word include files."
   [job]
   (trace-block
    "Creating category pages"
@@ -521,7 +539,7 @@
 
 ;; #### Video Pages
 
-(defn create-video-word-include
+(defn- create-video-word-include
   "Creates the include file for a word in the context of a video."
   [{:keys [output-dir] :as job} video {:keys [path] :as word}]
   (create-include
@@ -530,7 +548,7 @@
     (assoc job :video video :word word)))
 
 
-(defn create-video-word-includes
+(defn- create-video-word-includes
   "Create includes for all words of a video."
   [{:keys [output-dir configuration] :as job} {:keys [id index path] :as video}]
   (if (cfg/value :skip-word-includes configuration)
@@ -559,7 +577,7 @@
                                         :video-cloud)))))
 
 
-(defn create-video-page
+(defn- create-video-page
   "Create the main page for a certain video."
   [{:keys [output-dir configuration] :as job} {:keys [id index video-file] :as video}]
   (trace-message "Creating video page for '" id "'")
@@ -590,7 +608,8 @@
 
 
 (defn create-video-pages
-  "Creates one page for every video."
+  "**TASK** - Creates one page for every video
+  including the word clouds and the word include files."
   [job]
   (trace-block
    "Creating video pages"
@@ -617,6 +636,10 @@
       .toUri
       .toString
       browse-url))
+
+
+
+
 
 
 
