@@ -54,7 +54,8 @@
      dt/create-categories-page
      dt/create-category-pages
      dt/create-videos-page
-     dt/create-video-pages])))
+     dt/create-video-pages]))
+  nil)
 
 (defn run-complete!
   "Takes a job description, and executes the complete process
@@ -85,16 +86,10 @@
 ;;     (def job-descr (load-data job-file))
 ;;     (def job (prepare-and-analyze job-descr))
 ;;     (generate-xml-result-file! job)
-;;     (generate-website! job)
+     (generate-website! job)
 ;;     (run-complete! job-descr)
 ;;
 
-
-
-
-
-
-
-
-
+(def job (assoc-in job [:configuration :parallel-proc] true))
+(def job (assoc-in job [:configuration :parallel-proc] false))
 

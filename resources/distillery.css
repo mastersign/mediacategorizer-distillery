@@ -131,12 +131,14 @@ ul.main_statistic li, ul.video_statistic li, ul.word_statistic li {
 }
 
 .hitlist_text {
-  float: left;
+  width: 65%;
   text-align: left;
+  white-space: nowrap;
 }
 
 .hitlist_stats {
-  float: right;
+  width: 35%;
+  white-space: nowrap;
   text-align: right;
 }
 

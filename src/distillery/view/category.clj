@@ -45,15 +45,13 @@
 
 (defn- render-videos
   "Creates the HTML for the overview page."
-  [{:keys [videos category max-score] :as args}]
+  [{:keys [videos category max-score configuration] :as args}]
   (let [video-fn (fn [mid] (first (filter #(= mid (:id %)) videos)))]
     (innerpage "videos" "Videos" false
-               (ulist (map
-                       #(list-item [(format "%.4f  " (/ (:score %) max-score))
-                                    (jslink
-                                     (str "match('" (:video-id %) "');")
-                                     (:name (video-fn (:video-id %))))])
-                       (reverse (sort-by :score (vals (:matches category)))))))))
+              (hitlist/render-video-matchlist
+               category
+               videos
+               configuration))))
 
 (defn- render-category-word-frame
   "Create the HTML for the word frame.

@@ -40,7 +40,7 @@
 (defn bar
   "Builds a bar as part of a diagram."
   ([text color v]
-   (bar text color v 1))
+   (bar text color v (+ 0.5 (* 0.5 v))))
   ([text [r g b] v1 v2]
    (let [iv (int (* 100 v1))
          c (str "rgba(" (int (* 255 r)) "," (int (* 255 g)) "," (int (* 255 b)) "," (float v2) ")")]
