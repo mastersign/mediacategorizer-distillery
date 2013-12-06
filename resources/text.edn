@@ -1,0 +1,102 @@
+{
+ :project "Projekt"
+ :video "Video"
+ :videos "Videos"
+ :category "Kategorie"
+ :categories "Kategorien"
+ :word "Wort"
+ :words "Wörter"
+ :phrase "Phrase"
+ :phrases "Phrasen"
+
+ :overview "Übersicht"
+ :content "Inhalt"
+ :glossary "Glossar"
+ :wordcloud "Wortwolke"
+ :transcript "Transkript"
+ :matrix "Matrix"
+
+ :frame-title-prefix nil
+ :frame-top-menu-title "Hauptmenü"
+ :frame-top-menu-project :project
+ :frame-top-menu-categories :categories
+ :frame-top-menu-videos :videos
+ :frame-menu-title "Ansichten"
+
+ :copyright-holder "Tobias Kiertscher von der Fachhochschule Brandenburg"
+ :copyright-href "http://informatik.fh-brandenburg.de/~kiertsch/"
+
+ :main-title nil
+ :main-h :project
+
+ :main-menu-overview :overview
+ :main-menu-wordcloud :wordcloud
+ :main-menu-matching-matrix :matrix
+ :main-menu-glossary :glossary
+
+ :main-overview-h :overview
+ :main-overview-content-h :content
+ :main-overview-videos "Videos: "
+ :main-overview-categories "Kategorien: "
+ :main-overview-words "Wörter: "
+ :main-wordcloud-h "Globale Wortwolke"
+ :main-glossary-h "Globaler Glossar"
+ :main-matching-matrix-h "Übereinstimmungsmatrix"
+ :main-word-h :word
+ :main-word-occurrences "Vorkommen: "
+ :main-word-mean-confidence "Mittlere Erkennungssicherheit: "
+ :main-word-videos-h :videos
+ :main-word-categories-h :categories
+
+ :categories-title nil
+ :categories-h :categories
+ :categories-menu-overview :overview
+ :categories-overview-h :overview
+
+ :videos-title nil
+ :videos-h :videos
+ :videos-menu-overview :overview
+ :videos-overview-h :overview
+
+ :category-title :category
+
+ :category-menu-overview :overview
+ :category-menu-wordcloud :wordcloud
+ :category-menu-videos :videos
+ :category-menu-glossary :glossary
+
+ :category-overview-h :overview
+ :category-overview-resource-count "Quellen: "
+ :category-overview-word-count "Gesamtanzahl Worte: "
+ :category-overview-index-size "Worte im Index: "
+ :category-wordcloud-h :wordcloud
+ :category-videos-h :videos
+ :category-glossary-h :glossary
+ :category-word-h :word
+ :category-word-occurrences "Vorkommen: "
+ :category-word-videos-h :videos
+
+ :video-title :video
+
+ :video-menu-overview :overview
+ :video-menu-wordcloud :wordcloud
+ :video-menu-transcript :transcript
+ :video-menu-categories :categories
+ :video-menu-glossary :glossary
+
+ :video-overview-h :overview
+ :video-overview-duration "Länge: "
+ :video-overview-phrase-count "Erkannte Phrasen: "
+ :video-overview-word-count "Erkannte Worte: "
+ :video-overview-index-size "Worte im Glossar: "
+ :video-overview-mean-confidence "Mittlere Erkennungssicherheit: "
+ :video-wordcloud-h :wordcloud
+ :video-transcript-h :transcript
+ :video-categories-h :categories
+ :video-glossary-h :glossary
+ :video-word-h :word
+ :video-word-occurrences "Vorkommen: "
+ :video-word-mean-confidence "Mittlere Erkennungssicherheit: "
+ :video-word-phrases-h :phrases
+ :video-word-categories-h :categories
+}
