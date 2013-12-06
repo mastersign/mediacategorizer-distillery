@@ -1,13 +1,14 @@
-(ns distillery.view.defaults)
+(ns distillery.view.defaults
+  (:require [distillery.text :refer [txt]]))
 
-(def main-menu-title "Hauptmenü")
+(def main-menu-title (txt :frame-top-menu-title))
 
-(def secondary-menu-title "Ansichten")
+(def secondary-menu-title (txt :frame-menu-title))
 
 (def main-menu
-  [["Projekt" "index.html"]
-   ["Kategorien" "categories.html"]
-   ["Videos" "videos.html"]])
+  [[(txt :frame-top-menu-project) "index.html"]
+   [(txt :frame-top-menu-categories) "categories.html"]
+   [(txt :frame-top-menu-videos) "videos.html"]])
 
 (def copyright
   {:tag :p
@@ -16,7 +17,7 @@
      (.get (java.util.GregorianCalendar.) java.util.Calendar/YEAR)
     " "
     {:tag :a
-     :attrs {:href "http://informatik.fh-brandenburg.de/~kiertsch/" :target "_blank"}
-     :content ["Tobias Kiertscher"]}
-    ", Brandenburg University of Applied Sciences."]})
-
+     :attrs {:href (txt :copyright-href) :target "_blank"}
+     :content [(txt :copyright-holder)]}
+    "."]})
+

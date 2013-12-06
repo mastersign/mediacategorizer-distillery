@@ -2,6 +2,7 @@
   (:require [net.cgrand.enlive-html :as eh])
   (:require [mastersign.html :refer :all])
   (:require [mastersign.files :refer :all])
+  (:require [distillery.text :refer [txt]])
   (:require [distillery.view.defaults :as defaults])
   (:require [distillery.view.html :refer :all]))
 
@@ -43,7 +44,10 @@
              page
              foot]}]
 
-  (let [title (if title (str "distillery - " title) "distillery")
+  (let [title-prefix (txt :frame-title-prefix)
+        title (if title
+                (if title-prefix (str title-prefix " - " title) title)
+                title-prefix)
         js-code (if js-code (str "$(function () { " js-code " });") nil)
         head (or head (headline 1 title))
         foot (or foot defaults/copyright)
