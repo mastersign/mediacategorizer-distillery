@@ -86,10 +86,9 @@
 ;;     (def job-descr (load-data job-file))
 ;;     (def job (prepare-and-analyze job-descr))
 ;;     (generate-xml-result-file! job)
-     (generate-website! job)
+;;     (generate-website! job)
 ;;     (run-complete! job-descr)
 ;;
-
-(def job (assoc-in job [:configuration :parallel-proc] true))
-(def job (assoc-in job [:configuration :parallel-proc] false))
+;; (def job (assoc-in job [:configuration :parallel-proc] true))
+;; (def job (assoc-in job [:configuration :parallel-proc] false))
 
