@@ -8,6 +8,6 @@
                  [org.clojure/data.xml "0.0.7"]
                  [enlive "1.1.1"]]
   :global-vars {*warn-on-reflection* true}
-  :aot [distillery.core]
-  :main distillery.core)
+  :main distillery.core
+  :profiles {:uberjar {:aot [distillery.core]}})
 
