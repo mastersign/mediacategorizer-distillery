@@ -327,8 +327,8 @@
         scores (map :score matches)
         word-scores (mapcat #(vals (:word-scores %)) matches)]
         (assoc job
-          :max-score (apply max scores)
-          :max-word-score (apply max word-scores))))
+          :max-score (safe-max scores)
+          :max-word-score (safe-max word-scores))))
 
 
 ;; ### XML Result Generation

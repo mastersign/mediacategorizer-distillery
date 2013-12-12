@@ -148,7 +148,7 @@
   [words]
   (->> words
        (map :appearance)
-       (apply max)))
+       (safe-max)))
 
 (defn correction-candidates
   "Returns frequent words that are most likely false recognized."
@@ -234,7 +234,7 @@
                    (reduce-by-sorted :id add-occurrence nil)
                    (map-values compute-index-entry-stats))
         index-stats {:count (count index)
-                     :max-occurrence-count (apply max (map :occurrence-count (vals index)))}
+                     :max-occurrence-count (safe-max (map :occurrence-count (vals index)))}
         index (map-values (partial compute-index-entry-match-value index-stats) index)]
     (assoc video
       :index index
@@ -261,7 +261,7 @@
                    (reduce-by-sorted :id add-occurrence nil)
                    (map-values compute-index-entry-stats))
         index-stats {:count (count index)
-                     :max-occurrence-count (apply max (map :occurrence-count (vals index)))}
+                     :max-occurrence-count (safe-max (map :occurrence-count (vals index)))}
         index (map-values (partial compute-index-entry-match-value index-stats) index)]
     (assoc category
       :index index
@@ -307,15 +307,17 @@
   [Analysis Results](data-structures.html#AnalysisResults) `job`
   and the given `video`."
   [{:keys [categories configuration] :as job} video]
-  (let [matches (->> categories
-                  (map #(compute-matching-score video %))
-                  (filter #(>= (:score %) 0.0))
-                  (map #(vector (:category-id %) %))
-                  (apply concat)
-                  (apply sorted-map))]
+  (let [matches (if (not (empty? categories))
+                  (->> categories
+                       (map #(compute-matching-score video %))
+                       (filter #(>= (:score %) 0.0))
+                       (map #(vector (:category-id %) %))
+                       (apply concat)
+                       (apply sorted-map))
+                  {})]
   (assoc video
     :matches matches
-    :max-score (apply max (map :score (vals matches))))))
+    :max-score (safe-max (map :score (vals matches))))))
 
 (defn- lookup-matching-score
   [category video]
@@ -334,8 +336,5 @@
                   (apply sorted-map))]
   (assoc category
     :matches matches
-    :max-score (apply max (map :score (vals matches))))))
-
-
-
+    :max-score (safe-max (map :score (vals matches))))))
 
