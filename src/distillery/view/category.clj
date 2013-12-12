@@ -4,7 +4,7 @@
   (:require [mastersign.html :refer :all])
   (:require [mastersign.files :refer :all])
   (:require [distillery.config :as cfg])
-  (:require [distillery.text :as txt])
+  (:require [distillery.text :refer [txt]])
   (:require [distillery.view.cloud :as cloud])
   (:require [distillery.view.glossary :as glossary])
   (:require [distillery.view.hitlist :as hitlist])

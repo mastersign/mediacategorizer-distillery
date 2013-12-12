@@ -4,13 +4,20 @@
   (:require [net.cgrand.enlive-html :refer (html-resource transform content emit*)])
   (:require [mastersign.html :refer :all])
   (:require [mastersign.trace :refer :all])
-  (:require [distillery.text :as txt]))
+  (:require [distillery.text :refer [txt]]))
 
 (defn template
   "Loads a html template from the 'view' folder by its name without extension."
   [name]
   (let [path (str "distillery/view/" name ".html")]
     (html-resource path)))
+
+(defn build-title
+  "Generates the title for a page."
+  [{:keys [job-name] :as args} title]
+  (if title
+    (str job-name " - " title)
+    job-name))
 
 (defn menu
   "Builds a menu structure from a menu title and a sequence of label/url pairs."

@@ -11,12 +11,6 @@
   (:require [distillery.view.hitlist :as hitlist])
   (:require [distillery.view.match :as match]))
 
-(defn- build-title
-  [{:keys [job-name] :as args} title]
-  (if title
-    (str job-name " - " title)
-    job-name))
-
 (defn- render-hitlist
   [{:keys [words configuration] :as args}]
   (hitlist/render-occurrence-hitlist

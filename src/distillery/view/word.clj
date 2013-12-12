@@ -4,7 +4,7 @@
   (:require [mastersign.html :refer :all])
   (:require [mastersign.files :refer :all])
   (:require [distillery.data :refer [key-comp any?]])
-  (:require [distillery.text :as txt])
+  (:require [distillery.text :refer [txt]])
   (:require [distillery.view.html :refer :all])
   (:require [distillery.view.transcript :as transcript]))
 

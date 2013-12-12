@@ -3,7 +3,7 @@
   (:require [net.cgrand.enlive-html :as eh])
   (:require [mastersign.html :refer :all])
   (:require [distillery.data :refer [key-comp any?]])
-  (:require [distillery.text :as txt])
+  (:require [distillery.text :refer [txt]])
   (:require [distillery.view.html :refer :all]))
 
 (defn- render-category-match-word-list

@@ -2,7 +2,7 @@
   (:require [mastersign.html :refer :all])
   (:require [distillery.config :as cfg])
   (:require [distillery.data :refer :all])
-  (:require [distillery.text :as txt])
+  (:require [distillery.text :refer [txt]])
   (:require [distillery.view.html :refer :all]))
 
 (defn render-occurrence-hitlist
