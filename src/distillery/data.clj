@@ -166,6 +166,12 @@
 ;; ## Collection Math
 ;; A few helper functions to simplify some mathematical tasks on collections.
 
+(defn safe-max
+  "Computes the maximum of a numeric sequence.
+  Returns `0` if the sequence is empty."
+  [xs]
+  (if (empty? xs) 0 (apply max xs)))
+
 (defn sum
   "Computes the sum of a numeric sequence."
   [xs] (apply + xs))
@@ -180,6 +186,4 @@
 (defn squared-sum
   "Computes the sum of the squared items of a sequence."
   [xs] (apply + (map #(* % %) xs)))
-
-
 
