@@ -171,7 +171,8 @@
   [xs] (apply + xs))
 
 (defn mean
-  "Computes the mean value of a numeric sequence."
+  "Computes the mean value of a numeric sequence.
+  Return `0` if the sequence is empty."
   [xs]
   (let [cnt (count xs)]
     (if (> cnt 0) (/ (apply + xs) cnt) 0)))
