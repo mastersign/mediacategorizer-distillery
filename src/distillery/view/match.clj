@@ -3,6 +3,7 @@
   (:require [net.cgrand.enlive-html :as eh])
   (:require [mastersign.html :refer :all])
   (:require [distillery.data :refer [key-comp any?]])
+  (:require [distillery.text :as txt])
   (:require [distillery.view.html :refer :all]))
 
 (defn- render-category-match-word-list
@@ -19,7 +20,7 @@
                                        (str "word('" id "');")
                                        lexical-form)]))))]
     (div
-     [(paragraph (format "Gesamt (normalisiert): %.4f" (/ (:score match) max-score)))
+     [(paragraph (str (txt :match-normalized) (format "%.4f" (/ (:score match) max-score))))
       (ulist items)])))
 
 (defn render-category-match-include
@@ -98,5 +99,3 @@
         {:tag :tbody
          :content
          (vec (map (partial render-match-matrix-row matrix max-score category-ids) videos))}]}]}))
-
-

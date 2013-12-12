@@ -8,6 +8,7 @@
  :words "Wörter"
  :phrase "Phrase"
  :phrases "Phrasen"
+ :match "Übereinstimmung"
 
  :overview "Übersicht"
  :content "Inhalt"
@@ -45,6 +46,7 @@
  :main-word-h :word
  :main-word-occurrences "Vorkommen: "
  :main-word-mean-confidence "Mittlere Erkennungssicherheit: "
+ :main-word-category-list-empty "Dieses Wort kommt in keiner Kategorie vor."
  :main-word-videos-h :videos
  :main-word-categories-h :categories
 
@@ -74,7 +76,9 @@
  :category-glossary-h :glossary
  :category-word-h :word
  :category-word-occurrences "Vorkommen: "
+ :category-word-video-list-empty "Dieses Wort kommt in keinem Video vor."
  :category-word-videos-h :videos
+ :category-match-h :match
 
  :video-title :video
 
@@ -97,6 +101,14 @@
  :video-word-h :word
  :video-word-occurrences "Vorkommen: "
  :video-word-mean-confidence "Mittlere Erkennungssicherheit: "
+ :video-word-category-list-empty "Dieses Wort kommt in keiner Kategorie vor."
  :video-word-phrases-h :phrases
  :video-word-categories-h :categories
-}
+
+ :occurrence-hitlist-h "Häufige Worte"
+
+ :match-normalized "Gesamt (normalisiert): "
+
+ :TODO "TODO"
+ :DEBUG "DEBUG"
+}

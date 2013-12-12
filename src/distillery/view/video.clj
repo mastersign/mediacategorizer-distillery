@@ -4,6 +4,7 @@
   (:require [mastersign.html :refer :all])
   (:require [mastersign.files :refer :all])
   (:require [distillery.config :as cfg])
+  (:require [distillery.text :as txt])
   (:require [distillery.view.html :refer :all])
   (:require [distillery.view.cloud :as cloud])
   (:require [distillery.view.transcript :as transcript])
@@ -44,38 +45,38 @@
 (defn- render-overview
   "Creates the HTML for the overview page."
   [{:keys [video] :as job}]
-  (innerpage "overview" "Übersicht" true
+  (innerpage "overview" (txt :video-overview-h) true
              [(ulist "video_statistic"
-                     [(list-item (str "Länge: " (transcript/format-time (:duration video))))
-                      (list-item (str "Erkannte Phrasen: " (:phrase-count video)))
-                      (list-item (str "Erkannte Worte: " (:word-count video)))
-                      (list-item (str "Worte im Glossar: " (count (:index video))))
-                      (list-item (format "Mittlere Erkennungssicherheit: %1.1f%%" (* 100 (:confidence video))))])
+                     [(list-item (str (txt :video-overview-duration) (transcript/format-time (:duration video))))
+                      (list-item (str (txt :video-overview-phrase-count) (:phrase-count video)))
+                      (list-item (str (txt :video-overview-word-count) (:word-count video)))
+                      (list-item (str (txt :video-overview-index-size) (count (:index video))))
+                      (list-item (str (txt :video-overview-mean-confidence) (format "%1.1f%%" (* 100 (:confidence video)))))])
               (render-hitlist job video)]))
 
 (defn- render-video-transcript
   "Creates the HTML for the transcript with all phrases."
   [{{:keys [results index] :as video} :video :as args}]
-  (innerpage "transcript" "Transkript" false
+  (innerpage "transcript" (txt :video-transcript-h) false
               (transcript/render-transcript results :index index)))
 
 (defn- render-video-glossary
   "Create the HTML for the video glossary."
   [{{:keys [pindex] :as video} :video :as args}]
-  (innerpage "glossary" "Glossar" false
+  (innerpage "glossary" (txt :video-glossary-h) false
     (glossary/render-glossary pindex)))
 
 (defn- render-cloud
   "Create the HTML for the video word cloud."
   [{{:keys [id cloud] :as video} :video :as args}]
-  (innerpage "cloud" "Wortwolke" false
+  (innerpage "cloud" (txt :video-wordcloud-h) false
                (cloud/render-cloud id cloud)))
 
 (defn- render-categories
   "Create the HTML for the video categories."
   [{:keys [configuration categories video max-score] :as args}]
   (let [category-fn (fn [cid] (first (filter #(= cid (:id %)) categories)))]
-    (innerpage "categories" "Kategorien" false
+    (innerpage "categories" (txt :video-categories-h) false
                (hitlist/render-category-matchlist
                 video
                 categories
@@ -85,21 +86,21 @@
   "Create the HTML for the word frame.
    The word frame is an empty container to load a video word page into."
   [args]
-  (innerpage "word" "Wort" false nil))
+  (innerpage "word" (txt :video-word-h) false nil))
 
 (defn render-video-page
   "Renders the main page for a video."
   [{:keys [job-name video categories configuration] :as args}]
   [:base-path "../../"
-   :title (str job-name " - " "Video")
+   :title (build-title args (txt :video-title))
 ;   :js-code "videojs.options.flash.swf = 'video-js.swf';"
-   :secondary-menu [["Übersicht" (jshref "innerpage('overview')")]
+   :secondary-menu [[(txt :video-menu-overview) (jshref "innerpage('overview')")]
                     (when-not (cfg/value :skip-wordclouds configuration)
-                      ["Wortwolke" (jshref "innerpage('cloud')")])
-                    ["Transkript" (jshref "innerpage('transcript')")]
+                      [(txt :video-menu-wordcloud) (jshref "innerpage('cloud')")])
+                    [(txt :video-menu-transcript) (jshref "innerpage('transcript')")]
                     (when (seq categories)
-                      ["Kategorien" (jshref "innerpage('categories')")])
-                    ["Glossar" (jshref "innerpage('glossary')")]]
+                      [(txt :video-menu-categories) (jshref "innerpage('categories')")])
+                    [(txt :video-menu-glossary) (jshref "innerpage('glossary')")]]
    :page
      [(render-headline args)
       (render-video args)
@@ -109,4 +110,3 @@
       (render-cloud args)
       (render-categories args)
       (render-video-word-frame args)]])
-

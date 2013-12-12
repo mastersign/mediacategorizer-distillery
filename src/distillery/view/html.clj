@@ -3,7 +3,8 @@
   (:require [clojure.java.io :refer (resource)])
   (:require [net.cgrand.enlive-html :refer (html-resource transform content emit*)])
   (:require [mastersign.html :refer :all])
-  (:require [mastersign.trace :refer :all]))
+  (:require [mastersign.trace :refer :all])
+  (:require [distillery.text :as txt]))
 
 (defn template
   "Loads a html template from the 'view' folder by its name without extension."
@@ -62,7 +63,7 @@
     (let [txt (.toString w)]
       (trace-message "DEBUG:\n" txt)
       {:tag :pre
-       :content [{:tag :strong :content "DEBUG\n" }
+       :content [{:tag :strong :content [(txt :DEBUG) "\n"] }
                  {:tag :code
                   :content [txt]}]})))
 
@@ -72,4 +73,3 @@
   [text]
   (trace-message "TODO: " text)
   {:tag :div :attrs {:class "todo"} :content text})
-

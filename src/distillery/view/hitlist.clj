@@ -2,6 +2,7 @@
   (:require [mastersign.html :refer :all])
   (:require [distillery.config :as cfg])
   (:require [distillery.data :refer :all])
+  (:require [distillery.text :as txt])
   (:require [distillery.view.html :refer :all]))
 
 (defn render-occurrence-hitlist
@@ -32,7 +33,7 @@
                        (/ num-occ max-occ)
                        (conf-fn mean-confidence)))))]
     (div "hitlist"
-         [(headline 3 "Häufige Worte")
+         [(headline 3 (txt :occurrence-hitlist-h))
           (olist (map item-gen hitlist))])))
 
 (defn render-category-matchlist
@@ -88,4 +89,4 @@
                        color
                        rel-score))))]
     (div "hitlist"
-         [(olist (map item-gen matchlist))])))
+         [(olist (map item-gen matchlist))])))
