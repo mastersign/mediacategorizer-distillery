@@ -11,6 +11,7 @@
   (:require [mastersign.trace :refer :all])
   (:require [mastersign.files :refer :all])
   (:require [distillery.config :as cfg])
+  (:require [distillery.text :refer [txt]])
   (:require [distillery.data :refer :all])
   (:require [distillery.blacklist :refer :all])
   (:require [distillery.processing :as proc])
@@ -342,7 +343,18 @@
     (xr/save-result path job))
   nil)
 
+
 ;; ### Website Generation
+
+
+(defn- create-main-menu
+  "Builds the main menu structure."
+  [{:keys [categories] :as args}]
+  [[(txt :frame-top-menu-project) "index.html"]
+   (when (seq categories)
+     [(txt :frame-top-menu-categories) "categories.html"])
+   [(txt :frame-top-menu-videos) "videos.html"]])
+
 
 (defn- create-page
   "Generates a HTML page by calling the page function `page-f`
@@ -350,11 +362,12 @@
   Saves the generated page in the `output-dir` of the job.
   The filename of the page is specified by the `page-name`."
   [page-name page-f {:keys [output-dir] :as args}]
-  (let [target-file (combine-path output-dir page-name)]
-    (->> args
-         page-f
-         (apply render)
-         (save-page target-file))))
+  (let [target-file (combine-path output-dir page-name)
+        page-def (-> args
+                     page-f
+                     (concat [:main-menu (create-main-menu args)]))
+        page (apply render page-def)]
+    (save-page target-file page)))
 
 
 (defn- create-include
@@ -368,7 +381,9 @@
          include-f
          (save-page target-file))))
 
+
 ;; #### Main Pages
+
 
 (defn- create-word-include
   "Creates the include file for a word in the global context."
@@ -636,12 +651,4 @@
       .toUri
       .toString
       browse-url))
-
-
-
-
-
-
-
-
 

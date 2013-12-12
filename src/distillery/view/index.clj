@@ -4,6 +4,7 @@
   (:require [mastersign.files :refer :all])
   (:require [distillery.data :refer [key-comp]])
   (:require [distillery.text :refer [txt]])
+  (:require [distillery.config :as cfg])
   (:require [distillery.view.html :refer :all])
   (:require [distillery.view.glossary :as glossary])
   (:require [distillery.view.cloud :as cloud])
@@ -58,12 +59,13 @@
 
 (defn render-main-page
   "Renders the main page for the site."
-  [{:keys [job-name] :as args}]
+  [{:keys [job-name configuration] :as args}]
   [:title (build-title args nil)
-   :secondary-menu {(txt :main-menu-overview) (jshref "innerpage('overview')")
-                    (txt :main-menu-wordcloud) (jshref "innerpage('cloud')")
-                    (txt :main-menu-matching-matrix) (jshref "innerpage('matrix')")
-                    (txt :main-menu-glossary) (jshref "innerpage('glossary')")}
+   :secondary-menu [[(txt :main-menu-overview) (jshref "innerpage('overview')")]
+                    (when-not (cfg/value :skip-wordclouds configuration)
+                      [(txt :main-menu-wordcloud) (jshref "innerpage('cloud')")])
+                    [(txt :main-menu-matching-matrix) (jshref "innerpage('matrix')")]
+                    [(txt :main-menu-glossary) (jshref "innerpage('glossary')")]]
    :page
      [(headline 2 "Projekt")
       (render-main-overview args)
@@ -88,7 +90,7 @@
   "Renders the categories main page."
   [{:keys [job-name] :as args}]
   [:title (build-title args (txt :categories-title))
-   :secondary-menu {(txt :categories-menu-overview) (jshref "innerpage('overview')")}
+   :secondary-menu [(txt :categories-menu-overview) (jshref "innerpage('overview')")]
    :page
      [(headline 2 (txt :categories-h))
       (render-categories-list args)]])

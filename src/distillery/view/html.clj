@@ -21,7 +21,9 @@
         :content title}
        nil)
      {:tag :ul
-      :content (map menu-item items)}]))
+      :content (->> items
+                    (filter #(not (nil? %)))
+                    (map menu-item))}]))
 
 (defn innerpage
   "Builds the block structure for an inner page.
@@ -70,5 +72,4 @@
   [text]
   (trace-message "TODO: " text)
   {:tag :div :attrs {:class "todo"} :content text})
-
 

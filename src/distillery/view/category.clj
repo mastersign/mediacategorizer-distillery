@@ -3,6 +3,7 @@
   (:require [net.cgrand.enlive-html :as eh])
   (:require [mastersign.html :refer :all])
   (:require [mastersign.files :refer :all])
+  (:require [distillery.config :as cfg])
   (:require [distillery.view.cloud :as cloud])
   (:require [distillery.view.glossary :as glossary])
   (:require [distillery.view.hitlist :as hitlist])
@@ -67,11 +68,12 @@
 
 (defn render-category-page
   "Renders the main page for a category."
-  [{:keys [job-name category] :as args}]
+  [{:keys [job-name category configuration] :as args}]
   [:base-path "../../"
    :title (str job-name " - " "Kategorie")
    :secondary-menu [["Übersicht" (jshref "innerpage('overview')")]
-                    ["Wortwolke" (jshref "innerpage('cloud')")]
+                    (when-not (cfg/value :skip-wordclouds configuration)
+                      ["Wortwolke" (jshref "innerpage('cloud')")])
                     ["Videos" (jshref "innerpage('videos')")]
                     ["Glossar" (jshref "innerpage('glossary')")]]
    :page
@@ -82,6 +84,4 @@
       (render-videos args)
       (render-category-word-frame args)
       (render-category-match-frame args)]])
-
-
 

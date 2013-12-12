@@ -89,14 +89,16 @@
 
 (defn render-video-page
   "Renders the main page for a video."
-  [{:keys [job-name video] :as args}]
+  [{:keys [job-name video categories configuration] :as args}]
   [:base-path "../../"
    :title (str job-name " - " "Video")
 ;   :js-code "videojs.options.flash.swf = 'video-js.swf';"
    :secondary-menu [["Übersicht" (jshref "innerpage('overview')")]
-                    ["Wortwolke" (jshref "innerpage('cloud')")]
+                    (when-not (cfg/value :skip-wordclouds configuration)
+                      ["Wortwolke" (jshref "innerpage('cloud')")])
                     ["Transkript" (jshref "innerpage('transcript')")]
-                    ["Kategorien" (jshref "innerpage('categories')")]
+                    (when (seq categories)
+                      ["Kategorien" (jshref "innerpage('categories')")])
                     ["Glossar" (jshref "innerpage('glossary')")]]
    :page
      [(render-headline args)
@@ -107,9 +109,4 @@
       (render-cloud args)
       (render-categories args)
       (render-video-word-frame args)]])
-
-
-
-
-
 

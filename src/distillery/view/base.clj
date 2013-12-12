@@ -28,7 +28,7 @@
 (defn fix-menu-urls
   "Fixes all relative URLs in the menu by suffixing with the given base path."
   [base-path menu]
-  (let [map-map (fn [f m] (into {} (for [[k v] m] [k (f v)])))]
+  (let [map-map (fn [f m] (map (fn [pair] (when pair [(first pair) (f (second pair))])) m))]
     (map-map (partial fix-url base-path) menu)))
 
 (defn render
@@ -52,7 +52,7 @@
         head (or head (headline 1 title))
         foot (or foot defaults/copyright)
         main-menu (menu
-                    (or main-menu (fix-menu-urls base-path defaults/main-menu))
+                    (fix-menu-urls base-path (or main-menu defaults/main-menu))
                     :title (or main-menu-title defaults/main-menu-title))
         secondary-menu (if secondary-menu
                          (menu
@@ -68,6 +68,4 @@
 	    [:header] (eh/content head)
 	    [:#page] (eh/content page)
 	    [:footer] (eh/content foot))))
-
-
 
