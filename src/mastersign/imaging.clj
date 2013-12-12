@@ -42,4 +42,3 @@
       (.setSize fw fh)
       (.setContentPane panel)
       (.setVisible true))))
-

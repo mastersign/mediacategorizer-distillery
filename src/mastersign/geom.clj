@@ -74,4 +74,3 @@
    (.createTransformedArea
     area
     (AffineTransform/getTranslateInstance (double x) (double y)))))
-

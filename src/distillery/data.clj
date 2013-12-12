@@ -186,4 +186,3 @@
 (defn squared-sum
   "Computes the sum of the squared items of a sequence."
   [xs] (apply + (map #(* % %) xs)))
-

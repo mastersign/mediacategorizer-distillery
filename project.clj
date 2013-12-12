@@ -10,4 +10,3 @@
   :global-vars {*warn-on-reflection* true}
   :main distillery.core
   :profiles {:uberjar {:aot [distillery.core]}})
-

@@ -96,10 +96,3 @@
   (let [tags (job-result-tags job)]
     (with-open [w (writer path)]
       (xml/indent tags w))))
-
-
-
-
-
-
-

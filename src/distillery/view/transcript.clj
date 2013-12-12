@@ -50,4 +50,3 @@
   "Creates the HTML for a sequence of phrases."
   [results & {:keys [index pivot]}]
   (div "transcript" (map #(render-result % :index index :pivot pivot) results)))
-

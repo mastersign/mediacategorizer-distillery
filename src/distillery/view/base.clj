@@ -68,4 +68,3 @@
 	    [:header] (eh/content head)
 	    [:#page] (eh/content page)
 	    [:footer] (eh/content foot))))
-

@@ -26,6 +26,3 @@
   [word]
   (let [text (.toLowerCase ^String (word-text word))]
     (not (contains? blacklist text))))
-
-
-

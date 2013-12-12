@@ -18,4 +18,3 @@
            end# (/ (- (System/nanoTime) start#) 1000000.0)]
        (trace-message (str "END   " ~msg " after " end# " msecs"))
        result#)))
-

@@ -211,4 +211,3 @@
 
 (defn test-show-main-page []
   (dt/show-main-page job-descr))
-

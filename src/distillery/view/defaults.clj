@@ -20,4 +20,3 @@
      :attrs {:href (txt :copyright-href) :target "_blank"}
      :content [(txt :copyright-holder)]}
     "."]})
-

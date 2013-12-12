@@ -61,4 +61,3 @@
                       :max-font-size (ccv :max-font-size)
                       :color-fn #(apply mdr/color (concat (take 3 (ccv :color)) [(+ 0.25 (* % 0.75))]))
                       :background-color (apply mdr/color (ccv :background-color)))))
-

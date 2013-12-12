@@ -38,8 +38,3 @@
   [^String target-dir]
   (doseq [rn static-resources]
     (save-dependency target-dir rn)))
-
-
-
-
-

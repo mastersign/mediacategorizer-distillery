@@ -114,4 +114,3 @@
    :page
      [(headline 2 (txt :videos-h))
       (render-videos-list args)]])
-

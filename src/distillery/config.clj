@@ -25,4 +25,3 @@
   ([k cfg]
    (let [ks (if (coll? k) (vec k) [k])]
      (get-in cfg ks (get-in default ks nil)))))
-

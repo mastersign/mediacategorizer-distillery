@@ -58,12 +58,3 @@
   [path & parts]
   (let [path (apply get-path (cons path parts))]
     (Files/exists path (make-array LinkOption 0))))
-
-
-
-
-
-
-
-
-

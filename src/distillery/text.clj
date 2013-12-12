@@ -8,4 +8,3 @@
   [id]
   (let [v (get resources id)]
     (if (keyword? v) (txt v) v)))
-

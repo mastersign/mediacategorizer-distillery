@@ -50,5 +50,3 @@
     (vec (cons
           (render-glossary-navigation pindex)
           (map (partial render-glossary-partition fl) pindex)))))
-
-

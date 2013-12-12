@@ -91,4 +91,3 @@
 ;;
 ;; (def job (assoc-in job [:configuration :parallel-proc] true))
 ;; (def job (assoc-in job [:configuration :parallel-proc] false))
-

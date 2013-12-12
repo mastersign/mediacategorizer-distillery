@@ -337,4 +337,3 @@
   (assoc category
     :matches matches
     :max-score (safe-max (map :score (vals matches))))))
-

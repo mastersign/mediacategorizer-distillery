@@ -145,6 +145,3 @@
    The javascript code must not contain double quotes."
   [js content]
   {:tag :a :attrs {:href (jshref js)} :content (safe-content content)})
-
-
-
