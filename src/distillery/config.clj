@@ -11,7 +11,7 @@
   (:require [distillery.data :refer (load-data)]))
 
 ;; A public var with a the default configuration.
-(def default (load-data (resource "default.cfg")))
+(def default (load-data (resource "default-config.edn")))
 
 (defn value
   "Retrieves the value of a configuration parameter by its key.
@@ -25,6 +25,4 @@
   ([k cfg]
    (let [ks (if (coll? k) (vec k) [k])]
      (get-in cfg ks (get-in default ks nil)))))
-
-
 
