@@ -84,7 +84,7 @@
   "Renders the categories main page."
   [{:keys [job-name] :as args}]
   [:title (build-title args (txt :categories-title))
-   :secondary-menu [(txt :categories-menu-overview) (jshref "innerpage('overview')")]
+   :secondary-menu [[(txt :categories-menu-overview) (jshref "innerpage('overview')")]]
    :page
      [(headline 2 (txt :categories-h))
       (render-categories-list args)]])
