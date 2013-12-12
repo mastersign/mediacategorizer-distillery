@@ -9,13 +9,14 @@
 (defn build-cloud-word-data
   "Transforms the word meta-data from an index
   into the input format for the cloud generator."
-  [index]
+  [index config cloud-key]
   (let [max-occurrence (double (dec (apply max (cons 0 (map #(count (:occurrences %)) (vals index))))))]
     (vec
      (map
       (fn [w]
         (let [occurrence (dec (count (:occurrences w)))
-              confidence (/ (- (:mean-confidence w) (cfg/value :min-confidence)) (- 1 (cfg/value :min-confidence)))]
+              confidence (/ (- (:mean-confidence w) (cfg/value :min-confidence config))
+                            (- 1 (cfg/value :min-confidence config)))]
           [(:id w)
            (:lexical-form w)
            (/ occurrence max-occurrence)

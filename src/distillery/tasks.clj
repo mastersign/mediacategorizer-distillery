@@ -402,7 +402,7 @@
     (do (trace-message "Skipping global wordcloud") [])
     (trace-block
      "Creating global wordcloud"
-     (build-cloud-ui-data (create-cloud (build-cloud-word-data words)
+     (build-cloud-ui-data (create-cloud (build-cloud-word-data words configuration :main-cloud)
                                         (combine-path output-dir "cloud.png")
                                         configuration
                                         :main-cloud)))))
@@ -494,7 +494,7 @@
     (do (trace-message "Skipping wordcloud for category '" id "'") [])
     (trace-block
      (str "Creating wordcloud for category '" id "'")
-     (build-cloud-ui-data (create-cloud (build-cloud-word-data index)
+     (build-cloud-ui-data (create-cloud (build-cloud-word-data index configuration :category-cloud)
                                         (combine-path output-dir path "cloud.png")
                                         configuration
                                         :category-cloud)))))
@@ -571,7 +571,7 @@
     (do (trace-message "Skipping wordcloud for video '" id "'") [])
     (trace-block
      (str "Creating wordcloud for " id)
-     (build-cloud-ui-data (create-cloud (build-cloud-word-data index)
+     (build-cloud-ui-data (create-cloud (build-cloud-word-data index configuration :video-cloud)
                                         (combine-path output-dir path "cloud.png")
                                         configuration
                                         :video-cloud)))))
