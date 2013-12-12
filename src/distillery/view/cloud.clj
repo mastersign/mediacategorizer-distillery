@@ -21,7 +21,7 @@
            (:lexical-form w)
            (/ occurrence max-occurrence)
            (* confidence confidence)]))
-      (filter #(> (count (:occurrences %)) 1) (vals index))))))
+      (filter #(>= (count (:occurrences %)) (cfg/value [cloud-key :min-occurrence] config)) (vals index))))))
 
 (defn build-cloud-ui-data
   "Transforms the result data from the cloud generator
