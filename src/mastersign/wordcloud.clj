@@ -23,7 +23,7 @@
    :precision 0.4
    :font (Font. "Calibri" Font/BOLD (float 30))
    :min-font-size 14
-   :max-font-size 60
+   :max-font-size 80
    :max-test-radius 350
    :order-priority 0.7
    :padding 4
