@@ -19,7 +19,7 @@
                             (- 1 (cfg/value :min-confidence config)))]
           [(:id w)
            (:lexical-form w)
-           (/ occurrence max-occurrence)
+           (if (> max-occurrence 0) (/ occurrence max-occurrence) 0.5)
            (* confidence confidence)]))
       (filter #(>= (count (:occurrences %)) (cfg/value [cloud-key :min-occurrence] config)) (vals index))))))
 
