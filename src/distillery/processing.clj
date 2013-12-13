@@ -165,12 +165,12 @@
   [{:keys [^String lexical-form] :as word}]
   (comment "TODO Needs to be improved for arbitrary characters!")
   (-> lexical-form
-      (.replace " " "_")
       (.toLowerCase)
       (.replace "ß" "ss")
       (.replace "ä" "ae")
       (.replace "ö" "oe")
-      (.replace "ü" "ue")))
+      (.replace "ü" "ue")
+      (string/replace #"\W" "_")))
 
 (defn- compute-index-entry-stats
   [{:keys [occurrences] :as entry}]
