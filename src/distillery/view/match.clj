@@ -57,15 +57,16 @@
                (fn [category-id]
                  (let [match (get-in matrix [category-id id])
                        score (:score match)
-                       normalized-score (/ score max-score)
-                       video-normalized-score (/ score (:max-score video))]
+                       video-max-score (:max-score video)
+                       normalized-score (if (> max-score 0) (/ score max-score) 0)
+                       video-normalized-score (if (> video-max-score 0) (/ score video-max-score) 0)]
                    (if match
                      {:tag :td
                       :attrs {:data-video-id id
                               :data-category-id category-id
                               :style (str "background-color: rgba(234,30,106," video-normalized-score ")")}
                       :content [(link (str "categories/" category-id "/index.html?match=" id)
-                                 (format "%.1f%%" (* 100 normalized-score)))]}
+                                      (format "%.1f%%" (* 100 normalized-score)))]}
                      {:tag :td :content []})))
                category-ids)))})
 
