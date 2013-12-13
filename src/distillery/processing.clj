@@ -50,30 +50,9 @@
 (defn no-punctuation?
   "Checks whether the given word ends with a colon."
   [word]
-  (let [^String text (:text word)]
-    (not (or
-          (.endsWith text ".")
-          (.endsWith text ",")
-          (.endsWith text ":")
-          (.endsWith text ";")
-          (= text "@")
-          (= text "(")
-          (= text ")")
-          (= text "[")
-          (= text "]")
-          (= text "{")
-          (= text "}")
-          (= text "<")
-          (= text ">")
-          (= text "=")
-          (= text "§")
-          (= text "$")
-          (= text "&")
-          (= text "%")
-          (= text "?")
-          (= text "!")
-          (= text "/")
-          (= text "\\")))))
+  (let [^String text (:text word)
+        regex (re-pattern "\\W")]
+    (not (re-find regex text))))
 
 (defn not-short?
   "Checks whether a word is long enough to be relevant."
