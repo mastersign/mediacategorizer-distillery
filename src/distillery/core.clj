@@ -89,5 +89,7 @@
 ;;     (generate-website! job)
 ;;     (run-complete! job-descr)
 ;;
+;; (def job (assoc-in job [:configuration :skip-wordclouds] true))
+;; (def job (assoc-in job [:configuration :skip-wordclouds] false))
 ;; (def job (assoc-in job [:configuration :parallel-proc] true))
 ;; (def job (assoc-in job [:configuration :parallel-proc] false))
