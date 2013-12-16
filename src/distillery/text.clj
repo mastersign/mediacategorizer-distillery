@@ -6,5 +6,5 @@
 
 (defn txt
   [id]
-  (let [v (get resources id)]
+  (let [v (get resources id (format "TEXT WITH ID '%s' NOT FOUND!" (name id)))]
     (if (keyword? v) (txt v) v)))

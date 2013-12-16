@@ -33,8 +33,7 @@
                        (/ num-occ max-occ)
                        (conf-fn mean-confidence)))))]
     (div "hitlist"
-         [(headline 3 (txt :occurrence-hitlist-h))
-          (olist (map item-gen hitlist))])))
+         [(olist (map item-gen hitlist))])))
 
 (defn render-category-matchlist
   [{:keys [matches max-score] :as video} categories config]

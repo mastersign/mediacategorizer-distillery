@@ -1,4 +1,7 @@
 {
+ :TODO "TODO"
+ :DEBUG "DEBUG"
+
  :project "Projekt"
  :video "Video"
  :videos "Videos"
@@ -16,6 +19,7 @@
  :wordcloud "Wortwolke"
  :transcript "Transkript"
  :matrix "Matrix"
+ :hitlist "Häufige Worte"
 
  :frame-title-prefix nil
  :frame-top-menu-title "Hauptmenü"
@@ -36,13 +40,20 @@
  :main-menu-glossary :glossary
 
  :main-overview-h :overview
+ :main-overview-d "Ein Projekt enhält Videos und Kategorien. Aus den Videos wurden mit Hilfe von Spracherkennung Worte und Phrasen extrahiert. Die Kategorien sind jeweils durch eine Gruppe von Texten definiert. Die Worte aus den Videos und Kategorien wurden nach Häufigkeit untersucht miteinander abgeglichen."
+ :main-overview-description-h "Beschreibung"
  :main-overview-content-h :content
+ :main-overview-hitlist-h :hitlist
+ :main-overview-hitlist-d "Das folgende Diagramm zeigt die häufigsten Worte in allen Videos. Die Balkenlänge beschreibt die Worthäufigkeit und die Farbintensität beschreibt die Sicherheit mit der das Wort durch die Spracherkennung erkannt wurde."
  :main-overview-videos "Videos: "
  :main-overview-categories "Kategorien: "
  :main-overview-words "Wörter: "
  :main-wordcloud-h "Globale Wortwolke"
+ :main-wordcloud-d "Die globale Wortwolke zeigt die häufigsten Worte aus allen Videos an. Die Größe eines Wortes beschreibt die Häufigkeit, die Intensität der Farbe beschreibt die Erkennungssicherheit der Spracherkennung."
  :main-glossary-h "Globaler Glossar"
+ :main-glossary-d "Der globale Glossar enthält die Worte aus allen Videos. Jedes Wort ist mit einer Detail-Seite verknüpft, welche weitere Informationen über das Wort im Kontext des gesamten Projektes enthält."
  :main-matching-matrix-h "Übereinstimmungsmatrix"
+ :main-matching-matrix-d "Die Übereinstimmungsmatrix zeigt die Übereinstimmung zwischen Videos und Kategorien. Eine hohe Übereinstimmung bedeutet, dass häufige Worte eines Videos auch häufig in einer Kategorie vorkommen. Die Prozentangabe beschreibt die Übereinstimmung relativ zur besten Übereinstimmung im ganzen Projekt. Die Hintergrundfarbe beschreibt die Übereinstimmung relativ zur besten Übereinstimmung für das jeweilige Video."
  :main-word-h :word
  :main-word-occurrences "Vorkommen: "
  :main-word-mean-confidence "Mittlere Erkennungssicherheit: "
@@ -54,11 +65,13 @@
  :categories-h :categories
  :categories-menu-overview :overview
  :categories-overview-h :overview
+ :categories-overview-d "Die folgenden Kategorien sind im Projekt enthalten."
 
  :videos-title nil
  :videos-h :videos
  :videos-menu-overview :overview
  :videos-overview-h :overview
+ :videos-overview-d "Die folgenden Videos sind im Projekt enthalten."
 
  :category-title :category
 
@@ -71,9 +84,14 @@
  :category-overview-resource-count "Quellen: "
  :category-overview-word-count "Gesamtanzahl Worte: "
  :category-overview-index-size "Worte im Index: "
+ :category-overview-hitlist-h :hitlist
+ :category-overview-hitlist-d "Das folgende Diagramm zeigt die häufigsten Worte in der Kategorie. Die Balkenlänge beschreibt die Häufigkeit des Wortes."
  :category-wordcloud-h :wordcloud
+ :category-wordcloud-d "Die Wortwolke zeigt die häufigsten Worte dieser Kategorie an. Die Größe eines Worte beschreibt seine Häufigkeit."
  :category-videos-h :videos
+ :category-videos-d "Das folgende Diagramm zeigt Videos, die mit dieser Kategorie übereinstimmen. Die Balkenlänge beschreibt den Grad der Übereinstimmung eines Videos mit dieser Kategorie."
  :category-glossary-h :glossary
+ :category-glossary-d "In diesem Glossar sind alle Worte dieser Kategorie aufgeführt. Jedes Wort ist mit einer Detail-Seite verknüpft, welche weitere Informationen über das Wort im Kontext dieser Kategorie enthält."
  :category-word-h :word
  :category-word-occurrences "Vorkommen: "
  :category-word-video-list-empty "Dieses Wort kommt in keinem Video vor."
@@ -105,10 +123,5 @@
  :video-word-phrases-h :phrases
  :video-word-categories-h :categories
 
- :occurrence-hitlist-h "Häufige Worte"
-
  :match-normalized "Gesamt (normalisiert): "
-
- :TODO "TODO"
- :DEBUG "DEBUG"
 }

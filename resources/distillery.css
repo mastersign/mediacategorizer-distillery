@@ -24,6 +24,12 @@ figure {
   border: none;
 }
 
+.explanation {
+  color: #888;
+  font-style: italic;
+  margin: 0.5em 0;
+}
+
 video#main_video {
   margin-left: auto;
   margin-right: auto;

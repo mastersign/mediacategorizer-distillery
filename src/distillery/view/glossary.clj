@@ -47,6 +47,8 @@
   "Create the HTML for a glossary."
   [pindex]
   (let [fl (first-letter pindex)]
-    (vec (cons
-          (render-glossary-navigation pindex)
-          (map (partial render-glossary-partition fl) pindex)))))
+    {:tag :div
+     :attrs {:class "glossary"}
+     :content (vec (cons
+                    (render-glossary-navigation pindex)
+                    (map (partial render-glossary-partition fl) pindex)))}))

@@ -31,19 +31,23 @@
                     [(list-item (str (txt :category-overview-resource-count) (count (:resources category))))
                      (list-item (str (txt :category-overview-word-count) (count (:words category))))
                      (list-item (str (txt :category-overview-index-size) (count (:index category))))])
+              (headline 4 (txt :category-overview-hitlist-h))
+              (paragraph "explanation" (txt :category-overview-hitlist-d))
               (render-hitlist job category)]))
 
 (defn- render-glossary
   "Creates the HTML for the category glossary page."
   [{{:keys [pindex] :as category} :category :as args}]
   (innerpage "glossary" (txt :category-glossary-h) false
-             (glossary/render-glossary pindex)))
+             [(paragraph "explanation" (txt :category-glossary-d))
+              (glossary/render-glossary pindex)]))
 
 (defn- render-cloud
   "Creates the HTML for the overview page."
   [{{:keys [id cloud] :as category} :category :as args}]
   (innerpage "cloud" (txt :category-wordcloud-h) false
-             (cloud/render-cloud id cloud)))
+             [(paragraph "explanation" (txt :category-wordcloud-d))
+              (cloud/render-cloud id cloud)]))
 
 (defn- render-videos
   "Creates the HTML for the overview page."

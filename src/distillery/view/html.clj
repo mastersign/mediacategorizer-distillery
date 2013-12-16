@@ -43,9 +43,7 @@
            :style (str "display: " (if active "inherit" "none"))
            :data-start (str active)}
    :content [(headline 3 title)
-             {:tag :div
-              :attrs {:class "innerpage"}
-              :content (safe-content content)}]})
+             (div "innerpage" content)]})
 
 (defn bar
   "Builds a bar as part of a diagram."

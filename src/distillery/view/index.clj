@@ -22,18 +22,23 @@
 (defn- render-main-overview
   [{:keys [job-description videos categories words] :as args}]
   (innerpage "overview" (txt :main-overview-h) true
-             [(paragraph job-description)
-              (headline 3 (txt :main-overview-content-h))
+             [(paragraph "explanation" (txt :main-overview-d))
+              (headline 4 (txt :main-overview-description-h))
+              (paragraph job-description)
+              (headline 4 (txt :main-overview-content-h))
               (ulist "main_statistic"
                      [(list-item (str (txt :main-overview-videos) (count videos)))
                       (list-item (str (txt :main-overview-categories) (count categories)))
                       (list-item (str (txt :main-overview-words) (count words)))])
+              (headline 4 (txt :main-overview-hitlist-h))
+              (paragraph "explanation" (txt :main-overview-hitlist-d))
               (render-hitlist args)]))
 
 (defn- render-main-cloud
   [{:keys [cloud] :as args}]
   (innerpage "cloud" (txt :main-wordcloud-h) false
-             (cloud/render-cloud "global" cloud)))
+             [(paragraph "explanation" (txt :main-wordcloud-d))
+              (cloud/render-cloud "global" cloud)]))
 
 (defn- render-main-word-frame
   "Create the HTML for the word frame.
@@ -44,12 +49,14 @@
 (defn- render-main-glossary
   [{:keys [pwords] :as args}]
   (innerpage "glossary" (txt :main-glossary-h) false
-             (glossary/render-glossary pwords)))
+             [(paragraph "explanation" (txt :main-glossary-d))
+              (glossary/render-glossary pwords)]))
 
 (defn- render-main-matching-matrix
   [args]
    (innerpage "matrix" (txt :main-matching-matrix-h) false
-              (match/render-match-matrix args)))
+              [(paragraph "explanation" (txt :main-matching-matrix-d))
+               (match/render-match-matrix args)]))
 
 (defn render-main-page
   "Renders the main page for the site."
@@ -74,11 +81,13 @@
 
 (defn- render-categories-list
   [{:keys [categories] :as args}]
-  (->> categories
-       (into (sorted-set-by (key-comp :name)))
-       (map render-categories-list-item)
-       (ulist)
-       (innerpage "overview" (txt :categories-overview-h) true)))
+  (let [categories-list (->> categories
+                             (into (sorted-set-by (key-comp :name)))
+                             (map render-categories-list-item)
+                             (ulist))]
+    (innerpage "overview" (txt :categories-overview-h) true
+               [(paragraph "explanation" (txt :categories-overview-d))
+                categories-list])))
 
 (defn render-categories-page
   "Renders the categories main page."
@@ -96,9 +105,13 @@
 
 (defn- render-videos-list
   [{:keys [videos] :as args}]
-  (let [video-list (into (sorted-set-by (key-comp :name)) videos)]
+  (let [videos-list (->> videos
+                        (into (sorted-set-by (key-comp :name)))
+                        (map render-videos-list-item)
+                        (ulist))]
     (innerpage "overview" (txt :videos-overview-h) true
-               (ulist (map render-videos-list-item video-list)))))
+               [(paragraph "explanation" (txt :videos-overview-d))
+                videos-list])))
 
 (defn render-videos-page
   "Renders the videos main page."
