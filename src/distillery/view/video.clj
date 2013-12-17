@@ -52,39 +52,45 @@
                       (list-item (str (txt :video-overview-word-count) (:word-count video)))
                       (list-item (str (txt :video-overview-index-size) (count (:index video))))
                       (list-item (str (txt :video-overview-mean-confidence) (format "%1.1f%%" (* 100 (:confidence video)))))])
+              (headline 4 (txt :video-overview-hitlist-h))
+              (paragraph "explanation" (txt :video-overview-hitlist-d))
               (render-hitlist job video)]))
 
 (defn- render-video-transcript
   "Creates the HTML for the transcript with all phrases."
   [{{:keys [results index] :as video} :video :as args}]
   (innerpage "transcript" (txt :video-transcript-h) false
-              (transcript/render-transcript results :index index)))
+             [(paragraph "explanation" (txt :video-transcript-d))
+              (transcript/render-transcript results :index index)]))
 
 (defn- render-video-glossary
   "Create the HTML for the video glossary."
   [{{:keys [pindex] :as video} :video :as args}]
   (innerpage "glossary" (txt :video-glossary-h) false
-    (glossary/render-glossary pindex)))
+             [(paragraph "explanation" (txt :video-glossary-d))
+              (glossary/render-glossary pindex)]))
 
 (defn- render-cloud
   "Create the HTML for the video word cloud."
   [{{:keys [id cloud] :as video} :video :as args}]
   (innerpage "cloud" (txt :video-wordcloud-h) false
-               (cloud/render-cloud id cloud)))
+             [(paragraph "explanation" (txt :video-wordcloud-d))
+              (cloud/render-cloud id cloud)]))
 
 (defn- render-categories
   "Create the HTML for the video categories."
   [{:keys [configuration categories video max-score] :as args}]
   (let [category-fn (fn [cid] (first (filter #(= cid (:id %)) categories)))]
     (innerpage "categories" (txt :video-categories-h) false
-               (hitlist/render-category-matchlist
-                video
-                categories
-                configuration))))
+               [(paragraph "explanation" (txt :video-categories-d))
+                (hitlist/render-category-matchlist
+                 video
+                 categories
+                 configuration)])))
 
 (defn- render-video-word-frame
   "Create the HTML for the word frame.
-   The word frame is an empty container to load a video word page into."
+  The word frame is an empty container to load a video word page into."
   [args]
   (innerpage "word" (txt :video-word-h) false nil))
 
@@ -93,7 +99,7 @@
   [{:keys [job-name video categories configuration] :as args}]
   [:base-path "../../"
    :title (build-title args (txt :video-title))
-;   :js-code "videojs.options.flash.swf = 'video-js.swf';"
+   ;   :js-code "videojs.options.flash.swf = 'video-js.swf';"
    :secondary-menu [[(txt :video-menu-overview) (jshref "innerpage('overview')")]
                     (when-not (cfg/value :skip-wordclouds configuration)
                       [(txt :video-menu-wordcloud) (jshref "innerpage('cloud')")])
@@ -102,11 +108,11 @@
                       [(txt :video-menu-categories) (jshref "innerpage('categories')")])
                     [(txt :video-menu-glossary) (jshref "innerpage('glossary')")]]
    :page
-     [(render-headline args)
-      (render-video args)
-      (render-overview args)
-      (render-video-transcript args)
-      (render-video-glossary args)
-      (render-cloud args)
-      (render-categories args)
-      (render-video-word-frame args)]])
+   [(render-headline args)
+    (render-video args)
+    (render-overview args)
+    (render-video-transcript args)
+    (render-video-glossary args)
+    (render-cloud args)
+    (render-categories args)
+    (render-video-word-frame args)]])

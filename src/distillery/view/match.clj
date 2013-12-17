@@ -19,16 +19,17 @@
                                       (jslink
                                        (str "word('" id "');")
                                        lexical-form)]))))]
-    (div
-     [(paragraph (str (txt :match-normalized) (format "%.4f" (/ (:score match) max-score))))
-      (ulist items)])))
+    (div (ulist items))))
 
 (defn render-category-match-include
   "Renders the include part for the match frame of a category page."
-  [{:keys [videos category match] :as args}]
+  [{:keys [videos category match max-score] :as args}]
   (let [{:keys [video-id]} match
         video (first (filter #(= (:id %) video-id) videos))]
-    [(headline 4 "match_headline" (:name video))
+    [(paragraph [(str (txt :video) ": ") (strong (:name video)) {:tag :br}
+                 (str (txt :category) ": ") (strong (:name category))])
+     (paragraph (str (txt :match-normalized) (format "%.4f" (/ (:score match) max-score))))
+     (paragraph "explanation" (txt :match-d))
      (render-category-match-word-list (assoc args :video video))]))
 
 (defn- render-match-matrix-head-cell

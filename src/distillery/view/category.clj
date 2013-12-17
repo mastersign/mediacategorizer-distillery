@@ -54,10 +54,11 @@
   [{:keys [videos category max-score configuration] :as args}]
   (let [video-fn (fn [mid] (first (filter #(= mid (:id %)) videos)))]
     (innerpage "videos" (txt :category-videos-h) false
-              (hitlist/render-video-matchlist
-               category
-               videos
-               configuration))))
+               [(paragraph "explanation" (txt :category-videos-d))
+                (hitlist/render-video-matchlist
+                 category
+                 videos
+                 configuration)])))
 
 (defn- render-category-word-frame
   "Create the HTML for the word frame.

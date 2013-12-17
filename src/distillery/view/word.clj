@@ -119,8 +119,10 @@
     [(headline 4 "word_headline" [lexical-form (span "pronunciation" pronunciation)])
      (render-word-statistic args)
      (headline 4 (txt :main-word-videos-h))
+     (paragraph "explanation" (txt :main-word-videos-d))
      (render-word-video-list args)
      (headline 4 (txt :main-word-categories-h))
+     (paragraph "explanation" (txt :main-word-categories-d))
      (render-word-category-list args)]))
 
 (defn render-video-word-include
@@ -130,8 +132,10 @@
     [(headline 4 "word_headline" [lexical-form (span "pronunciation" pronunciation)])
      (render-video-word-statistic args)
      (headline 4 (txt :video-word-phrases-h))
+     (paragraph "explanation" (txt :video-word-phrases-d))
      (render-video-word-phrases args)
      (headline 4 (txt :video-word-categories-h))
+     (paragraph "explanation" (txt :video-word-categories-d))
      (render-video-word-category-list args)]))
 
 (defn render-category-word-include
@@ -141,4 +145,5 @@
     [(headline 4 "word_headline" lexical-form)
      (render-category-word-statistic args)
      (headline 4 (txt :category-word-videos-h))
+     (paragraph "explanation" (txt :category-word-videos-d))
      (render-category-word-video-list args)]))
