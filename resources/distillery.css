@@ -89,6 +89,10 @@ ul.glossary li {
   margin-left: 0.75em;
 }
 
+.word_headline {
+  color: #F00;
+}
+
 span.pronunciation {
   margin-left: 0.5em;
   font-style: italic;
