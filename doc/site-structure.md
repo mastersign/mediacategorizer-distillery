@@ -11,25 +11,25 @@ Path: `/index.html`
 	* Overview
 		* Description
 		* Statistics
-		* Word Hitlist -> Project:Word
+		* Word Hitlist &rarr; Project:Word
 	* Cloud
-		* Cloud Word -> Project:Word 
+		* Cloud Word &rarr; Project:Word 
 	* Matrix
-		* Row -> Video:Overview
-		* Column -> Category:Overview
-		* Cell -> Category:Match 
+		* Row &rarr; Video:Overview
+		* Column &rarr;> Category:Overview
+		* Cell &rarr; Category:Match 
 	* Glossary
 * Categories
 	* Overview 
-		* List -> Category:Overview
+		* List &rarr; Category:Overview
 * Videos
 	* Overview	
-		* List -> Video:Overview
+		* List &rarr; Video:Overview
 * Word*  
   Path: `/words/<word>.inc.html`
 	* Statistics
-	* Videos (subset) -> Video:Word
-	* Categories (subset) -> Category:Word
+	* Videos (subset) &rarr; Video:Word
+	* Categories (subset) &rarr; Category:Word
 
 ## Category*
 Path: `/categories/<category>/index.html`
@@ -40,45 +40,46 @@ Path: `/categories/<category>/index.html`
 * Category (Overview)
 	* Description
 	* Statistics
-	* Word Hitlist -> Category:Word
+	* Word Hitlist &rarr; Category:Word
 * Cloud
-	* Cloud Word -> Category:Word
+	* Cloud Word &rarr; Category:Word
 * Videos
-	* List -> Category:Match
+	* List &rarr; Category:Match
 * Glossary
-	* List -> Category:Word
+	* List &rarr; Category:Word
 * Word*  
   Path: `/categories/<category>/words/<word>.inc.html`
 	* Statistics
-	* Videos (subset) -> Video:Word
+	* Videos (subset) &rarr; Video:Word
 * Match*  
   Path: `/categories/<category>/matches/<video>.inc.html`
 	* Match Score
-	* Word List -> Category:Word
+	* Word List &rarr; Category:Word
 
 ## Video*
 Path: `/videos/<video>/index.html`  
-Video-Path: `/video/<video>/<video>.mp4`
+Video-Path: `/video/<video>/<video>.mp4`  
+Waveform-Path: `/videos/<video>/waveform.png`
 ### Context
 * Single Video
 * Multiple Categories (subset)
 ### Views
-* Video
+* Video (Overview)
 	* Description
 	* Statistics
+	* Waveform
 	* Word Hitlist
 * Cloud
-	* Cloud Word -> Video:Word 
+	* Cloud Word &rarr; Video:Word 
 * Transcript
-	* Phrase Time -> Playback Position
-	* Phrase Word -> Video:Word
+	* Phrase Time &rarr; Playback Position
+	* Phrase Word &rarr; Video:Word
 * Categories
-	* List Item -> Category:Match
+	* List Item &rarr; Category:Match
 * Glossary
-	* List Item -> Video:Word
+	* List Item &rarr; Video:Word
 * Word*  
   Path: `/videos/<video>/words/<word>.inc.html`
 	* Statistics
-	* Occurrences -> Playback Position
-	* Categories -> Category:Word
-
+	* Occurrences &rarr; Playback Position
+	* Categories &rarr; Category:Word
