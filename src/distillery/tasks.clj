@@ -111,6 +111,7 @@
 ;;      + Speech Recognition Results
 ;;      + Similarity Matching
 ;;  * XML Result Generation
+;;  * Text Result Generation
 ;;  * Website Generation
 ;;      + Main Pages
 ;;      + Category Pages
