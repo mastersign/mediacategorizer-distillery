@@ -84,7 +84,7 @@
     [:Occurrence {:video video-id
                   :phrase result-no
                   :no word-no
-                  :phrase-start phrase-start}]))
+                  :phrase-start (format-invariant "%.2f" (double phrase-start))}]))
 
 (defn- word-tag
   [job {:keys [lexical-form pronunciation occurrence-count occurrences] :as word}]
