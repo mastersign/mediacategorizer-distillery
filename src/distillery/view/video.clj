@@ -42,6 +42,19 @@
    configuration
    :video-cloud))
 
+(defn- render-waveform
+  "Creates the HTML for the waveform."
+  [{:keys [output-dir] :as job} {:keys [id waveform-file] :as video}]
+  (copy-file
+   (get-path waveform-file)
+   (get-path output-dir "videos" id "waveform.png"))
+  (div "video_waveform"
+       {:tag :img
+        :attrs { :class "waveform_img"
+                 :alt (txt :video-overview-waveform)
+                 :src "waveform.png" }
+        :content []}))
+
 (defn- render-overview
   "Creates the HTML for the overview page."
   [{:keys [video] :as job}]
@@ -52,6 +65,9 @@
                       (list-item (str (txt :video-overview-word-count) (:word-count video)))
                       (list-item (str (txt :video-overview-index-size) (count (:index video))))
                       (list-item (str (txt :video-overview-mean-confidence) (format "%1.1f%%" (* 100 (:confidence video)))))])
+              (headline 4 (txt :video-overview-waveform-h))
+              (paragraph "explanation" (txt :video-overview-waveform-d))
+              (render-waveform job video)
               (headline 4 (txt :video-overview-hitlist-h))
               (paragraph "explanation" (txt :video-overview-hitlist-d))
               (render-hitlist job video)]))

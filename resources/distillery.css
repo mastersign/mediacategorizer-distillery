@@ -154,6 +154,11 @@ ul.main_statistic li, ul.video_statistic li, ul.word_statistic li {
   text-align: right;
 }
 
+.video_waveform {
+  text-align: center;
+  overflow: auto;
+}
+
 table.match_matrix {
   table-layout: fixed;
 }
