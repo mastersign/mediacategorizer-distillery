@@ -390,7 +390,7 @@ The following properties of a word are possible.
   _string_ the [IPA](http://en.wikipedia.org/wiki/International_Phonetic_Alphabet)
   pronunciation of the word
 * **occurrences**  
-  _vector_ a vector of _[Video Word Occurrences](#VideoWordOccurence)_
+  _vector_ a vector of _[Video Word Occurrences](#VideoWordOccurrence)_
 * **occurrence-count**  
   _integer number_ `[1..n]` the number of occurrences (cached for easy accessibility)
 * **mean-confidence**  
@@ -421,7 +421,7 @@ For computational reasons, an index map can be supported by some statistical val
 	{ :count 233
       :max-occurrence-count: 35 } 
 
-### Video Word Occurrence {#VideoWordOccurence}
+### Video Word Occurrence {#VideoWordOccurrence}
 A video word occurrence is the address to a recognized word in a video.
 #### Slots
 
@@ -500,7 +500,7 @@ a list of _[Video Word Occurrences](#VideoWordOccurrence)_.
   _string_ the [IPA](http://en.wikipedia.org/wiki/International_Phonetic_Alphabet)
   pronunciation of the word
 * **occurrences**  
-  _vector_ a vector of _[Video Word Occurrences](#VideoWordOccurence)_
+  _vector_ a vector of _[Video Word Occurrences](#VideoWordOccurrence)_
 * **occurrence-count**  
   _integer number_ `[1..n]` the number of occurrences (cached for easy accessibility)
 * **mean-confidence**  
