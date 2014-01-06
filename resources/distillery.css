@@ -154,15 +154,15 @@ ul.main_statistic li, ul.video_statistic li, ul.word_statistic li {
   text-align: right;
 }
 
-table.match-matrix {
+table.match_matrix {
   table-layout: fixed;
 }
 
-table.match-matrix thead td {
+table.match_matrix thead td {
   width: 16em;
 }
 
-table.match-matrix thead th {
+table.match_matrix thead th {
   vertical-align: bottom;
   text-align: left;
   overflow: hidden;
@@ -170,7 +170,7 @@ table.match-matrix thead th {
   height: 14em;
 }
 
-table.match-matrix thead th a {
+table.match_matrix thead th a {
   transform:rotate(-90deg);
   transform-origin: top left;
   -moz-transform:rotate(-90deg);
@@ -189,19 +189,19 @@ table.match-matrix thead th a {
   left: 0.9em;
 }
 
-table.match-matrix tbody th {
+table.match_matrix tbody th {
   text-align: left;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-table.match-matrix tbody td {
+table.match_matrix tbody td {
   padding: 0.4em 0.5em;
   overflow: hidden;
 }
 
-table.match-matrix tbody td a {
+table.match_matrix tbody td a {
   color: #000;
 }
 
