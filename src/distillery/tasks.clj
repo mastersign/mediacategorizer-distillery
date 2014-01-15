@@ -352,10 +352,12 @@
 (defn save-result-as-txt
   "**TASK** - Writes a text file with all recognized phrases for each video."
   [{:keys [output-dir] :as job}]
-  (doall (map
-          (fn [video]
-            (tr/save-result video (.toString (get-path output-dir "videos" (:id video) "transcript.txt"))))
-          (:videos job)))
+  (doseq [video (:videos job)]
+    (let [dir (combine-path output-dir "videos" (:id video))
+          path (combine-path dir "transcript.txt")]
+      (when (not (file-exists? dir))
+        (create-dir dir))
+      (tr/save-result video path)))
   nil)
 
 
