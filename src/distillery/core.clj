@@ -72,7 +72,7 @@
   [job-descr]
   (let [job (prepare-and-analyze job-descr)]
     (generate-xml-result-file! job)
-    (generate-txt-result-file! job)
+    (generate-txt-result-files! job)
     (when (get-in job [:configuration :visualize-result])
       (generate-website! job)))
   nil)
