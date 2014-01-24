@@ -7,6 +7,6 @@
   :dependencies [[org.clojure/clojure "1.5.1"]
                  [org.clojure/data.xml "0.0.7"]
                  [enlive "1.1.1"]]
-  :global-vars {*warn-on-reflection* true}
+  :global-vars {*warn-on-reflection* false}
   :profiles {:uberjar {:main distillery.core
                        :aot [distillery.core]}})
