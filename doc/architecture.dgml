@@ -1,0 +1,159 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DirectedGraph GraphDirection="TopToBottom" Layout="Sugiyama" xmlns="http://schemas.microsoft.com/vs/2009/dgml">
+  <Nodes>
+    <Node Id="Base" Bounds="356.348876953125,421.141566772461,50,25.96" Label="base" UseManualLocation="True" />
+    <Node Id="Blacklist" Bounds="36.4651414301985,226.593997980246,62.5593671049089,25.9599997286816" Label="blacklist" UseManualLocation="True" />
+    <Node Id="Category" Bounds="381.534610595703,286.669719238281,66.0700000000001,25.96" Label="category" UseManualLocation="True" />
+    <Node Id="Cloud" Bounds="481.617370605469,363.885249633789,49.9999999999999,25.96" Label="cloud" UseManualLocation="True" />
+    <Node Id="Config" Bounds="476.178382925361,188.735265447126,53.0933333333334,25.96" Label="config" UseManualLocation="True" />
+    <Node Id="Core" Bounds="119.706326924561,102.579119079109,50.0040636801758,25.9600000002856" Label="core" UseManualLocation="True" />
+    <Node Id="Data" Bounds="392.742559052477,188.775121404157,50,25.96" Label="data" UseManualLocation="True" />
+    <Node Id="Defaults" Bounds="438.68078145345,420.383555908203,62.0633333333333,25.96" Label="defaults" UseManualLocation="True" />
+    <Node Id="Dependencies" Bounds="232.198046366374,420.340404052734,93.4166666666667,25.96" Label="dependencies" UseManualLocation="True" />
+    <Node Id="Distillery" Bounds="16.4651437180534,62.5790201780798,655.125559508672,424.522746594381" Group="Expanded" Label="distillery" />
+    <Node Id="Drawing" Bounds="213.73676522705,619.379402331993,62.7833333333334,25.96" Label="drawing" />
+    <Node Id="Enlive" Bounds="278.603819783529,759.299615287714,138.883333333333,25.96" Label="net.cgrand.enlive-html" UseManualLocation="True" />
+    <Node Id="Files" Bounds="431.718443151041,675.339363270211,50.0437628857422,25.9599999985645" Label="files" />
+    <Node Id="Geom" Bounds="281.773431893717,675.339424304649,50.71,25.9599999999999" Label="geom" />
+    <Node Id="Glossary" Bounds="388.340701090495,364.423472900391,63.2766666666667,25.96" Label="glossary" UseManualLocation="True" />
+    <Node Id="Hitlist" Bounds="308.340698242187,364.380260009766,50.0000000000001,25.96" Label="hitlist" UseManualLocation="True" />
+    <Node Id="Html" Bounds="538.743957519531,420.059657592773,50,25.96" Label="html" UseManualLocation="True" />
+    <Node Id="Html1" Bounds="431.718443490397,563.418983630821,50,25.96" Label="html" />
+    <Node Id="Imaging" Bounds="338.538447152506,619.379280261681,63.1800000000001,25.9599999999999" Label="imaging" />
+    <Node Id="Index" Bounds="301.534484863281,288.908519287109,50,25.96" Label="index" UseManualLocation="True" />
+    <Node Id="Mastersign" Bounds="193.73676522705,523.418705033807,308.025444811198,197.880810253906" Group="Expanded" Label="mastersign" UseManualLocation="True" />
+    <Node Id="Match#" Bounds="225.497148946126,363.537059326172,52.8433333333333,25.96" Label="match" UseManualLocation="True" />
+    <Node Id="Processing" Bounds="88.68933161514,308.815021404157,77.0266666666667,25.96" Label="processing" UseManualLocation="True" />
+    <Node Id="Tasks" Bounds="119.559616088867,167.04227673306,50,25.96" Label="tasks" UseManualLocation="True" />
+    <Node Id="Text" Bounds="565.083303071032,188.695378972516,50,25.96" Label="text" UseManualLocation="True" />
+    <Node Id="Trace" Bounds="431.718443490397,619.379158191368,50,25.96" Label="trace" />
+    <Node Id="Transcript" Bounds="561.617367757161,363.099559326172,69.9733333333334,25.96" Label="transcript" UseManualLocation="True" />
+    <Node Id="Txtresult" Bounds="254.418130900065,133.051604092854,62.9466666666667,25.96" Label="txtresult" UseManualLocation="True" />
+    <Node Id="Video" Bounds="477.604629516602,287.575099487305,50.0000000000001,25.96" Label="video" UseManualLocation="True" />
+    <Node Id="View" Bounds="205.497148946126,246.669619238281,446.093554280599,220.43204753418" Group="Expanded" Label="view" UseManualLocation="True" />
+    <Node Id="Word" Bounds="571.605041503906,287.943004150391,50,25.96" Label="word" UseManualLocation="True" />
+    <Node Id="Wordcloud" Bounds="268.988431893717,563.418831042931,76.28,25.96" Label="wordcloud" />
+    <Node Id="Xmlresult" Bounds="253.831026407878,189.01170998885,68.0566666666667,25.96" Label="xmlresult" UseManualLocation="True" />
+  </Nodes>
+  <Links>
+    <Link Source="Base" Target="Defaults" Bounds="406.348876953125,433.706957457621,23.3322356260239,0.200151350362717" />
+    <Link Source="Base" Target="Files" Bounds="458.237426893941,411.519077758789,48.8077602305365,362.739064354309" />
+    <Link Source="Base" Target="Html1" Bounds="458.920612104838,411.519077758789,46.9637485143244,250.892088651044" />
+    <Link Source="Blacklist" Target="Processing" Bounds="77.1312661404339,252.553989732505,35.4111190962758,48.9681259778383" />
+    <Link Source="Category" Target="Cloud" Bounds="430.042921593687,312.629719238281,54.2059365786811,45.471396321249" />
+    <Link Source="Category" Target="Files" Bounds="416.94454679861,361.629719238281,37.4728012876453,353.759657855752" />
+    <Link Source="Category" Target="Glossary" Bounds="415.472644966898,312.629719238281,2.97872326892536,42.8154556060745" />
+    <Link Source="Category" Target="Hitlist" Bounds="353.411616228889,312.629719238281,47.590320382289,45.52898007917" />
+    <Link Source="Category" Target="Html1" Bounds="417.499559645813,361.629719238281,35.9653099603257,241.887071194219" />
+    <Link Source="Cloud" Target="Drawing" Bounds="316.743519235076,372.262821655273,327.454283739116,348.39682221506" />
+    <Link Source="Cloud" Target="Html1" Bounds="519.516316682899,372.262821655273,131.032335979444,290.789305307809" />
+    <Link Source="Cloud" Target="Wordcloud" Bounds="378.264920741129,372.262821655273,266.308503324804,292.341391611276" />
+    <Link Source="Core" Target="Tasks" Bounds="144.610332823138,128.539120178365,0.068075808280696,29.503173982732" />
+    <Link Source="Core" Target="Trace" Bounds="151.903463013888,128.842797130618,293.256510835438,529.036047127202" />
+    <Link Source="Dependencies" Target="Files" Bounds="360.476532657161,410.717934597935,141.225400717843,364.069008271844" />
+    <Link Source="Distillery" Target="Blacklist" Category="Contains" />
+    <Link Source="Distillery" Target="Config" Category="Contains" />
+    <Link Source="Distillery" Target="Core" Category="Contains" />
+    <Link Source="Distillery" Target="Data" Category="Contains" />
+    <Link Source="Distillery" Target="Processing" Category="Contains" />
+    <Link Source="Distillery" Target="Tasks" Category="Contains" />
+    <Link Source="Distillery" Target="Text" Category="Contains" />
+    <Link Source="Distillery" Target="Txtresult" Category="Contains" />
+    <Link Source="Distillery" Target="View" Category="Contains" />
+    <Link Source="Distillery" Target="Xmlresult" Category="Contains" />
+    <Link Source="Drawing" Target="Geom" Bounds="259.509393947767,645.339389680984,26.5570164889172,23.9698919100235" />
+    <Link Source="Glossary" Target="Html1" Bounds="513.445255579421,372.954639892578,45.9930635298448,289.414415701499" />
+    <Link Source="Html1" Target="Enlive" Bounds="359.612874831278,589.378986816406,89.9043735996995,162.050679581421" />
+    <Link Source="Index" Target="Cloud" Bounds="351.505426064075,312.285062659911,121.832363766743,50.7243777447831" />
+    <Link Source="Index" Target="Files" Bounds="331.874438814156,363.868519287109,117.672020643156,351.93526135005" />
+    <Link Source="Index" Target="Glossary" Bounds="342.596339979614,314.868519287109,54.3208516008635,43.8980832956348" />
+    <Link Source="Index" Target="Hitlist" Bounds="327.70505081038,314.868519287109,3.65672147362972,40.5481167851804" />
+    <Link Source="Index" Target="Html1" Bounds="333.642842727407,363.868519287109,113.135007950116,240.407067800794" />
+    <Link Source="Index" Target="Match#" Bounds="271.259989201403,314.868519287109,42.29673425365,42.3040302054177" />
+    <Link Source="Mastersign" Target="Drawing" Category="Contains" />
+    <Link Source="Mastersign" Target="Files" Category="Contains" />
+    <Link Source="Mastersign" Target="Geom" Category="Contains" />
+    <Link Source="Mastersign" Target="Html1" Category="Contains" />
+    <Link Source="Mastersign" Target="Imaging" Category="Contains" />
+    <Link Source="Mastersign" Target="Trace" Category="Contains" />
+    <Link Source="Mastersign" Target="Wordcloud" Category="Contains" />
+    <Link Source="Match#" Target="Html1" Bounds="412.397120409642,371.914722900391,90.833992188817,290.752255042027" />
+    <Link Source="Tasks" Target="Base" Bounds="154.778715521901,193.305965881348,211.783755942539,269.001507436953" />
+    <Link Source="Tasks" Target="Blacklist" Bounds="91.6003438250638,193.002270202637,36.2165826410305,28.0774029306004" />
+    <Link Source="Tasks" Target="Category" Bounds="165.420453092665,193.002270202637,221.646798518851,137.912752218474" />
+    <Link Source="Tasks" Target="Cloud" Bounds="163.850751371109,193.305965881348,317.742548286936,213.792408607543" />
+    <Link Source="Tasks" Target="Dependencies" Bounds="150.423308310119,193.305965881348,120.648338052563,267.069854424909" />
+    <Link Source="Tasks" Target="Files" Bounds="151.869075411986,193.305965881348,293.145672875274,520.562556779867" />
+    <Link Source="Tasks" Target="Html1" Bounds="153.717427856854,193.305965881348,288.65477376847,409.130375076304" />
+    <Link Source="Tasks" Target="Index" Bounds="158.459457686711,193.002270202637,148.597296991557,138.763661540547" />
+    <Link Source="Tasks" Target="Match#" Bounds="150.352852397423,193.305965881348,93.838773325477,210.249886745656" />
+    <Link Source="Tasks" Target="Processing" Bounds="129.885467754927,193.002270202637,13.0850334820092,106.879458328708" />
+    <Link Source="Tasks" Target="Trace" Bounds="152.689202234156,193.305965881348,291.122448075805,464.816942522179" />
+    <Link Source="Tasks" Target="Txtresult" Bounds="169.559616088867,155.705532088675,76.1080280051665,18.3041744744255" />
+    <Link Source="Tasks" Target="Video" Bounds="169.094340276824,191.607004850791,301.837185410671,142.520603579671" />
+    <Link Source="Tasks" Target="Word" Bounds="169.559616088867,189.397750254781,394.618516017313,147.989521005081" />
+    <Link Source="Tasks" Target="Xmlresult" Bounds="169.559616088867,183.855048216567,75.3753509265285,11.5558795129393" />
+    <Link Source="Transcript" Target="Html1" Bounds="471.024818457809,438.059562158202,117.45030911538,166.997724198376" />
+    <Link Source="Transcript" Target="Processing" Bounds="174.506596757879,332.181396301935,388.110761082033,85.2162539617605" />
+    <Link Source="Video" Target="Cloud" Bounds="503.287177906177,313.535099487305,2.17503496642075,41.3625675414845" />
+    <Link Source="Video" Target="Files" Bounds="459.388920981005,362.535099487305,42.6469751371118,352.869224187056" />
+    <Link Source="Video" Target="Glossary" Bounds="440.525013481095,313.535099487305,48.1238198889571,44.7589786780522" />
+    <Link Source="Video" Target="Hitlist" Bounds="366.267305613381,311.776979897825,111.606438873424,50.6425107137357" />
+    <Link Source="Video" Target="Html1" Bounds="460.432835228364,362.535099487305,40.9655361838471,241.011085062148" />
+    <Link Source="Video" Target="Transcript" Bounds="518.759823556085,313.535099487305,54.6730457731417,43.927428689558" />
+    <Link Source="View" Target="Base" Category="Contains" />
+    <Link Source="View" Target="Category" Category="Contains" />
+    <Link Source="View" Target="Cloud" Category="Contains" />
+    <Link Source="View" Target="Defaults" Category="Contains" />
+    <Link Source="View" Target="Dependencies" Category="Contains" />
+    <Link Source="View" Target="Glossary" Category="Contains" />
+    <Link Source="View" Target="Hitlist" Category="Contains" />
+    <Link Source="View" Target="Html" Category="Contains" />
+    <Link Source="View" Target="Index" Category="Contains" />
+    <Link Source="View" Target="Match#" Category="Contains" />
+    <Link Source="View" Target="Transcript" Category="Contains" />
+    <Link Source="View" Target="Video" Category="Contains" />
+    <Link Source="View" Target="Word" Category="Contains" />
+    <Link Source="Word" Target="Files" Bounds="464.535661564443,362.903004150391,128.349603312307,352.978113711608" />
+    <Link Source="Word" Target="Html1" Bounds="467.454827812714,362.903004150391,123.511854831818,241.503044604651" />
+    <Link Source="Word" Target="Transcript" Bounds="596.60433046211,313.903004150391,0.00053748180380353,40.1965551765858" />
+    <Link Source="Wordcloud" Target="Drawing" Bounds="266.190309644737,589.378818391922,26.5572839762324,23.9703352128359" />
+    <Link Source="Wordcloud" Target="Geom" Bounds="307.128433227539,589.378818391922,0,76.9606712890627" />
+    <Link Source="Wordcloud" Target="Imaging" Bounds="321.741253139782,589.378818391922,27.045594536222,24.0235504980152" />
+  </Links>
+  <Categories>
+    <Category Id="Contains" Label="Enthält" Description="Gibt an, ob die Quelle der Verknüpfung das Zielobjekt enthält" CanBeDataDriven="False" CanLinkedNodesBeDataDriven="True" IncomingActionLabel="Enthalten in" IsContainment="True" OutgoingActionLabel="Enthält" />
+  </Categories>
+  <Properties>
+    <Property Id="Bounds" DataType="System.Windows.Rect" />
+    <Property Id="CanBeDataDriven" Label="CanBeDataDriven" Description="CanBeDataDriven" DataType="System.Boolean" />
+    <Property Id="CanLinkedNodesBeDataDriven" Label="CanLinkedNodesBeDataDriven" Description="CanLinkedNodesBeDataDriven" DataType="System.Boolean" />
+    <Property Id="Expression" DataType="System.String" />
+    <Property Id="GraphDirection" DataType="Microsoft.VisualStudio.Diagrams.Layout.LayoutOrientation" />
+    <Property Id="Group" Label="Gruppe" Description="Knoten als Gruppe anzeigen" DataType="Microsoft.VisualStudio.GraphModel.GraphGroupStyle" />
+    <Property Id="GroupLabel" DataType="System.String" />
+    <Property Id="IncomingActionLabel" Label="IncomingActionLabel" Description="IncomingActionLabel" DataType="System.String" />
+    <Property Id="IsContainment" DataType="System.Boolean" />
+    <Property Id="IsEnabled" DataType="System.Boolean" />
+    <Property Id="Label" Label="Bezeichnung" Description="Anzeigbare Bezeichnung eines Objekts, das Anmerkungen einblenden werden kann" DataType="System.String" />
+    <Property Id="Layout" DataType="System.String" />
+    <Property Id="OutgoingActionLabel" Label="OutgoingActionLabel" Description="OutgoingActionLabel" DataType="System.String" />
+    <Property Id="TargetType" DataType="System.Type" />
+    <Property Id="ToolTip" DataType="System.String" />
+    <Property Id="UseManualLocation" DataType="System.Boolean" />
+    <Property Id="Value" DataType="System.String" />
+    <Property Id="ValueLabel" DataType="System.String" />
+  </Properties>
+  <Styles>
+    <Style TargetType="Node" GroupLabel="Zirkelverweise" ToolTip="Der Knoten ist Teil einer stark gekoppelten Komponente." ValueLabel="Knoten">
+      <Condition Expression="IsStronglyConnected" />
+      <Setter Property="Stroke" Value="#D02030" />
+      <Setter Property="StrokeThickness" Value="2" />
+    </Style>
+    <Style TargetType="Link" GroupLabel="Zirkelverweise" ToolTip="Der Knoten ist Teil einer stark gekoppelten Komponente." ValueLabel="Links">
+      <Condition Expression="IsCircularLink" />
+      <Setter Property="Stroke" Value="#D02030" />
+      <Setter Property="StrokeThickness" Value="2" />
+    </Style>
+  </Styles>
+</DirectedGraph>
