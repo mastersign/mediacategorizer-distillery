@@ -115,7 +115,6 @@
   [{:keys [job-name medium categories configuration] :as args}]
   [:base-path "../../"
    :title (build-title args (txt :medium-title))
-   ;   :js-code "videojs.options.flash.swf = 'video-js.swf';"
    :secondary-menu [[(txt :medium-menu-overview) (jshref "innerpage('overview')")]
                     (when-not (cfg/value :skip-wordclouds configuration)
                       [(txt :medium-menu-wordcloud) (jshref "innerpage('cloud')")])
