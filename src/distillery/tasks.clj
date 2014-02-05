@@ -138,7 +138,8 @@
 
 (defn- load-category-resource
   "Loads a single resource for a category.
-  The resource is defined by an URL and can have on the following formats:
+  The resource is defined by an absolute path to a local file or an URL. If both are given, the local file takes precedence.
+  The resource can have one of the following types:
 
   * `:plain` A plain text file, which can be simply tokenized to extract the words
   * `:html` A HTML file, where the text is extracted by taking the page body
@@ -149,14 +150,15 @@
 
   The preprocessing functions to extract the words from the resources
   reside in [distillery.data](#distillery.data)."
-  [{:keys [id]} {:keys [type url] :as resource}]
-  (trace-message "Loading category resource " url)
-  (assoc resource :words
-    (-> (case type
-          :plain (load-text url)
-          :html (load-text-from-html url)
-          :wikipedia (load-text-from-wikipedia url))
-        words-from-text)))
+  [{:keys [id]} {:keys [type url file] :as resource}]
+  (trace-message "Loading category resource " file)
+  (let [url (if file (str "file:///" file) url)]
+    (assoc resource :words
+      (-> (case type
+            :plain (load-text url)
+            :html (load-text-from-html url)
+            :wikipedia (load-text-from-wikipedia url))
+          words-from-text))))
 
 
 (defn- load-category-resources
