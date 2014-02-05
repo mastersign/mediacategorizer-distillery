@@ -41,7 +41,7 @@ function scroll_to_page() {
   //window.location.hash = "#main-menu";
 }
 
-function video_jump(pos) {
+function medium_jump(pos) {
   var player = $("#main_video")[0];
   if (player.paused) {
     player.play();
@@ -78,13 +78,13 @@ function word(word_id, with_history) {
   });
 }
 
-function match(video_id, with_history) {
+function match(medium_id, with_history) {
   with_history = typeof with_history !== 'undefined' ? with_history : true;
-  $("#match .innerpage").load("matches/" + video_id + ".inc.html", function(text, status) {
+  $("#match .innerpage").load("matches/" + medium_id + ".inc.html", function(text, status) {
     innerpage("match", false);
     if (with_history) {
       var title = $("#match h3:first").innerText;
-      add_history_entry({ match: video_id }, title);
+      add_history_entry({ match: medium_id }, title);
     }
   });
 }

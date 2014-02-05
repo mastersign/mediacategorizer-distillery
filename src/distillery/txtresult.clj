@@ -5,8 +5,8 @@
   (:require [mastersign.files :refer :all]))
 
 (defn save-result
-  [video file]
+  [medium file]
   (with-open [w (writer file)]
-    (doseq [result (:results video)]
+    (doseq [result (:results medium)]
         (.write w (str/join " " (map :text (:words result))))
         (.write w (format "%n")))))

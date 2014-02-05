@@ -3,8 +3,8 @@
  :DEBUG "DEBUG"
 
  :project "Projekt"
- :video "Video"
- :videos "Videos"
+ :medium "Medium"
+ :media "Medien"
  :category "Kategorie"
  :categories "Kategorien"
  :word "Wort"
@@ -26,7 +26,7 @@
  :frame-top-menu-title "Hauptmenü"
  :frame-top-menu-project :project
  :frame-top-menu-categories :categories
- :frame-top-menu-videos :videos
+ :frame-top-menu-media :media
  :frame-menu-title "Ansichten"
 
  :copyright-holder "Tobias Kiertscher von der Fachhochschule Brandenburg"
@@ -41,26 +41,26 @@
  :main-menu-glossary :glossary
 
  :main-overview-h :overview
- :main-overview-d "Ein Projekt enhält Videos und Kategorien. Aus den Videos wurden mit Hilfe von Spracherkennung Worte und Phrasen extrahiert. Die Kategorien sind jeweils durch eine Gruppe von Texten definiert. Die Worte aus den Videos und Kategorien wurden nach Häufigkeit untersucht miteinander abgeglichen."
+ :main-overview-d "Ein Projekt enhält Medien und Kategorien. Aus den Medien wurden mit Hilfe von Spracherkennung Worte und Phrasen extrahiert. Die Kategorien sind jeweils durch eine Gruppe von Texten definiert. Die Worte aus den Medien und Kategorien wurden nach Häufigkeit untersucht miteinander abgeglichen."
  :main-overview-description-h "Beschreibung"
  :main-overview-content-h :content
  :main-overview-hitlist-h :hitlist
- :main-overview-hitlist-d "Das folgende Diagramm zeigt die häufigsten Worte in allen Videos. Die Balkenlänge beschreibt die Worthäufigkeit und die Farbintensität beschreibt die Sicherheit mit der das Wort durch die Spracherkennung erkannt wurde."
- :main-overview-videos "Videos: "
+ :main-overview-hitlist-d "Das folgende Diagramm zeigt die häufigsten Worte in allen Medien. Die Balkenlänge beschreibt die Worthäufigkeit und die Farbintensität beschreibt die Sicherheit mit der das Wort durch die Spracherkennung erkannt wurde."
+ :main-overview-media "Medien: "
  :main-overview-categories "Kategorien: "
  :main-overview-words "Wörter: "
  :main-wordcloud-h "Globale Wortwolke"
- :main-wordcloud-d "Die globale Wortwolke zeigt die häufigsten Worte aus allen Videos an. Die Größe eines Wortes beschreibt die Häufigkeit, die Intensität der Farbe beschreibt die Erkennungssicherheit der Spracherkennung."
+ :main-wordcloud-d "Die globale Wortwolke zeigt die häufigsten Worte aus allen Medien an. Die Größe eines Wortes beschreibt die Häufigkeit, die Intensität der Farbe beschreibt die Erkennungssicherheit der Spracherkennung."
  :main-glossary-h "Globaler Glossar"
- :main-glossary-d "Der globale Glossar enthält die Worte aus allen Videos. Jedes Wort ist mit einer Detail-Seite verknüpft, die weitere Informationen über das Wort im Kontext des gesamten Projektes enthält."
+ :main-glossary-d "Der globale Glossar enthält die Worte aus allen Medien. Jedes Wort ist mit einer Detail-Seite verknüpft, die weitere Informationen über das Wort im Kontext des gesamten Projektes enthält."
  :main-matching-matrix-h "Übereinstimmungsmatrix"
- :main-matching-matrix-d "Die Übereinstimmungsmatrix zeigt die Übereinstimmung zwischen Videos und Kategorien. Eine hohe Übereinstimmung bedeutet, dass häufige Worte eines Videos auch häufig in einer Kategorie vorkommen. Die Prozentangabe beschreibt die Übereinstimmung relativ zur besten Übereinstimmung im ganzen Projekt. Die Hintergrundfarbe beschreibt die Übereinstimmung relativ zur besten Übereinstimmung für das jeweilige Video."
+ :main-matching-matrix-d "Die Übereinstimmungsmatrix zeigt die Übereinstimmung zwischen Medien und Kategorien. Eine hohe Übereinstimmung bedeutet, dass häufige Worte eines Medien auch häufig in einer Kategorie vorkommen. Die Prozentangabe beschreibt die Übereinstimmung relativ zur besten Übereinstimmung im ganzen Projekt. Die Hintergrundfarbe beschreibt die Übereinstimmung relativ zur besten Übereinstimmung für das jeweilige Medium."
  :main-word-h :word
  :main-word-occurrences "Vorkommen: "
  :main-word-mean-confidence "Mittlere Erkennungssicherheit: "
  :main-word-category-list-empty "Dieses Wort kommt in keiner Kategorie vor."
- :main-word-videos-h :videos
- :main-word-videos-d "Dieses Wort wurde in den folgenden Videos mindestens einmal erkannt."
+ :main-word-media-h :media
+ :main-word-media-d "Dieses Wort wurde in den folgenden Medien mindestens einmal erkannt."
  :main-word-categories-h :categories
  :main-word-categories-d "Dieses Wort tritt in den folgenden Kategorien mindestens einmal auf."
 
@@ -70,17 +70,17 @@
  :categories-overview-h :overview
  :categories-overview-d "Die folgenden Kategorien sind im Projekt enthalten."
 
- :videos-title nil
- :videos-h :videos
- :videos-menu-overview :overview
- :videos-overview-h :overview
- :videos-overview-d "Die folgenden Videos sind im Projekt enthalten."
+ :media-title nil
+ :media-h :media
+ :media-menu-overview :overview
+ :media-overview-h :overview
+ :media-overview-d "Die folgenden Medien sind im Projekt enthalten."
 
  :category-title :category
 
  :category-menu-overview :overview
  :category-menu-wordcloud :wordcloud
- :category-menu-videos :videos
+ :category-menu-media :media
  :category-menu-glossary :glossary
 
  :category-overview-h :overview
@@ -91,53 +91,53 @@
  :category-overview-hitlist-d "Das folgende Diagramm zeigt die häufigsten Worte in der Kategorie. Die Balkenlänge beschreibt die Häufigkeit des Wortes."
  :category-wordcloud-h :wordcloud
  :category-wordcloud-d "Die Wortwolke zeigt die häufigsten Worte dieser Kategorie an. Die Größe eines Worte beschreibt seine Häufigkeit."
- :category-videos-h :videos
- :category-videos-d "Das folgende Diagramm zeigt Videos, die mit dieser Kategorie übereinstimmen. Die Balkenlänge beschreibt den Grad der Übereinstimmung eines Videos mit dieser Kategorie."
+ :category-media-h :media
+ :category-media-d "Das folgende Diagramm zeigt Medien, die mit dieser Kategorie übereinstimmen. Die Balkenlänge beschreibt den Grad der Übereinstimmung eines Medien mit dieser Kategorie."
  :category-glossary-h :glossary
  :category-glossary-d "In diesem Glossar sind alle Worte dieser Kategorie aufgeführt. Jedes Wort ist mit einer Detail-Seite verknüpft, die weitere Informationen über das Wort im Kontext dieser Kategorie enthält."
  :category-word-h :word
  :category-word-occurrences "Vorkommen: "
- :category-word-video-list-empty "Das Wort wurde in keinem Video erkannt."
- :category-word-videos-h :videos
- :category-word-videos-d "Das Wort wurde auch in den folgenden Videos erkannt. Die Zahl vor dem Namen eines Videos gibt den Übereinstimmungsfaktor des Wortes an. Der Übereinstimmungsfaktor eines Wortes wird bei der Berechnung der Übereinstimmung zwischen einer Kategorie und einem Video verwendet."
+ :category-word-medium-list-empty "Das Wort wurde in keinem Medium erkannt."
+ :category-word-media-h :media
+ :category-word-media-d "Das Wort wurde auch in den folgenden Medien erkannt. Die Zahl vor dem Namen eines Medien gibt den Übereinstimmungsfaktor des Wortes an. Der Übereinstimmungsfaktor eines Wortes wird bei der Berechnung der Übereinstimmung zwischen einer Kategorie und einem Medium verwendet."
  :category-match-h :match
 
- :video-title :video
+ :medium-title :medium
 
- :video-menu-overview :overview
- :video-menu-wordcloud :wordcloud
- :video-menu-transcript :transcript
- :video-menu-categories :categories
- :video-menu-glossary :glossary
+ :medium-menu-overview :overview
+ :medium-menu-wordcloud :wordcloud
+ :medium-menu-transcript :transcript
+ :medium-menu-categories :categories
+ :medium-menu-glossary :glossary
 
- :video-overview-h :overview
- :video-overview-duration "Länge: "
- :video-overview-phrase-count "Erkannte Phrasen: "
- :video-overview-word-count "Erkannte Worte: "
- :video-overview-index-size "Worte im Glossar: "
- :video-overview-mean-confidence "Mittlere Erkennungssicherheit: "
- :video-overview-hitlist-h :hitlist
- :video-overview-hitlist-d "Das folgende Diagramm zeigt die häufigsten erkannten Worte im Video. Die Balkenlänge beschreibt die Worthäufigkeit und die Farbintensität beschreibt die Sicherheit mit der das Wort durch die Spracherkennung erkannt wurde."
- :video-overview-waveform-h :waveform
- :video-overview-waveform-d "Die Wellenform stellt die Tonspur visuell dar. Die Vertikale stellt die Amplitude des Signals dar und die Horizontale repräsentiert die Zeit."
- :video-overview-waveform :waveform
- :video-wordcloud-h :wordcloud
- :video-wordcloud-d "Die Wortwokle zeigt die häufigsten Worte in diesem Video an. Die Größe eines Wortes beschreibt die Häufigkeit, die Intensität der Farbe beschreibt die Erkennungssicherheit der Spracherkennung."
- :video-transcript-h :transcript
- :video-transcript-d "Das Transkript führt alle im Video erkannten Phrasen auf. Links steht der Anfangszeitpunkt der Phrase im Video. Ein Klick auf die Zeit spielt das Video von dieser Stelle ab. Die Farbe der Worte beschreibt die Sicherheit, mit der die Spracherkennung das Wort erkannt hat. Worte mit blasser Farbe wurden nicht sicher erkannt, Worte mit einer kräftigen Farbe wurden sicher erkannt. Relevante Worte sind mit einer Detail-Seite verknüpft, die weitere Informationen über das Wort im Kontext dieses Videos enthält."
- :video-categories-h :categories
- :video-categories-d "Das folgende Diagramm zeigt Kategorien, die mit diesem Video übereinstimmen. Die Balkenlänge beschreibt den Grad der Übereinstimmung einer Kategorie mit diesem Video."
- :video-glossary-h :glossary
- :video-glossary-d "In diesem Glossar sind alle Worte aus diesem Video aufgeführt. Jedes Wort ist mit einer Detail-Seite verknüpft, welche weitere Informationen über das Wort im Kontext dieses Videos enthält."
- :video-word-h :word
- :video-word-occurrences "Vorkommen: "
- :video-word-mean-confidence "Mittlere Erkennungssicherheit: "
- :video-word-category-list-empty "Das Wort kommt in keiner Kategorie vor."
- :video-word-phrases-h :phrases
- :video-word-phrases-d "Das Wort ist Teil der folgenden erkannten Phrasen im aktuellen Video. Links steht der Anfangszeitpunkt der Phrase im Video. Ein Klick auf die Zeit spielt das Video von dieser Stelle ab. Die Farbe der Worte beschreibt die Sicherheit, mit der die Spracherkennung das Wort erkannt hat. Worte mit blasser Farbe wurden nicht sicher erkannt, Worte mit einer kräftigen Farbe wurden sicher erkannt. Das aktuelle Wort ist farblich hervorgehoben. Relevante Worte sind mit einer Detail-Seite verknüpft, die weitere Informationen über das Wort im Kontext des aktuellen Videos enthält."
- :video-word-categories-h :categories
- :video-word-categories-d "Das Wort kommt auch in den folgenden Kategorien vor. Die Zahl vor dem Namen einer Kategorie gibt den Übereinstimmungsfaktor des Wortes an. Der Übereinstimmungsfaktor eines Wortes wird bei der Berechnung der Übereinstimmung zwischen einer Kategorie und einem Video verwendet."
+ :medium-overview-h :overview
+ :medium-overview-duration "Länge: "
+ :medium-overview-phrase-count "Erkannte Phrasen: "
+ :medium-overview-word-count "Erkannte Worte: "
+ :medium-overview-index-size "Worte im Glossar: "
+ :medium-overview-mean-confidence "Mittlere Erkennungssicherheit: "
+ :medium-overview-hitlist-h :hitlist
+ :medium-overview-hitlist-d "Das folgende Diagramm zeigt die häufigsten erkannten Worte im Medium. Die Balkenlänge beschreibt die Worthäufigkeit und die Farbintensität beschreibt die Sicherheit mit der das Wort durch die Spracherkennung erkannt wurde."
+ :medium-overview-waveform-h :waveform
+ :medium-overview-waveform-d "Die Wellenform stellt die Tonspur visuell dar. Die Vertikale stellt die Amplitude des Signals dar und die Horizontale repräsentiert die Zeit."
+ :medium-overview-waveform :waveform
+ :medium-wordcloud-h :wordcloud
+ :medium-wordcloud-d "Die Wortwokle zeigt die häufigsten Worte in diesem Medium an. Die Größe eines Wortes beschreibt die Häufigkeit, die Intensität der Farbe beschreibt die Erkennungssicherheit der Spracherkennung."
+ :medium-transcript-h :transcript
+ :medium-transcript-d "Das Transkript führt alle im Medium erkannten Phrasen auf. Links steht der Anfangszeitpunkt der Phrase im Medium. Ein Klick auf die Zeit spielt das Medium von dieser Stelle ab. Die Farbe der Worte beschreibt die Sicherheit, mit der die Spracherkennung das Wort erkannt hat. Worte mit blasser Farbe wurden nicht sicher erkannt, Worte mit einer kräftigen Farbe wurden sicher erkannt. Relevante Worte sind mit einer Detail-Seite verknüpft, die weitere Informationen über das Wort im Kontext dieses Medien enthält."
+ :medium-categories-h :categories
+ :medium-categories-d "Das folgende Diagramm zeigt Kategorien, die mit diesem Medium übereinstimmen. Die Balkenlänge beschreibt den Grad der Übereinstimmung einer Kategorie mit diesem Medium."
+ :medium-glossary-h :glossary
+ :medium-glossary-d "In diesem Glossar sind alle Worte aus diesem Medium aufgeführt. Jedes Wort ist mit einer Detail-Seite verknüpft, welche weitere Informationen über das Wort im Kontext dieses Medien enthält."
+ :medium-word-h :word
+ :medium-word-occurrences "Vorkommen: "
+ :medium-word-mean-confidence "Mittlere Erkennungssicherheit: "
+ :medium-word-category-list-empty "Das Wort kommt in keiner Kategorie vor."
+ :medium-word-phrases-h :phrases
+ :medium-word-phrases-d "Das Wort ist Teil der folgenden erkannten Phrasen im aktuellen Medium. Links steht der Anfangszeitpunkt der Phrase im Medium. Ein Klick auf die Zeit spielt das Medium von dieser Stelle ab. Die Farbe der Worte beschreibt die Sicherheit, mit der die Spracherkennung das Wort erkannt hat. Worte mit blasser Farbe wurden nicht sicher erkannt, Worte mit einer kräftigen Farbe wurden sicher erkannt. Das aktuelle Wort ist farblich hervorgehoben. Relevante Worte sind mit einer Detail-Seite verknüpft, die weitere Informationen über das Wort im Kontext des aktuellen Medien enthält."
+ :medium-word-categories-h :categories
+ :medium-word-categories-d "Das Wort kommt auch in den folgenden Kategorien vor. Die Zahl vor dem Namen einer Kategorie gibt den Übereinstimmungsfaktor des Wortes an. Der Übereinstimmungsfaktor eines Wortes wird bei der Berechnung der Übereinstimmung zwischen einer Kategorie und einem Medium verwendet."
 
  :match-normalized "Übereinstimmungswert (normalisiert): "
- :match-d "Die folgenden Worte führten zu einer Übereinstimmung zwischen der Kategorie und dem Video. Die Zahl vor dem Wort gibt den Übereinstimmungsfaktor des Wortes an. Der Übereinstimmungsfaktor eines Wortes wird bei der Berechnung der Übereinstimmung zwischen einer Kategorie und einem Video verwendet."
+ :match-d "Die folgenden Worte führten zu einer Übereinstimmung zwischen der Kategorie und dem Medium. Die Zahl vor dem Wort gibt den Übereinstimmungsfaktor des Wortes an. Der Übereinstimmungsfaktor eines Wortes wird bei der Berechnung der Übereinstimmung zwischen einer Kategorie und einem Medium verwendet."
 }

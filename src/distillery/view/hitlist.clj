@@ -36,7 +36,7 @@
          [(olist (map item-gen hitlist))])))
 
 (defn render-category-matchlist
-  [{:keys [matches max-score] :as video} categories config]
+  [{:keys [matches max-score] :as medium} categories config]
   (let [matchlist (->> matches
                        (filter #(>= (:score (second %)) (cfg/value [:min-match-score] config)))
                        (sort-by #(:score (second %)))
@@ -51,7 +51,7 @@
                       (bar
                        [(span "hitlist_text"
                               (link
-                               (str "../../categories/" category-id "/index.html?match=" (:id video))
+                               (str "../../categories/" category-id "/index.html?match=" (:id medium))
                                (:name category)))
                         (span "hitlist_stats"
                               (strong (stats-str-fn score rel-score)))]
@@ -60,29 +60,29 @@
     (div "hitlist"
          [(olist (map item-gen matchlist))])))
 
-(defn render-video-matchlist
-  [{:keys [matches] :as category} videos config]
-  (let [rel-score-fn (fn [match] (let [video (first (filter #(= (:id %) (:video-id match)) videos))
-                                       max-score (:max-score video)]
+(defn render-medium-matchlist
+  [{:keys [matches] :as category} media config]
+  (let [rel-score-fn (fn [match] (let [medium (first (filter #(= (:id %) (:medium-id match)) media))
+                                       max-score (:max-score medium)]
                                    (/ (:score match) max-score)))
         matchlist (->> matches
                        (filter #(>= (:score (second %)) (cfg/value [:min-match-score] config)))
                        (sort-by #(rel-score-fn (second %)))
                        reverse)
-        color (or (cfg/value [:video-cloud :color] config) [0 0 0])
+        color (or (cfg/value [:medium-cloud :color] config) [0 0 0])
         stats-str-fn (fn [score rel-score]
                        (format "%1.3f | %05.1f%%" score (* rel-score 100)))
-        item-gen (fn [[video-id {:keys [score] :as m}]]
-                   (let [video (first (filter #(= (:id %) video-id) videos))
+        item-gen (fn [[medium-id {:keys [score] :as m}]]
+                   (let [medium (first (filter #(= (:id %) medium-id) media))
                          rel-score (rel-score-fn m)]
                      (list-item
                       (bar
                        [(span "hitlist_text"
                               (link
-                               (str "../../videos/" video-id "/index.html?match=" (:id category))
+                               (str "../../media/" medium-id "/index.html?match=" (:id category))
                                {:tag :span
-                                :attrs {:title (:name video)}
-                                :content (:name video)}))
+                                :attrs {:title (:name medium)}
+                                :content (:name medium)}))
                         (span "hitlist_stats"
                               (strong (stats-str-fn score rel-score)))]
                        color

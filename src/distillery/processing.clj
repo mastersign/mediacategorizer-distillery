@@ -194,17 +194,17 @@
       compute-index-entry-stats)]
     res))
 
-(defn add-video-word-index
+(defn add-medium-word-index
   "Builds an index of words for a sequence of recognition results."
-  [video & {:keys [predicate]}]
-  (let [ws (words (:results video) :predicate predicate)
+  [medium & {:keys [predicate]}]
+  (let [ws (words (:results medium) :predicate predicate)
         add-occurrence (fn [props word]
                          (let [props (or props {:id (:id word)
                                                 :lexical-form (:lexical-form word)
                                                 :pronunciation (:pronunciation word)})]
                            (assoc props :occurrences
                              (conj (:occurrences props [])
-                                   {:video-id (:id video)
+                                   {:medium-id (:id medium)
                                     :result-no (:result-no word)
                                     :word-no (:no word)
                                     :confidence (:confidence word)}))))
@@ -215,7 +215,7 @@
         index-stats {:count (count index)
                      :max-occurrence-count (safe-max (map :occurrence-count (vals index)))}
         index (map-values (partial compute-index-entry-match-value index-stats) index)]
-    (assoc video
+    (assoc medium
       :index index
       :index-stats index-stats)))
 
@@ -265,10 +265,10 @@
 
 (defn- compute-matching-score
   "Builds a [Category Match](data-structures.html#CategoryMatch) between
-  the given `video` and `category`."
-  [video category]
+  the given `medium` and `category`."
+  [medium category]
   (let [cwidx (:index category)
-        mwidx (:index video)
+        mwidx (:index medium)
         word-scores (->> (keys mwidx)
                          (map (fn [wid] [wid
                                          (* (:match-value (get mwidx wid) 0.0)
@@ -281,36 +281,36 @@
      :word-scores word-scores
      :score score}))
 
-(defn match-video
+(defn match-medium
   "Builds the matches between all categories in the
   [Analysis Results](data-structures.html#AnalysisResults) `job`
-  and the given `video`."
-  [{:keys [categories configuration] :as job} video]
+  and the given `medium`."
+  [{:keys [categories configuration] :as job} medium]
   (let [matches (if (not (empty? categories))
                   (->> categories
-                       (map #(compute-matching-score video %))
+                       (map #(compute-matching-score medium %))
                        (filter #(>= (:score %) 0.0))
                        (map #(vector (:category-id %) %))
                        (apply concat)
                        (apply sorted-map))
                   {})]
-  (assoc video
+  (assoc medium
     :matches matches
     :max-score (safe-max (map :score (vals matches))))))
 
 (defn- lookup-matching-score
-  [category video]
-  (-> video
+  [category medium]
+  (-> medium
       (get-in [:matches (:id category)] {:word-scores {} :score 0.0})
       (dissoc :category-id)
-      (assoc :video-id (:id video))))
+      (assoc :medium-id (:id medium))))
 
 (defn lookup-category-match
-  [{:keys [videos] :as job} category]
-  (let [matches (->> videos
+  [{:keys [media] :as job} category]
+  (let [matches (->> media
                   (map #(lookup-matching-score category %))
                   (filter #(>= (:score %) 0.0))
-                  (map #(vector (:video-id %) %))
+                  (map #(vector (:medium-id %) %))
                   (apply concat)
                   (apply sorted-map))]
   (assoc category

@@ -8,7 +8,7 @@
 (def main-menu
   [[(txt :frame-top-menu-project) "index.html"]
    [(txt :frame-top-menu-categories) "categories.html"]
-   [(txt :frame-top-menu-videos) "videos.html"]])
+   [(txt :frame-top-menu-media) "media.html"]])
 
 (def copyright
   {:tag :p
