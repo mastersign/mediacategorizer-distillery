@@ -42,7 +42,8 @@ function scroll_to_page() {
 }
 
 function medium_jump(pos) {
-  var player = $("#main_video")[0];
+  var player = $("#main_video")[0] || $("#main_audio")[0];
+  if (!player) return;
   if (player.paused) {
     player.play();
   }

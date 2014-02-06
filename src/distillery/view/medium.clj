@@ -16,23 +16,44 @@
   [{:keys [medium]}]
   (headline 2 (:name medium)))
 
+(defn- render-media-source
+  "Creates the source element for an audio or video player."
+  [{:keys [id] :as medium} {:keys [ext mime-type] :as emf}]
+  {:tag :source
+   :attrs {:src (str (:id medium) ext)
+           :type mime-type}})
+
 (defn- render-video
   "Creates the HTML for the video display box."
   [{:keys [medium]}]
-  {:tag :figure
-   :attrs {:class "video-box"}
-   :content
-   [{:tag :video
-     :attrs {:id "main_video"
-             :class "video-js vjs-default-skin"
-             :controls "controls"
-             :preload "auto"
-             :width "540"
-             :height "360" }
-     :content [{:tag :source
-                :attrs
-                {:src (str (:id medium) ".mp4")
-                 :type "video/mp4" }}]}]})
+  (let [sources (map
+                 (partial render-media-source medium)
+                 (:encoded-media-files medium))]
+    {:tag :figure
+     :attrs {:class "video-box"}
+     :content
+     [{:tag :video
+       :attrs {:id "main_video"
+               :controls "controls"
+               :preload "auto"
+               :width "540"
+               :height "360" }
+       :content (vec sources)}]}))
+
+(defn- render-audio
+  "Creates the HTML for the audio player."
+  [{:keys [medium]}]
+  (let [sources (map
+                 (partial render-media-source medium)
+                 (:encoded-media-files medium))]
+    {:tag :figure
+     :attrs {:class "audio-box"}
+     :content
+     [{:tag :audio
+       :attrs {:id "main_audio"
+               :controls "controls"
+               :preload "auto" }
+       :content (vec sources)}]}))
 
 (defn- render-hitlist
   [{:keys [configuration] :as job} {:keys [id index] :as medium}]
@@ -124,7 +145,11 @@
                     [(txt :medium-menu-glossary) (jshref "innerpage('glossary')")]]
    :page
    [(render-headline args)
-    (render-video args)
+    (when (not (cfg/value :skip-media-copy configuration))
+      (case (:medium-type medium)
+        :video (render-video args)
+        :audio (render-audio args)
+        nil))
     (render-overview args)
     (render-medium-transcript args)
     (render-medium-glossary args)

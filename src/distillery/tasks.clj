@@ -571,7 +571,7 @@
   nil)
 
 
-;; #### Medium Pages
+;; #### Media Pages
 
 (defn- create-medium-word-include
   "Creates the include file for a word in the context of a medium."
@@ -613,7 +613,7 @@
 
 (defn- create-medium-page
   "Create the main page for a certain medium."
-  [{:keys [output-dir configuration] :as job} {:keys [id index medium-file] :as medium}]
+  [{:keys [output-dir configuration] :as job} {:keys [id index encoded-media-files] :as medium}]
   (trace-message "Creating medium page for '" id "'")
   (let [medium-path (combine-path "media" id)]
 
@@ -624,14 +624,18 @@
           medium* (assoc medium* :cloud cloud)
           pindex (proc/partition-index index)
           medium* (assoc medium* :pindex pindex)
+          encoded-media-files* (map #(assoc % :ext (file-name-ext (:path %))) encoded-media-files)
+          medium* (assoc medium* :encoded-media-files encoded-media-files*)
           args (assoc job :medium medium*)]
 
       (if (cfg/value :skip-media-copy configuration)
         (trace-message "Skipping copy mediafile for medium '" id "'")
-        (let [medium-target-file (combine-path output-dir medium-path (str id ".mp4"))]
-          (trace-message "Copy mediafile for medium '" id "'")
-          (when (not (file-exists? medium-target-file))
-            (copy-file (get-path medium-file) (get-path medium-target-file)))))
+        (do
+          (trace-message "Copy media files for medium '" id "'")
+          (doseq [{:keys [path ext]} encoded-media-files*]
+            (let [medium-target-file (combine-path output-dir medium-path (str id ext))]
+              (when (not (file-exists? medium-target-file))
+                (copy-file (get-path path) (get-path medium-target-file)))))))
 
       (create-page
        (combine-path medium-path "index.html")
