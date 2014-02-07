@@ -47,12 +47,13 @@
                  (partial render-media-source medium)
                  (:encoded-media-files medium))]
     {:tag :figure
-     :attrs {:class "audio-box"}
+     :attrs {:class "audio_box"}
      :content
      [{:tag :audio
        :attrs {:id "main_audio"
                :controls "controls"
-               :preload "auto" }
+               :preload "auto"
+               :style (str "width: " 540 "px;")}
        :content (vec sources)}]}))
 
 (defn- render-hitlist
@@ -65,16 +66,39 @@
 
 (defn- render-waveform
   "Creates the HTML for the waveform."
-  [{:keys [output-dir] :as job} {:keys [id waveform-file] :as medium}]
+  [{:keys [output-dir configuration] :as job} {:keys [id] :as medium}]
   (copy-file
-   (get-path waveform-file)
+   (get-path (:waveform-file medium))
    (get-path output-dir "media" id "waveform.png"))
-  (div "medium_waveform"
-       {:tag :img
-        :attrs { :class "waveform_img"
-                 :alt (txt :medium-overview-waveform)
-                 :src "waveform.png" }
-        :content []}))
+  (copy-file
+   (get-path (:waveform-file-bg medium))
+   (get-path output-dir "media" id "waveform2.png"))
+  {:tag :figure
+   :attrs {:class "waveform_box"}
+   :content [{:tag :div
+              :attrs {:id "main_waveform"
+                      :class "waveform"
+                      :style (str
+                              "width: "
+                              (cfg/value [:waveform :width] configuration)
+                              "px; height: "
+                              (cfg/value [:waveform :height] configuration)
+                              "px;")
+                      :data-duration (:duration medium)}
+              :content [{:tag :div
+                         :attrs {:class "waveform_bg"
+                                 :style (str "background-image: url('waveform2.png'); width: "
+                                             (cfg/value [:waveform :width] configuration)
+                                             "px; height: "
+                                             (cfg/value [:waveform :height] configuration)
+                                             "px;")}}
+                        {:tag :div
+                         :attrs {:class "waveform_img"
+                                 :style (str "background-image: url('waveform.png'); width: "
+                                             0
+                                             "px; height: "
+                                             (cfg/value [:waveform :height] configuration)
+                                             "px;") }}]}]})
 
 (defn- render-overview
   "Creates the HTML for the overview page."

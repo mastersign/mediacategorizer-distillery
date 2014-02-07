@@ -1,5 +1,11 @@
 $(function() {
   $(window).on("popstate", history_handler);
+  $("#main_waveform")
+    .on("mousedown", waveform_mousedown_handler)
+    .on("mouseup", waveform_mouseup_handler)
+    .on("mousemove", waveform_mousemove_handler);
+  $("#main_video").on("timeupdate", medium_timeupdate_handler);
+  $("#main_audio").on("timeupdate", medium_timeupdate_handler);
   $.each($("figure.wordcloud"), register_cloud_handler);
   var request = parse_request();
   if (request.innerpage || request.word || request.match) {
@@ -7,6 +13,7 @@ $(function() {
   }
 });
 
+var distillery = {"waveform_down": false};
 
 function parse_request() {
   return { innerpage: get_query_variable("innerpage"),
@@ -49,6 +56,38 @@ function medium_jump(pos) {
   }
   player.currentTime = pos;
   scroll_to_page();
+}
+
+function medium_timeupdate_handler(ea) {
+  var player = $("#main_video, #main_audio");
+  var waveform = $("#main_waveform");
+  var waveformImg = $(".waveform_img");
+  if (!player || !waveform) return;
+  var p = player.prop("currentTime");
+  var w = waveform.width();
+  var d = waveform.attr("data-duration");
+  waveformImg.css("width", (p / d * w) + "px")
+}
+
+function waveform_mouse_jump(ea) {
+    var waveform = $("#main_waveform")
+    var x = ea.clientX - waveform.prop("offsetLeft");
+    var w = waveform.width();
+    var d = waveform.attr("data-duration");
+    medium_jump(x / w * d);
+}
+
+function waveform_mousedown_handler(ea) {
+  distillery.waveform_down = true;
+  waveform_mouse_jump(ea);
+}
+function waveform_mouseup_handler(ea) {
+  distillery.waveform_down = false;
+}
+function waveform_mousemove_handler(ea) {
+  if (distillery.waveform_down) {
+    waveform_mouse_jump(ea);
+  }
 }
 
 function innerpage(page_id, with_history) {
