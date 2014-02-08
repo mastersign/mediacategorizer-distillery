@@ -2,7 +2,7 @@
 
 setLocal EnableExtensions EnableDelayedExpansion
 
-set LEIN_VERSION=2.3.3
+set LEIN_VERSION=2.3.4
 
 if "%LEIN_VERSION:~-9%" == "-SNAPSHOT" (
     set SNAPSHOT=YES
@@ -141,6 +141,11 @@ if NOT "x%HTTP_CLIENT%" == "x" (
     %HTTP_CLIENT% %1 %2
     goto EOF
 )
+powershell -? >nul 2>&1
+if NOT ERRORLEVEL 9009 (
+    powershell -Command "& {param($a,$f) (new-object System.Net.WebClient).DownloadFile($a, $f)}" ""%2"" ""%1""
+    goto EOF
+)
 wget >nul 2>&1
 if NOT ERRORLEVEL 9009 (
     wget --no-check-certificate -O %1 %2
@@ -152,11 +157,6 @@ if NOT ERRORLEVEL 9009 (
     set CURL_PROXY= 
     if NOT "x%HTTPS_PROXY%" == "x" set CURL_PROXY="-x %HTTPS_PROXY%"
     curl %CURL_PROXY% --insecure -f -L -o  %1 %2
-    goto EOF
-)
-powershell -? >nul 2>&1
-if NOT ERRORLEVEL 9009 (
-    powershell -Command "& {param($a,$f) (new-object System.Net.WebClient).DownloadFile($a, $f)}" ""%2"" ""%1""
     goto EOF
 )
 goto NO_HTTP_CLIENT
