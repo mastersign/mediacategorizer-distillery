@@ -119,7 +119,7 @@
  :medium-overview-hitlist-h :hitlist
  :medium-overview-hitlist-d "Das folgende Diagramm zeigt die häufigsten erkannten Worte im Medium. Die Balkenlänge beschreibt die Worthäufigkeit und die Farbintensität beschreibt die Sicherheit mit der das Wort durch die Spracherkennung erkannt wurde."
  :medium-overview-waveform-h :waveform
- :medium-overview-waveform-d "Die Wellenform stellt die Tonspur visuell dar. Die Vertikale stellt die Amplitude des Signals dar und die Horizontale repräsentiert die Zeit."
+ :medium-overview-waveform-d "Die Wellenform stellt die Tonspur visuell dar. Die Vertikale stellt die Amplitude des Signals dar und die Horizontale repräsentiert die Zeit. Durch Klicken und Ziehen auf der Wellenform kann der Player gestartet und die Abspielposition verändert werden."
  :medium-overview-waveform :waveform
  :medium-wordcloud-h :wordcloud
  :medium-wordcloud-d "Die Wortwokle zeigt die häufigsten Worte in diesem Medium an. Die Größe eines Wortes beschreibt die Häufigkeit, die Intensität der Farbe beschreibt die Erkennungssicherheit der Spracherkennung."
