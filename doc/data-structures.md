@@ -1,0 +1,361 @@
+Data Structures
+===============
+This document describes the most important data structures for the distillery
+system. 
+
+* [Configuration File](#Config)
+* [Job File](#Job)
+* [Speech Recognition Result File](#SpeechRecognitionResults)
+* [Analysis Results](#AnalysisResults)
+
+## Configuration File {#Config}
+File in [Clojure EDN syntax](http://edn-format.org/) with the extension `.cfg`. 
+The content is a map with the configuration structure.
+### Configuration
+The configuration structure controls the processing of the 
+speech recognition results and the creation of the output. 
+#### Slots
+* **blacklist-resource**  
+  _string_ the resource name for the blacklist
+* **blacklist-max-size**  
+  _integer number_ the maximum number of words to take from the blacklist
+* **min-confidence**  
+  _floating point number_ `[0..1]` the minimal recognition confidence for a word to be
+  used in the statistic analysis
+* **good-confidence**  
+  _floating point number_ the minimal recognition confidence of words, 
+  recognized "without a doubt"
+* **min-relative-appearance**  
+  _floating point number_ `[0..1]` the minimal relative appearance 
+  (`max-appearance / appearance`) for correction candidates
+* **parallel-proc**  
+  _boolean_ a flag to activate the parallel processing
+* **skip-wordclouds**  
+  _boolean_ a flag to suppress the time consuming generation of word clouds
+* **main-cloud**  
+  _Cloud Configuration_ the configuration map for the global word cloud
+* **category-cloud**  
+  _Cloud Configuration_ the configuration map for the category word clouds
+* **video-cloud**  
+  _Cloud Configuration_ the configuration map for the video word clouds
+#### Example
+	{ :blacklist-resource (resource "blacklist.txt"))
+      :blacklist-max-size 1000
+	  :min-confidence 0.4
+	  :good-confidence 0.7
+	  :parallel-proc true
+      :skip-wordclouds false
+	  :main-cloud { { :width 640
+                      :height 400
+                      :color [0.0 0.8 0.2]
+                      ... } } 
+      :category-cloud { ... }
+      :video-cloud { ... } }
+
+### Cloud Configuration
+A cloud configuration controls the creation of a word cloud.
+#### Slots
+* **width**  
+  _integer number_ the width of the word cloud image in pixels
+* **height**  
+  _integer number_ the height of the word cloud image in pixels
+* **precision**  
+  _floating point number_ `[0..1]` the precision for finding a place for a word
+  in the word cloud
+* **order-priority**  
+  _floating point number_ `[0..1]` the priority of building an alphabetic order
+  in the word cloud
+* **font-family**  
+  _string_ the family name of the font to be used for the words in the word cloud 
+* **font-style**  
+  _vector_ vector with a combination of the following styles: `:bold`, `:italic`
+* **min-font-size**  
+  _integer number_ `[10..]` the font size of the smallest words in pixels 
+* **max-font-size**  
+  _integer number_ `[10..]` the font size of the largest words in pixels
+* **color**  
+  _vector_ a vector with three _floating point numbers_ `[0..1]` 
+  for red, green, and blue
+* **background-color**  
+  _vector_ a vector with four _floating point numbers_ `[0..1]` 
+  for red, green, blue, and alpha
+#### Example
+	{ :width 540
+	  :height 300
+	  :precision :medium
+	  :order-priority 0.6
+	  :font-family "Segoe UI"
+	  :font-style [:bold]
+	  :min-font-size 13
+	  :max-font-size 70
+	  :color [0.0 0.3 0.8]
+	  :background-color [0.0 0.0 0.0 0.0] }
+
+## Job File {#Job}
+File in [Clojure EDN syntax](http://edn-format.org/) with file extension `.saj`.
+It is the input for the speech recognition result analysis and contains
+a job description structure. Part of a job is a name, 
+a number of categories, a number of videos, and additional parameters
+like the output directory.
+### Job Description
+A job description contains all information necessary to perform the analysis
+and create the analysis result representation.
+#### Slots
+* **job-name**  
+  _string_ short name for the job
+* **job-description**  
+  _string_ brief textual description of the job
+* **output-dir**  
+  _string_ file system path to the directory to save the analysis result 
+  representation
+* **configuration**
+  _Configuration_ a configuration map which overwrites the default configuration
+  individually for each existing slot, can be nil or empty
+* **categories**  
+  _vector_ of _category descriptions_
+* **videos**  
+  _vector_ of _video descriptions_
+#### Example
+	{ :job-name "Archive 001"
+	  :job-description "The first part of the video archive."
+	  :output-dir "C:\\Videos\\Result"
+	  :configuration { ... } 
+	  :categories [ ... ] 
+      :videos [ ... ] }
+
+### Category Description
+Defines a category and all associated resources.
+#### Slots
+* **id**  
+  _string_ a short identifier without white spaces and special chars
+* **name**  
+  _string_ the full name of the category
+* **resources**  
+  _vector_ a vector with _Category Resource Descriptions_
+#### Example
+	{ :id "comb"
+      :name "Combination"
+      :resources [ {:type :html, :url "http://en.wikipedia.org/wiki/Combination"}
+                   {:type :html, :url "http://mathworld.wolfram.com/Combination.html"}
+                   {:type :plain, :url "file://D:\\text\\combination.txt"} ] }
+
+### Category Resource Description
+The reference to a category resource.
+#### Slots
+* **type**  
+  _:plain_ | _:html_ the text type of the resource
+* **url**  
+  _string_ the URL to the resource
+
+### Video Description
+Defines a video and all associated resources.
+#### Slots
+* **id**  
+  _string_ a short identifier without white spaces and special chars
+* **name**  
+  _string_ the full name of the video
+* **video-file**  
+  _string_ the absolute path to the video file
+* **audio-file**  
+  _string_ the absolute path to the audio file `.wav` (PCM 16bit mono),
+  used for speech recognition  
+* **results-file**  
+  _string_ the absolute path to the speech recognition file `*.srr`
+#### Example
+	{ :id "C1-P3-Intro"
+      :name "Introduction"
+      :video-file "D:\\media\\c1\\p3_introduction.mp4"
+      :audio-file "D:\\media\\proc\\audio\\p3_introduction.wav"
+      :results-file "D:\\media\\proc\\transcript\\p3_introduction.srr" }
+
+## Speech Recognition Result File {#SpeechRecognitionResults}
+File in [Clojure EDN syntax](http://edn-format.org/) with file extension `.srr`.
+The content is a vector of speech recognition results.
+### Example
+	[ { :no 0
+	    :start 0.3
+	    :duration 2.712
+	    :confidence 0.5651
+	    :text "Hello and welcome"
+	    :words [ { :no 0 :confidence 0.9544 :text "Hello" :lexical-form "hello" :pronunciation "həˈləʊ̯" }
+	             { :no 1 :confidence 0.8234 :text "and" :lexical-form "and" :pronunciation "ænd" }
+	             { :no 2 :confidence 0.8602 :text "welcome" :lexical-form "welcome" :pronunciation "ˈwɛl.kəm" } ]
+	    :alternates [ { :no 0
+	                    :confidence 0.3521
+	                    :text "Hello and elcom"
+	                    :words [ ... ] }
+	                  ... ] }
+	  ... ]
+
+### Phrase
+A phrase is a sequence of recognized words.
+#### Slots
+* **confidence**  
+  _floating point number_ `[0..1]` describing the overall confidence of this phrase
+* **text**  
+  _string_ with the text of the words in this phrase
+* **words**  
+  _vector_ of the _recognized words_ in this phrase
+### Speech Recognition Result
+A speech recognition result describes the result yielded by the speech
+recognition engine, analyzing a section of an audio stream.
+The analyzed section is typically selected by an algorithm which considers
+among others values like length of silence, background noises, and
+maximal length of a section.
+A speech recognition of an audio section yields a number of alternative
+phrases. The phrase with the highest confidence is typically used as the
+recognized phrase for the audio section.
+A speech recognition result is a _phrase_ as well.
+#### Slots
+* **no**  
+  _integer number_ `[0..n]` identifying the result in the context of a video
+* **start**  
+  _floating point number_ with the begin of the audio section in seconds
+* **duration**  
+  _floating point number_ with the duration of the audio section in seconds
+* **confidence**  
+  _floating point number_ `[0..1]` describing the overall confidence of the
+  _recognized phrase_ for the audio section
+* **text**  
+  _string_ with the text of the words in the _recognized phrase_
+* **words**  
+  _vector_ of the _recognized words_ in the _recognized phrase_
+* **alternates** (optional)  
+  _vector_ with _alternate phrases_
+#### Example
+	{ :no 0
+	  :start 24.35
+	  :duration 4.267
+	  :confidence 0.7885
+	  :text "a brown fox jumped over the messy hill."
+	  :words [ ... ]
+	  :alternates [ ... ] }
+
+### Alternate Phrase
+An alternate sequence of recognized words for an audio section.
+An alternate sequence is a _phrase_ as well.
+#### Slots
+* **no**
+  _integer number_ `[0..n]` identifying the phrase in the context of a _speech
+  recognition result_
+* **confidence**
+  _floating point number_ `[0..1]` describing the overall confidence of this phrase
+* **text**
+  _string_ with the text of the words in this phrase
+* **words**
+  _vector_ of the _recognized words_ in this phrase
+#### Example
+	{ :no 4
+	  :confidence 0.48992
+	  :text "a brown fox run about the messy mill."
+	  :words [ ... ] }
+
+### Recognized Word
+A recognized word is a word in the context of a recognition result. Every word
+is recognized with a certain confidence. The confidence values of the words
+in a phrase can be combined to an overall confidence for a phrase.
+#### Slots
+* **no**  
+  _integer number_ `[0..n]` identifying the word in a phrase
+* **confidence**  
+  _floating point number_ `[0..1]` describing the confidence for the recognition
+  of this word
+* **text**  
+  _string_ the text representation of the word in the context of the phrase
+* **lexical-form**  
+  _string_ the lexical form of the word
+* **pronunciation**  
+  _string_ the [IPA](http://en.wikipedia.org/wiki/International_Phonetic_Alphabet)
+  pronunciation of the word in the context of the phrase
+#### Example
+	{ :no 2
+	  :confidence 0.6443
+	  :text "brown"
+	  :lexical-form "brown"
+	  :pronunciation "braʊn" }
+
+### Reverse Indexed Structures
+Reverse indexing adds numerical references pointing upwards in the hierarchy.
+#### Reverse Indexed Word
+For words in the recognized phrase of a result the reverse indexing adds
+one additional slot:
+
+* **result-no**  
+  _integer number_ `[0..n]` identifying the result containing this word
+#### Reverse Indexed Alternate Phrase
+The reverse indexing adds one additional slot:
+
+* **result-no**  
+  _integer number_ `[0..n]` identifying the result containing this phrase
+#### Reverse Indexed Phrase Word
+For words in an alternate phrase of a result the reverse indexing adds
+two additional slots:
+
+* **result-no**  
+  _integer number_ `[0..n]` identifying the result containing the phrase
+* **alt-no**  
+  _integer number_ `[0..n]` identifying the alternate phrase in the result
+
+## Analysis Results {#AnalysisResults}
+### Word Index
+A word index points from words to a number of occurrences 
+in video phrases. It is encoded as a map with the lexical form of a word
+as the key and a map with properties of the word as value.
+#### Value Slots
+The following properties of a word are possible.
+
+* **id**  
+  _string_ an identifier, that can be used ax HTML/XML ID or as a filename 
+* **lexical-form**  
+  _string_ the lexical form of the word
+* **pronunciation**  
+  _string_ the [IPA](http://en.wikipedia.org/wiki/International_Phonetic_Alphabet)
+  pronunciation of the word
+* **occurrences**  
+  _vector_ a vector of _occurrences_
+* **videos**  
+  _set_ a set of video ids
+* **categories**  
+  _set_ a set of category ids
+* **mean-confidence**  
+  _floating point number_ `[0..1]` mean recognition confidence  
+#### Example
+    { "Grammar" { :id "grammar"
+                  :lexical-form "Grammar"
+                  :pronunciation "..."
+                  :occurrences [ { :video-id "video1" :result-no 20 :word-no 3 :confidence 0.679 } ... ]
+                  :mean-confidence 0.7533
+                  :videos #{ "video1" "video4" }
+                  :categories #{ "Language" "Programming" } }
+      "Method"  { :id "method"
+                  :lexical-form "Method"
+                  :pronunciation "..."
+                  :occurrences [ ... ] 
+                  :mean-confidence 0.895
+                  :videos #{ "video2" "video4" } 
+                  :categories #{ "Programming" } }
+
+### Occurrence
+An occurrence is the address to a recognized word in video.
+#### Slots
+* **video-id** _(optional)_  
+  _string_ video id
+* **result-no**  
+  _int_ result number
+* **word-no**  
+  _int_ word number
+* **confidence**  
+  _floating point number_ `[0..1]` recognition confidence
+#### Example
+    { :video-id "video1" 
+      :result-no 20 
+      :word-no 3 
+      :confidence 0.679 }
+
+
+*[EDN]: Extensible Data Notation
+*[HTML]: Hyper Text Markup Language
+*[IPA]: International Phonetic Alphabet
+*[PCM]: Pulse Code Modulation
+*[URL]: Uniform Resource Locator
+*[XML]: eXtensible Markup Language

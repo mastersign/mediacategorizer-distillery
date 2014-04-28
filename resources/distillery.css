@@ -1,0 +1,211 @@
+#page {
+  margin-left: 8em;
+}
+
+#secondary-menu {
+  width: 7em;
+}
+
+@media screen and (max-width: 720px), screen and (max-device-height: 720px) and (orientation: landscape) {
+  #page {
+    margin-left: 0.5em;
+  }
+  #secondary-menu {
+    width: auto;
+  }
+}
+
+article.innerpage h3 {
+  margin-bottom: 0.75em;
+}
+
+figure {
+  padding: 0;
+  border: none;
+}
+
+video#main_video {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+div.transcript, div.glossary-part {
+  margin-top: 1em;
+  padding: 0.5em;
+  height: 15em;
+  overflow: auto;
+  box-shadow: inset 0 0 4px #BBB;
+  -moz-box-shadow: inset 0 0 4px #BBB;
+  -webkit-box-shadow: inset 0 0 4px #BBB;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+}
+
+div.transcript div.phrase {
+  margin-bottom: 0.25em;
+  border-bottom: 1px solid #F0F0F0;
+}
+
+div.transcript span.tc {
+  display: block;
+  padding: 0.33em;
+  float: left;
+  width: 3.5em;
+  text-align: right;
+}
+
+div.transcript span.tc a {
+  color: #888;
+}
+
+div.transcript span.pt {
+  display: block;
+  margin-left: 4.5em;
+  padding: 0.33em;
+}
+
+div.glossary-nav {
+  font-size: larger;
+}
+
+div.glossary-part {
+  display: none;
+  padding: 0em 0.5em;
+}
+
+ul.glossary {
+  padding-bottom: 1em;
+}
+
+ul.glossary li {
+  list-style: none;
+  margin-left: 0.75em;
+}
+
+span.pronunciation {
+  margin-left: 0.5em;
+  font-style: italic;
+  color: #888;
+}
+
+ul.main_statistic li, ul.video_statistic li, ul.word_statistic li {
+  list-style: none;
+  margin-left: 1em;
+  color: #444;
+}
+
+.bar {
+  margin-bottom: 0.5em;
+}
+
+.bar_text {
+  display: inline-block;
+  width: 45%;
+  vertical-align: top;
+  padding-right: 1em;
+}
+
+.bar_client {
+  display: inline-block;
+  background-color: #F8F8F8;
+  text-align: left;
+  width: 45%;
+  height: 1.2em;
+  vertical-align: top;
+}
+
+.bar_beam {
+  display: inline-block;
+  background-color: #0850ff;
+  width: 50%;
+  height: 1.2em;
+}
+
+.hitlist_text, .hitlist_stats {
+  display: inline-block;
+  width: auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: top;
+}
+
+.hitlist_text {
+  float: left;
+  text-align: left;
+}
+
+.hitlist_stats {
+  float: right;
+  text-align: right;
+}
+
+table.match-matrix {
+  table-layout: fixed;
+}
+
+table.match-matrix thead td {
+  width: 16em;
+}
+
+table.match-matrix thead th {
+  vertical-align: bottom;
+  text-align: left;
+  overflow: hidden;
+  width: 3em;
+  height: 14em;
+}
+
+table.match-matrix thead th a {
+  transform:rotate(-90deg);
+  transform-origin: top left;
+  -moz-transform:rotate(-90deg);
+  -moz-transform-origin: top left;
+  -webkit-transform: rotate(-90deg);
+  -webkit-transform-origin: top left;
+  -o-transform: rotate(-90deg);
+  -o-transform-origin:  top left;
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 13em;
+  top: 0.75em;
+  left: 0.9em;
+}
+
+table.match-matrix tbody th {
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+table.match-matrix tbody td {
+  padding: 0.4em 0.5em;
+  overflow: hidden;
+}
+
+table.match-matrix tbody td a {
+  color: #000;
+}
+
+.todo {
+  display: block;
+  font-weight: bold;
+  background-color: #F46;
+  color: #FFF;
+  padding: 0.5em;
+  margin: 1em 0;
+  border-radius: 6px;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+}
+.todo:before {
+  content: "\23E9  ";
+}
+
+
+
+
