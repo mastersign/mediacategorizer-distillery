@@ -17,6 +17,7 @@
   (:require [distillery.processing :as proc])
   (:require [distillery.blacklist :as bl])
   (:require [distillery.xmlresult :as xr])
+  (:require [distillery.txtresult :as tr])
   (:require [distillery.view.dependencies :refer (save-dependencies)])
   (:require [distillery.view.base :refer (render)])
   (:require [distillery.view.cloud :refer (build-cloud-word-data build-cloud-ui-data create-cloud)])
@@ -110,6 +111,7 @@
 ;;      + Speech Recognition Results
 ;;      + Similarity Matching
 ;;  * XML Result Generation
+;;  * Text Result Generation
 ;;  * Website Generation
 ;;      + Main Pages
 ;;      + Category Pages
@@ -341,6 +343,21 @@
   [{:keys [output-dir result-file] :as job}]
   (let [path (combine-path output-dir result-file)]
     (xr/save-result path job))
+  nil)
+
+
+;; ### Text Result Generation
+
+
+(defn save-result-as-txt
+  "**TASK** - Writes a text file with all recognized phrases for each video."
+  [{:keys [output-dir] :as job}]
+  (doseq [video (:videos job)]
+    (let [dir (combine-path output-dir "videos" (:id video))
+          path (combine-path dir "transcript.txt")]
+      (when (not (file-exists? dir))
+        (create-dir dir))
+      (tr/save-result video path)))
   nil)
 
 

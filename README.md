@@ -1,13 +1,6 @@
-# distillery
+MediaCategorizer - Distillery
+=============================
 
-A Clojure application to filter the most relevant words from speech recognition results.
+Die Komponente für Analyse und Visualisierung von [MediaCategorizer][mc] - einer Windows-Anwendung zur Verschriftlichung und Kategorisierung von Videos mit gesprochenem Inhalt.
 
-## Usage
-
-FIXME
-
-## License
-
-Copyright © 2013 Tobias Kiertscher <kiertscher@fh-brandenburg>.
-
-All rights reserved.
+[mc]: http://github.com/mastersign/mediacategorizer.git

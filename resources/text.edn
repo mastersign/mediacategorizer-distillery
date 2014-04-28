@@ -20,6 +20,7 @@
  :transcript "Transkript"
  :matrix "Matrix"
  :hitlist "Häufige Worte"
+ :waveform "Wellenform"
 
  :frame-title-prefix nil
  :frame-top-menu-title "Hauptmenü"
@@ -117,6 +118,9 @@
  :video-overview-mean-confidence "Mittlere Erkennungssicherheit: "
  :video-overview-hitlist-h :hitlist
  :video-overview-hitlist-d "Das folgende Diagramm zeigt die häufigsten erkannten Worte im Video. Die Balkenlänge beschreibt die Worthäufigkeit und die Farbintensität beschreibt die Sicherheit mit der das Wort durch die Spracherkennung erkannt wurde."
+ :video-overview-waveform-h :waveform
+ :video-overview-waveform-d "Die Wellenform stellt die Tonspur visuell dar. Die Vertikale stellt die Amplitude des Signals dar und die Horizontale repräsentiert die Zeit."
+ :video-overview-waveform :waveform
  :video-wordcloud-h :wordcloud
  :video-wordcloud-d "Die Wortwokle zeigt die häufigsten Worte in diesem Video an. Die Größe eines Wortes beschreibt die Häufigkeit, die Intensität der Farbe beschreibt die Erkennungssicherheit der Spracherkennung."
  :video-transcript-h :transcript

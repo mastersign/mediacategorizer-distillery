@@ -93,7 +93,7 @@
     {:tag :figure
      :content
      [{:tag :table
-       :attrs {:class "match-matrix"}
+       :attrs {:class "match_matrix"}
        :content
        [{:tag :thead
          :content

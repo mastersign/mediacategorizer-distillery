@@ -77,6 +77,23 @@
    [:Source {} (:video-file video)]
    (speech-recognition-tag job video)])
 
+(defn- occurrence-tag
+  [job word {:keys [video-id result-no word-no] :as occurrence}]
+  (let [video (first (filter #(= video-id (:id %)) (:videos job)))
+        phrase-start (get-in video [:results result-no :start])]
+    [:Occurrence {:video video-id
+                  :phrase result-no
+                  :no word-no
+                  :phrase-start (format-invariant "%.2f" (double phrase-start))}]))
+
+(defn- word-tag
+  [job {:keys [lexical-form pronunciation occurrence-count occurrences] :as word}]
+  [:Word {:lexical-form lexical-form
+          :pronunciation pronunciation}
+   (tag-list :OccurrenceList
+             (partial occurrence-tag job word)
+             occurrences)])
+
 (defn- job-result-tags
   [job]
   (xml/sexp-as-element
@@ -89,7 +106,10 @@
               (:categories job))
     (tag-list :MediaList
               (partial video-tag job)
-              (:videos job))]))
+              (:videos job))
+    (tag-list :Glossary
+              (partial word-tag job)
+              (map val (:words job)))]))
 
 (defn save-result
   [path job]
