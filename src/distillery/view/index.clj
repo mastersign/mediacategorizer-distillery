@@ -20,14 +20,14 @@
    :main-cloud))
 
 (defn- render-main-overview
-  [{:keys [job-description videos categories words] :as args}]
+  [{:keys [job-description media categories words] :as args}]
   (innerpage "overview" (txt :main-overview-h) true
              [(paragraph "explanation" (txt :main-overview-d))
               (headline 4 (txt :main-overview-description-h))
               (paragraph job-description)
               (headline 4 (txt :main-overview-content-h))
               (ulist "main_statistic"
-                     [(list-item (str (txt :main-overview-videos) (count videos)))
+                     [(list-item (str (txt :main-overview-media) (count media)))
                       (list-item (str (txt :main-overview-categories) (count categories)))
                       (list-item (str (txt :main-overview-words) (count words)))])
               (headline 4 (txt :main-overview-hitlist-h))
@@ -98,26 +98,26 @@
      [(headline 2 (txt :categories-h))
       (render-categories-list args)]])
 
-(defn- render-videos-list-item
-  "Renders a video link as list item."
-  [{:keys [id name] :as video}]
-  (list-item (link (str "videos/" id "/index.html") name)))
+(defn- render-media-list-item
+  "Renders a medium link as list item."
+  [{:keys [id name] :as medium}]
+  (list-item (link (str "media/" id "/index.html") name)))
 
-(defn- render-videos-list
-  [{:keys [videos] :as args}]
-  (let [videos-list (->> videos
+(defn- render-media-list
+  [{:keys [media] :as args}]
+  (let [media-list (->> media
                         (into (sorted-set-by (key-comp :name)))
-                        (map render-videos-list-item)
+                        (map render-media-list-item)
                         (ulist))]
-    (innerpage "overview" (txt :videos-overview-h) true
-               [(paragraph "explanation" (txt :videos-overview-d))
-                videos-list])))
+    (innerpage "overview" (txt :media-overview-h) true
+               [(paragraph "explanation" (txt :media-overview-d))
+                media-list])))
 
-(defn render-videos-page
-  "Renders the videos main page."
+(defn render-media-page
+  "Renders the media main page."
   [{:keys [job-name] :as args}]
-  [:title (build-title args (txt :videos-title))
-   :secondary-menu [[(txt :videos-menu-overview) (jshref "innerpage('overview')")]]
+  [:title (build-title args (txt :media-title))
+   :secondary-menu [[(txt :media-menu-overview) (jshref "innerpage('overview')")]]
    :page
-     [(headline 2 (txt :videos-h))
-      (render-videos-list args)]])
+     [(headline 2 (txt :media-h))
+      (render-media-list args)]])

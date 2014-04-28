@@ -11,7 +11,7 @@
   (:require [distillery.view.html :refer :all]))
 
 (defn- render-headline
-  "Creates the headline for the video page."
+  "Creates the headline for the medium page."
   [{:keys [category]}]
   (headline 2 (:name category)))
 
@@ -49,15 +49,15 @@
              [(paragraph "explanation" (txt :category-wordcloud-d))
               (cloud/render-cloud id cloud)]))
 
-(defn- render-videos
+(defn- render-media
   "Creates the HTML for the overview page."
-  [{:keys [videos category max-score configuration] :as args}]
-  (let [video-fn (fn [mid] (first (filter #(= mid (:id %)) videos)))]
-    (innerpage "videos" (txt :category-videos-h) false
-               [(paragraph "explanation" (txt :category-videos-d))
-                (hitlist/render-video-matchlist
+  [{:keys [media category max-score configuration] :as args}]
+  (let [medium-fn (fn [mid] (first (filter #(= mid (:id %)) media)))]
+    (innerpage "media" (txt :category-media-h) false
+               [(paragraph "explanation" (txt :category-media-d))
+                (hitlist/render-medium-matchlist
                  category
-                 videos
+                 media
                  configuration)])))
 
 (defn- render-category-word-frame
@@ -80,13 +80,13 @@
    :secondary-menu [[(txt :category-menu-overview) (jshref "innerpage('overview')")]
                     (when-not (cfg/value :skip-wordclouds configuration)
                       [(txt :category-menu-wordcloud) (jshref "innerpage('cloud')")])
-                    [(txt :category-menu-videos) (jshref "innerpage('videos')")]
+                    [(txt :category-menu-media) (jshref "innerpage('media')")]
                     [(txt :category-menu-glossary) (jshref "innerpage('glossary')")]]
    :page
      [(render-headline args)
       (render-overview args)
       (render-glossary args)
       (render-cloud args)
-      (render-videos args)
+      (render-media args)
       (render-category-word-frame args)
       (render-category-match-frame args)]])

@@ -17,8 +17,8 @@
   [:Resource {:type (name (:type resource))} (:url resource)])
 
 (defn- category-match-tag
-  [job category [video-id match]]
-  [:Match {:video-id video-id
+  [job category [medium-id match]]
+  [:Match {:medium-id medium-id
            :score (format-invariant "%.6f" (:score match))}])
 
 (defn- category-tag
@@ -34,8 +34,8 @@
              (partial category-resource-tag job category)
              (:resources category))])
 
-(defn- video-match-tag
-  [job video [category-id match]]
+(defn- medium-match-tag
+  [job medium [category-id match]]
   [:Match {:category-id category-id
            :score (format-invariant "%.6f" (:score match))}])
 
@@ -58,30 +58,30 @@
    ])
 
 (defn- speech-recognition-tag
-  [job video]
-  [:SpeechRecognition {:profile (:recognition-profile video)
-                       :profile-name (:recognition-profile-name video)}
+  [job medium]
+  [:SpeechRecognition {:profile (:recognition-profile medium)
+                       :profile-name (:recognition-profile-name medium)}
    (tag-list :PhraseList
              (partial recognized-phrase job)
-             (:results video))])
+             (:results medium))])
 
-(defn- video-tag
-  [job video]
-  [:Media {:id (:id video)}
-   [:Name {} (:name video)]
+(defn- medium-tag
+  [job medium]
+  [:Media {:id (:id medium)}
+   [:Name {} (:name medium)]
    (tag-list :MatchList
-             (partial video-match-tag job video)
+             (partial medium-match-tag job medium)
              (filter
               (fn [[id match]] (>= (:score match) (get-in job [:configuration :min-match-score])))
-              (:matches video)))
-   [:Source {} (:video-file video)]
-   (speech-recognition-tag job video)])
+              (:matches medium)))
+   [:Source {} (:medium-file medium)]
+   (speech-recognition-tag job medium)])
 
 (defn- occurrence-tag
-  [job word {:keys [video-id result-no word-no] :as occurrence}]
-  (let [video (first (filter #(= video-id (:id %)) (:videos job)))
-        phrase-start (get-in video [:results result-no :start])]
-    [:Occurrence {:video video-id
+  [job word {:keys [medium-id result-no word-no] :as occurrence}]
+  (let [medium (first (filter #(= medium-id (:id %)) (:media job)))
+        phrase-start (get-in medium [:results result-no :start])]
+    [:Occurrence {:medium medium-id
                   :phrase result-no
                   :no word-no
                   :phrase-start (format-invariant "%.2f" (double phrase-start))}]))
@@ -105,8 +105,8 @@
               (partial category-tag job)
               (:categories job))
     (tag-list :MediaList
-              (partial video-tag job)
-              (:videos job))
+              (partial medium-tag job)
+              (:media job))
     (tag-list :Glossary
               (partial word-tag job)
               (map val (:words job)))]))

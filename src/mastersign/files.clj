@@ -36,6 +36,14 @@
   ^String [path & parts]
   (.toString ^Path (.getFileName ^Path (apply get-path (cons path parts)))))
 
+(defn file-name-ext
+  "Returns the extension of the given file name or nil if the name has no extension.
+
+  Uses the same interface like `get-path`."
+  ^String [path & parts]
+  (let [n (apply file-name path parts)]
+    (re-find #"\.[^\.]+$" n)))
+
 (defn copy-file
   "Copies a file from a given `source` path to the `target` path.
 

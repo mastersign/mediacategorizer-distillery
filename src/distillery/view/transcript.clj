@@ -43,7 +43,7 @@
 (defn- render-result
   "Creates the HTML for a single phrase."
   [result & {:keys [index pivot]}]
-  (div "phrase" [(span "tc" (jslink (format "video_jump(%f)" (double (:start result))) (format-time (:start result))))
+  (div "phrase" [(span "tc" (jslink (format "medium_jump(%f)" (double (:start result))) (format-time (:start result))))
                  (span "pt" (render-phrase result :index index :pivot pivot))]))
 
 (defn render-transcript

@@ -23,7 +23,7 @@
   (:require [distillery.view.cloud :refer (build-cloud-word-data build-cloud-ui-data create-cloud)])
   (:require [distillery.view.index :as v-index])
   (:require [distillery.view.category :as v-category])
-  (:require [distillery.view.video :as v-video])
+  (:require [distillery.view.medium :as v-medium])
   (:require [distillery.view.word :as v-word])
   (:require [distillery.view.match :as v-match]))
 
@@ -91,7 +91,7 @@
    :not-in-blacklist bl/not-in-blacklist?})
 
 (defn- word-predicate
-  "Create the word predicate for the video index."
+  "Create the word predicate for the medium index."
   [{:keys [configuration] :as job}]
   (let [filters (map #(% filter-map) (cfg/value :index-filter configuration))]
     (partial multi-filter (filter #(not (nil? %)) filters))))
@@ -115,7 +115,7 @@
 ;;  * Website Generation
 ;;      + Main Pages
 ;;      + Category Pages
-;;      + Video Pages
+;;      + Medium Pages
 
 
 ;; ### Dependencies
@@ -127,7 +127,7 @@
   (trace-message "Preparing output directory " output-dir)
   (create-dir output-dir)
   (create-dir output-dir "categories")
-  (create-dir output-dir "videos")
+  (create-dir output-dir "media")
   (create-dir output-dir "words")
   (save-dependencies output-dir))
 
@@ -138,7 +138,8 @@
 
 (defn- load-category-resource
   "Loads a single resource for a category.
-  The resource is defined by an URL and can have on the following formats:
+  The resource is defined by an absolute path to a local file or an URL. If both are given, the local file takes precedence.
+  The resource can have one of the following types:
 
   * `:plain` A plain text file, which can be simply tokenized to extract the words
   * `:html` A HTML file, where the text is extracted by taking the page body
@@ -149,14 +150,15 @@
 
   The preprocessing functions to extract the words from the resources
   reside in [distillery.data](#distillery.data)."
-  [{:keys [id]} {:keys [type url] :as resource}]
-  (trace-message "Loading category resource " url)
-  (assoc resource :words
-    (-> (case type
-          :plain (load-text url)
-          :html (load-text-from-html url)
-          :wikipedia (load-text-from-wikipedia url))
-        words-from-text)))
+  [{:keys [id]} {:keys [type url file] :as resource}]
+  (trace-message "Loading category resource " file)
+  (let [url (if file (str "file:///" file) url)]
+    (assoc resource :words
+      (-> (case type
+            :plain (load-text url)
+            :html (load-text-from-html url)
+            :wikipedia (load-text-from-wikipedia url))
+          words-from-text))))
 
 
 (defn- load-category-resources
@@ -226,66 +228,66 @@
 
 (defn- load-speech-recognition-result
   "Loads the [Speech Recognition Result](data-structures.html#SpeechRecognitionResult)
-  for a video and extends the [Video Description](data-structures.html#VideoDescription)
+  for a medium and extends the [Medium Description](data-structures.html#MediumDescription)
   by the slot `:results`."
-  [{:keys [id results-file] :as video}]
+  [{:keys [id results-file] :as medium}]
   (trace-message "Loading results of " id)
   (let [results (-> results-file
                     load-data
                     proc/strip-alternates
                     proc/reverse-index-results)]
-    (assoc video :results results)))
+    (assoc medium :results results)))
 
 
 (defn load-speech-recognition-results
-  "**TASK** - Loads the speech recognition results for all videos."
+  "**TASK** - Loads the speech recognition results for all media."
   [job]
   (trace-block
    "Loading speech recognition results"
-   (update-in job [:videos]
+   (update-in job [:media]
               #(vec ((map-fn job) load-speech-recognition-result %)))))
 
 
-(defn- build-video-statistics
-  "Extends a [Video Description](data-structures.html#VideoDescription)
+(defn- build-medium-statistics
+  "Extends a [Medium Description](data-structures.html#MediumDescription)
   by the slots `:phrase-count`, `:word-count`, and `:confidence`."
-  [{:keys [id results] :as video}]
-  (trace-message "Building statistics for video '" id "'")
-  (assoc video
+  [{:keys [id results] :as medium}]
+  (trace-message "Building statistics for medium '" id "'")
+  (assoc medium
     :phrase-count (count results)
     :word-count (count (proc/words results))
     :confidence (mean (map :confidence results))))
 
 
-(defn- build-video-index
-  "Extends a [Video Description](data-structures.html#VideoDescription)
-  by the slot `:index`, which is a map, pointing to [Video Words](data-structures.html#VideoWord),
+(defn- build-medium-index
+  "Extends a [Medium Description](data-structures.html#MediumDescription)
+  by the slot `:index`, which is a map, pointing to [Medium Words](data-structures.html#MediumWord),
   and by the slot `:index-stats`, which holds the [Index Statistics](data-structures.html#IndexStatistics)."
-  [job video]
-  (trace-message "Building index for video '" (:id video) "'")
-  (proc/add-video-word-index video :predicate (word-predicate job)))
+  [job medium]
+  (trace-message "Building index for medium '" (:id medium) "'")
+  (proc/add-medium-word-index medium :predicate (word-predicate job)))
 
 
 (defn- build-global-index
-  "Merges the video indexes into one global [Word Index](data-structures.html#WordIndex)."
-  [{:keys [videos]}]
+  "Merges the medium indexes into one global [Word Index](data-structures.html#WordIndex)."
+  [{:keys [media]}]
   (trace-block
    "Merging indexes"
-   (apply (partial merge-with proc/merge-index-entries) (map :index videos))))
+   (apply (partial merge-with proc/merge-index-entries) (map :index media))))
 
 
 (defn analyze-speech-recognition-results
   "**TASK** - Analyzes the speech recognition results and generates the index structures including
-  the [Video Words](data-structures.html#VideoWord) and the [Word Index](data-structures.html#WordIndex)."
+  the [Medium Words](data-structures.html#MediumWord) and the [Word Index](data-structures.html#WordIndex)."
   [job]
   (trace-block
-   "Analyzing videos"
+   "Analyzing media"
    (let [job* (update-in
-               job [:videos]
-               (fn [videos]
+               job [:media]
+               (fn [media]
                  (vec ((map-fn job)
-                       (fn [video] (build-video-index job (build-video-statistics video)))
-                       videos))))
+                       (fn [medium] (build-medium-index job (build-medium-statistics medium)))
+                       media))))
          job* (assoc job*
                 :words (build-global-index job*))]
      job*)))
@@ -294,26 +296,26 @@
 ;; #### Similarity Matching
 
 
-(defn match-videos
-  "**TASK** - Matches the [Video Words](data-structures.html#VideoWord) of all videos against
+(defn match-media
+  "**TASK** - Matches the [Medium Words](data-structures.html#MediumWord) of all media against
   the [Category Words](data-structures.html#CategoryWords) of all categories
-  and completes the given [Video Results](data-structures.html#VideoResult)
+  and completes the given [Medium Results](data-structures.html#MediumResult)
   with the slots `:matches` and `:max-score`."
-  [{:keys [videos] :as job}]
+  [{:keys [media] :as job}]
   (trace-block
-   "Matching videos against categories"
+   "Matching media against categories"
    (assoc job
-     :videos (vec ((map-fn job)
-                   (partial proc/match-video job)
-                   videos)))))
+     :media (vec ((map-fn job)
+                   (partial proc/match-medium job)
+                   media)))))
 
 
 (defn lookup-categories-matches
-  "**TASK** - Looks up the matching scores from the [Video Results](data-structures.html#VideoResult)
+  "**TASK** - Looks up the matching scores from the [Medium Results](data-structures.html#MediumResult)
   and adds them to the [Category Results](data-structures.html#CategoryResult)."
   [{:keys [categories] :as job}]
   (trace-block
-   "Looking up category matching scores against videos"
+   "Looking up category matching scores against media"
    (assoc job
      :categories (vec (map
                        (partial proc/lookup-category-match job)
@@ -326,7 +328,7 @@
   Completes the given [Analysis Results](data-structures.html#AnalysisResults)
   by adding the slots `:max-score` and `:max-word-score`."
   [job]
-  (let [matches (mapcat #(vals (:matches %)) (:videos job))
+  (let [matches (mapcat #(vals (:matches %)) (:media job))
         scores (map :score matches)
         word-scores (mapcat #(vals (:word-scores %)) matches)]
         (assoc job
@@ -350,14 +352,14 @@
 
 
 (defn save-result-as-txt
-  "**TASK** - Writes a text file with all recognized phrases for each video."
+  "**TASK** - Writes a text file with all recognized phrases for each medium."
   [{:keys [output-dir] :as job}]
-  (doseq [video (:videos job)]
-    (let [dir (combine-path output-dir "videos" (:id video))
+  (doseq [medium (:media job)]
+    (let [dir (combine-path output-dir "media" (:id medium))
           path (combine-path dir "transcript.txt")]
       (when (not (file-exists? dir))
         (create-dir dir))
-      (tr/save-result video path)))
+      (tr/save-result medium path)))
   nil)
 
 
@@ -370,7 +372,7 @@
   [[(txt :frame-top-menu-project) "index.html"]
    (when (seq categories)
      [(txt :frame-top-menu-categories) "categories.html"])
-   [(txt :frame-top-menu-videos) "videos.html"]])
+   [(txt :frame-top-menu-media) "media.html"]])
 
 
 (defn- create-page
@@ -460,11 +462,11 @@
   (create-page "categories.html" v-index/render-categories-page job))
 
 
-(defn create-videos-page
-  "**TASK** - Creates the overview page for all videos."
+(defn create-media-page
+  "**TASK** - Creates the overview page for all media."
   [job]
-  (trace-message "Creating videos overview page")
-  (create-page "videos.html" v-index/render-videos-page job))
+  (trace-message "Creating media overview page")
+  (create-page "media.html" v-index/render-media-page job))
 
 
 ;; #### Category Pages
@@ -504,7 +506,7 @@
 
 
 (defn- create-category-match-includes
-  "Create includes for all video matches of a category."
+  "Create includes for all medium matches of a category."
   [{:keys [output-dir configuration] :as job} {:keys [id matches path] :as category}]
   (if (cfg/value :skip-match-includes configuration)
     (trace-message "Skipping match includes for category '" id "'")
@@ -514,7 +516,7 @@
        (create-dir (combine-path output-dir matches-path))
        ((map-fn  job)
         (fn [match]
-          (let [match-path (combine-path matches-path (:video-id match))]
+          (let [match-path (combine-path matches-path (:medium-id match))]
             (create-category-match-include job category (assoc match :path match-path))))
         (vals matches))))))
 
@@ -569,86 +571,90 @@
   nil)
 
 
-;; #### Video Pages
+;; #### Media Pages
 
-(defn- create-video-word-include
-  "Creates the include file for a word in the context of a video."
-  [{:keys [output-dir] :as job} video {:keys [path] :as word}]
+(defn- create-medium-word-include
+  "Creates the include file for a word in the context of a medium."
+  [{:keys [output-dir] :as job} medium {:keys [path] :as word}]
   (create-include
     (str path ".inc.html")
-    v-word/render-video-word-include
-    (assoc job :video video :word word)))
+    v-word/render-medium-word-include
+    (assoc job :medium medium :word word)))
 
 
-(defn- create-video-word-includes
-  "Create includes for all words of a video."
-  [{:keys [output-dir configuration] :as job} {:keys [id index path] :as video}]
+(defn- create-medium-word-includes
+  "Create includes for all words of a medium."
+  [{:keys [output-dir configuration] :as job} {:keys [id index path] :as medium}]
   (if (cfg/value :skip-word-includes configuration)
-    (trace-message "Skipping word includes for video '" id "'")
+    (trace-message "Skipping word includes for medium '" id "'")
     (trace-block
-     (str "Creating word includes for video '" id "'")
+     (str "Creating word includes for medium '" id "'")
      (let [words-path (combine-path path "words")]
        (create-dir (combine-path output-dir words-path))
        ((map-fn job)
         (fn [word]
           (let [word-path (combine-path words-path (:id word))]
-            (create-video-word-include job video (assoc word :path word-path))))
+            (create-medium-word-include job medium (assoc word :path word-path))))
         (vals index))))))
 
 
-(defn- create-video-cloud
-  "Creates the word cloud for a video."
-  [{:keys [output-dir configuration] :as job} {:keys [id index path] :as video}]
+(defn- create-medium-cloud
+  "Creates the word cloud for a medium."
+  [{:keys [output-dir configuration] :as job} {:keys [id index path] :as medium}]
   (if (cfg/value :skip-wordclouds configuration)
-    (do (trace-message "Skipping wordcloud for video '" id "'") [])
+    (do (trace-message "Skipping wordcloud for medium '" id "'") [])
     (trace-block
      (str "Creating wordcloud for " id)
-     (build-cloud-ui-data (create-cloud (build-cloud-word-data index configuration :video-cloud)
+     (build-cloud-ui-data (create-cloud (build-cloud-word-data index configuration :medium-cloud)
                                         (combine-path output-dir path "cloud.png")
                                         configuration
-                                        :video-cloud)))))
+                                        :medium-cloud)))))
 
 
-(defn- create-video-page
-  "Create the main page for a certain video."
-  [{:keys [output-dir configuration] :as job} {:keys [id index video-file] :as video}]
-  (trace-message "Creating video page for '" id "'")
-  (let [video-path (combine-path "videos" id)]
+(defn- create-medium-page
+  "Create the main page for a certain medium."
+  [{:keys [output-dir configuration] :as job} {:keys [id index encoded-media-files] :as medium}]
+  (trace-message "Creating medium page for '" id "'")
+  (let [medium-path (combine-path "media" id)]
 
-    (create-dir (combine-path output-dir video-path))
+    (create-dir (combine-path output-dir medium-path))
 
-    (let [video* (assoc video :path video-path)
-          cloud (create-video-cloud job video*)
-          video* (assoc video* :cloud cloud)
+    (let [medium* (assoc medium :path medium-path)
+          cloud (create-medium-cloud job medium*)
+          medium* (assoc medium* :cloud cloud)
           pindex (proc/partition-index index)
-          video* (assoc video* :pindex pindex)
-          args (assoc job :video video*)]
+          medium* (assoc medium* :pindex pindex)
+          encoded-media-files* (map #(assoc % :ext (file-name-ext (:path %))) encoded-media-files)
+          medium* (assoc medium* :encoded-media-files encoded-media-files*)
+          args (assoc job :medium medium*)]
 
       (if (cfg/value :skip-media-copy configuration)
-        (trace-message "Skipping copy mediafile for video '" id "'")
-        (let [video-target-file (combine-path output-dir video-path (str id ".mp4"))]
-          (trace-message "Copy mediafile for video '" id "'")
-          (when (not (file-exists? video-target-file))
-            (copy-file (get-path video-file) (get-path video-target-file)))))
+        (trace-message "Skipping copy mediafile for medium '" id "'")
+        (do
+          (trace-message "Copy media files for medium '" id "'")
+          (doseq [{:keys [path ext]} encoded-media-files*]
+            (let [medium-target-file (combine-path output-dir medium-path (str id ext))]
+              (when (not (file-exists? medium-target-file))
+                (copy-file (get-path path) (get-path medium-target-file)))))))
 
       (create-page
-       (combine-path video-path "index.html")
-       v-video/render-video-page
+       (combine-path medium-path "index.html")
+       v-medium/render-medium-page
        args)
 
-      (create-video-word-includes job video*))))
+      (create-medium-word-includes job medium*))))
 
 
-(defn create-video-pages
-  "**TASK** - Creates one page for every video
+(defn create-medium-pages
+  "**TASK** - Creates one page for every medium
   including the word clouds and the word include files."
   [job]
   (trace-block
-   "Creating video pages"
+   "Creating medium pages"
    (doall
     ((map-fn job)
-     #(create-video-page job %)
-     (:videos job))))
+     #(create-medium-page job %)
+     (:media job))))
   nil)
 
 
@@ -656,8 +662,8 @@
 
 
 (defn print-reverse-indexed-results
-  [{:keys [video]}]
-  (let [results (load-data (:results-file video))]
+  [{:keys [medium]}]
+  (let [results (load-data (:results-file medium))]
     (pp/pprint (proc/reverse-index-results [(first results)]))))
 
 

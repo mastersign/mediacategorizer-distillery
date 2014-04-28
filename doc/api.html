@@ -3028,8 +3028,8 @@ net.brehaut.ClojureTools = (function (SH) {
     build_tree: build_tree
   };
 })(SyntaxHighlighter);
-</script><title>distillery -- Marginalia</title></head><body><table><tr><td class="docs"><div class="header"><h1 class="project-name">distillery</h1><h2 class="project-version">0.3.0</h2><br /><p>A Clojure application to filter the most relevant words from speech recognition results.</p>
-</div><div class="dependencies"><h3>dependencies</h3><table><tr><td class="dep-name">org.clojure/clojure</td><td class="dotted"><hr /></td><td class="dep-version">1.5.1</td></tr><tr><td class="dep-name">org.clojure/data.xml</td><td class="dotted"><hr /></td><td class="dep-version">0.0.7</td></tr><tr><td class="dep-name">enlive</td><td class="dotted"><hr /></td><td class="dep-version">1.1.1</td></tr></table></div></td><td class="codes" style="text-align: center; vertical-align: middle;color: #666;padding-right:20px"><br /><br /><br />(this space intentionally left almost blank)</td></tr><tr><td class="docs"><div class="toc"><a name="toc"><h3>namespaces</h3></a><ul><li><a href="#distillery.blacklist">distillery.blacklist</a></li><li><a href="#distillery.config">distillery.config</a></li><li><a href="#distillery.core">distillery.core</a></li><li><a href="#distillery.data">distillery.data</a></li><li><a href="#distillery.processing">distillery.processing</a></li><li><a href="#distillery.tasks">distillery.tasks</a></li><li><a href="#distillery.text">distillery.text</a></li><li><a href="#distillery.txtresult">distillery.txtresult</a></li><li><a href="#distillery.view.base">distillery.view.base</a></li><li><a href="#distillery.view.category">distillery.view.category</a></li><li><a href="#distillery.view.cloud">distillery.view.cloud</a></li><li><a href="#distillery.view.defaults">distillery.view.defaults</a></li><li><a href="#distillery.view.dependencies">distillery.view.dependencies</a></li><li><a href="#distillery.view.glossary">distillery.view.glossary</a></li><li><a href="#distillery.view.hitlist">distillery.view.hitlist</a></li><li><a href="#distillery.view.html">distillery.view.html</a></li><li><a href="#distillery.view.index">distillery.view.index</a></li><li><a href="#distillery.view.match">distillery.view.match</a></li><li><a href="#distillery.view.transcript">distillery.view.transcript</a></li><li><a href="#distillery.view.video">distillery.view.video</a></li><li><a href="#distillery.view.word">distillery.view.word</a></li><li><a href="#distillery.xmlresult">distillery.xmlresult</a></li><li><a href="#mastersign.drawing">mastersign.drawing</a></li><li><a href="#mastersign.files">mastersign.files</a></li><li><a href="#mastersign.geom">mastersign.geom</a></li><li><a href="#mastersign.html">mastersign.html</a></li><li><a href="#mastersign.imaging">mastersign.imaging</a></li><li><a href="#mastersign.trace">mastersign.trace</a></li><li><a href="#mastersign.wordcloud">mastersign.wordcloud</a></li></ul></div></td><td class="codes">&nbsp;</td></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#distillery.blacklist" name="distillery.blacklist"><h1 class="project-name">distillery.blacklist</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs"><h1>Blacklist</h1>
+</script><title>distillery -- Marginalia</title></head><body><table><tr><td class="docs"><div class="header"><h1 class="project-name">distillery</h1><h2 class="project-version">0.4.0-SNAPSHOT</h2><br /><p>A Clojure application to filter the most relevant words from speech recognition results.</p>
+</div><div class="dependencies"><h3>dependencies</h3><table><tr><td class="dep-name">org.clojure/clojure</td><td class="dotted"><hr /></td><td class="dep-version">1.5.1</td></tr><tr><td class="dep-name">org.clojure/data.xml</td><td class="dotted"><hr /></td><td class="dep-version">0.0.7</td></tr><tr><td class="dep-name">enlive</td><td class="dotted"><hr /></td><td class="dep-version">1.1.1</td></tr></table></div></td><td class="codes" style="text-align: center; vertical-align: middle;color: #666;padding-right:20px"><br /><br /><br />(this space intentionally left almost blank)</td></tr><tr><td class="docs"><div class="toc"><a name="toc"><h3>namespaces</h3></a><ul><li><a href="#distillery.blacklist">distillery.blacklist</a></li><li><a href="#distillery.config">distillery.config</a></li><li><a href="#distillery.core">distillery.core</a></li><li><a href="#distillery.data">distillery.data</a></li><li><a href="#distillery.processing">distillery.processing</a></li><li><a href="#distillery.tasks">distillery.tasks</a></li><li><a href="#distillery.text">distillery.text</a></li><li><a href="#distillery.txtresult">distillery.txtresult</a></li><li><a href="#distillery.view.base">distillery.view.base</a></li><li><a href="#distillery.view.category">distillery.view.category</a></li><li><a href="#distillery.view.cloud">distillery.view.cloud</a></li><li><a href="#distillery.view.defaults">distillery.view.defaults</a></li><li><a href="#distillery.view.dependencies">distillery.view.dependencies</a></li><li><a href="#distillery.view.glossary">distillery.view.glossary</a></li><li><a href="#distillery.view.hitlist">distillery.view.hitlist</a></li><li><a href="#distillery.view.html">distillery.view.html</a></li><li><a href="#distillery.view.index">distillery.view.index</a></li><li><a href="#distillery.view.match">distillery.view.match</a></li><li><a href="#distillery.view.medium">distillery.view.medium</a></li><li><a href="#distillery.view.transcript">distillery.view.transcript</a></li><li><a href="#distillery.view.word">distillery.view.word</a></li><li><a href="#distillery.xmlresult">distillery.xmlresult</a></li><li><a href="#mastersign.drawing">mastersign.drawing</a></li><li><a href="#mastersign.files">mastersign.files</a></li><li><a href="#mastersign.geom">mastersign.geom</a></li><li><a href="#mastersign.html">mastersign.html</a></li><li><a href="#mastersign.imaging">mastersign.imaging</a></li><li><a href="#mastersign.trace">mastersign.trace</a></li><li><a href="#mastersign.wordcloud">mastersign.wordcloud</a></li></ul></div></td><td class="codes">&nbsp;</td></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#distillery.blacklist" name="distillery.blacklist"><h1 class="project-name">distillery.blacklist</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs"><h1>Blacklist</h1>
 
 <p>This namespace contains functions for using the blacklist
 to filter words.</p>
@@ -3100,7 +3100,7 @@ and the <a href="data-structures.html#AnalysisResults">Analysis Results</a>.</p>
    dt/analyze-speech-recognition-results
    dt/load-categories
    dt/analyze-categories
-   dt/match-videos
+   dt/match-media
    dt/lookup-categories-matches
    dt/matching-stats))</pre></td></tr><tr><td class="docs"><p>Takes an extended job description generated by <code>prepare-and-analyze</code>
   and generates the XML result file for the job.
@@ -3110,7 +3110,7 @@ and the <a href="data-structures.html#AnalysisResults">Analysis Results</a>.</p>
   (trace-block
    &quot;XML Result Generation&quot;
    (dt/save-result-as-xml job)))</pre></td></tr><tr><td class="docs"><p>Takes an extended job description generated by <code>prepare-and-analyze</code>
-  and generates the transcript text files for the videos in the job.
+  and generates the transcript text files for the media in the job.
   Returns nil.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn generate-txt-result-files!
   [job]
@@ -3129,8 +3129,8 @@ and the <a href="data-structures.html#AnalysisResults">Analysis Results</a>.</p>
     [dt/create-index-page
      dt/create-categories-page
      dt/create-category-pages
-     dt/create-videos-page
-     dt/create-video-pages]))
+     dt/create-media-page
+     dt/create-medium-pages]))
   nil)</pre></td></tr><tr><td class="docs"><p>Takes a job description, and executes the complete process
   defined by the job.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn run-complete!
@@ -3152,7 +3152,7 @@ and the <a href="data-structures.html#AnalysisResults">Analysis Results</a>.</p>
 
 <p>Some prepared expressions for interactive debugging</p>
 
-<pre><code>(def job-file "S:\\Temp\\MediaCategorizerOutput\\_tmp_\\job.edn")
+<pre><code>(def job-file "D:\\Temp\\MediaCategorizerOutput\\_tmp_\\job.edn")
 (def job-descr (load-data job-file))
 (def job (prepare-and-analyze job-descr))
 (generate-xml-result-file! job)
@@ -3460,16 +3460,16 @@ For now, only the <code>:encoding</code> flag is supported.</p>
       (assoc :occurrences (concat (:occurrences a) (:occurrences b)))
       compute-index-entry-stats)]
     res))</pre></td></tr><tr><td class="docs"><p>Builds an index of words for a sequence of recognition results.</p>
-</td><td class="codes"><pre class="brush: clojure">(defn add-video-word-index
-  [video &amp; {:keys [predicate]}]
-  (let [ws (words (:results video) :predicate predicate)
+</td><td class="codes"><pre class="brush: clojure">(defn add-medium-word-index
+  [medium &amp; {:keys [predicate]}]
+  (let [ws (words (:results medium) :predicate predicate)
         add-occurrence (fn [props word]
                          (let [props (or props {:id (:id word)
                                                 :lexical-form (:lexical-form word)
                                                 :pronunciation (:pronunciation word)})]
                            (assoc props :occurrences
                              (conj (:occurrences props [])
-                                   {:video-id (:id video)
+                                   {:medium-id (:id medium)
                                     :result-no (:result-no word)
                                     :word-no (:no word)
                                     :confidence (:confidence word)}))))
@@ -3480,7 +3480,7 @@ For now, only the <code>:encoding</code> flag is supported.</p>
         index-stats {:count (count index)
                      :max-occurrence-count (safe-max (map :occurrence-count (vals index)))}
         index (map-values (partial compute-index-entry-match-value index-stats) index)]
-    (assoc video
+    (assoc medium
       :index index
       :index-stats index-stats)))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn- category-words
@@ -3520,11 +3520,11 @@ For now, only the <code>:encoding</code> flag is supported.</p>
   (-&gt;&gt; index
        (group-by (comp char-to-index-letter first first))
        (map-values #(apply sorted-map (apply concat %)))))</pre></td></tr><tr><td class="docs"><p>Builds a <a href="data-structures.html#CategoryMatch">Category Match</a> between
-  the given <code>video</code> and <code>category</code>.</p>
+  the given <code>medium</code> and <code>category</code>.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn- compute-matching-score
-  [video category]
+  [medium category]
   (let [cwidx (:index category)
-        mwidx (:index video)
+        mwidx (:index medium)
         word-scores (-&gt;&gt; (keys mwidx)
                          (map (fn [wid] [wid
                                          (* (:match-value (get mwidx wid) 0.0)
@@ -3537,32 +3537,32 @@ For now, only the <code>:encoding</code> flag is supported.</p>
      :word-scores word-scores
      :score score}))</pre></td></tr><tr><td class="docs"><p>Builds the matches between all categories in the
   <a href="data-structures.html#AnalysisResults">Analysis Results</a> <code>job</code>
-  and the given <code>video</code>.</p>
-</td><td class="codes"><pre class="brush: clojure">(defn match-video
-  [{:keys [categories configuration] :as job} video]
+  and the given <code>medium</code>.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn match-medium
+  [{:keys [categories configuration] :as job} medium]
   (let [matches (if (not (empty? categories))
                   (-&gt;&gt; categories
-                       (map #(compute-matching-score video %))
+                       (map #(compute-matching-score medium %))
                        (filter #(&gt;= (:score %) 0.0))
                        (map #(vector (:category-id %) %))
                        (apply concat)
                        (apply sorted-map))
                   {})]
-  (assoc video
+  (assoc medium
     :matches matches
     :max-score (safe-max (map :score (vals matches))))))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn- lookup-matching-score
-  [category video]
-  (-&gt; video
+  [category medium]
+  (-&gt; medium
       (get-in [:matches (:id category)] {:word-scores {} :score 0.0})
       (dissoc :category-id)
-      (assoc :video-id (:id video))))</pre></td></tr><tr><td class="docs">
+      (assoc :medium-id (:id medium))))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn lookup-category-match
-  [{:keys [videos] :as job} category]
-  (let [matches (-&gt;&gt; videos
+  [{:keys [media] :as job} category]
+  (let [matches (-&gt;&gt; media
                   (map #(lookup-matching-score category %))
                   (filter #(&gt;= (:score %) 0.0))
-                  (map #(vector (:video-id %) %))
+                  (map #(vector (:medium-id %) %))
                   (apply concat)
                   (apply sorted-map))]
   (assoc category
@@ -3593,7 +3593,7 @@ The tasks are used by <a href="#distillery.core">distillery.core</a>.</p>
   (:require [distillery.view.cloud :refer (build-cloud-word-data build-cloud-ui-data create-cloud)])
   (:require [distillery.view.index :as v-index])
   (:require [distillery.view.category :as v-category])
-  (:require [distillery.view.video :as v-video])
+  (:require [distillery.view.medium :as v-medium])
   (:require [distillery.view.word :as v-word])
   (:require [distillery.view.match :as v-match]))</pre></td></tr><tr><td class="docs"><h2>Helper</h2>
 </td><td class="codes"></td></tr><tr><td class="docs"><p>This HOF returns the map function that should be
@@ -3649,7 +3649,7 @@ actual predicates.</p>
    :min-confidence proc/min-confidence?
    :good-confidence proc/good-confidence?
    :no-punctuation proc/no-punctuation?
-   :not-in-blacklist bl/not-in-blacklist?})</pre></td></tr><tr><td class="docs"><p>Create the word predicate for the video index.</p>
+   :not-in-blacklist bl/not-in-blacklist?})</pre></td></tr><tr><td class="docs"><p>Create the word predicate for the medium index.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn- word-predicate
   [{:keys [configuration] :as job}]
   (let [filters (map #(% filter-map) (cfg/value :index-filter configuration))]
@@ -3673,7 +3673,7 @@ helping to organize the code of the tasks.</p>
 <li>Website Generation
 <ul><li>Main Pages</li>
 <li>Category Pages</li>
-<li>Video Pages</li></ul></li>
+<li>Medium Pages</li></ul></li>
 </ul>
 </td><td class="codes"></td></tr><tr><td class="docs"><h3>Dependencies</h3>
 </td><td class="codes"></td></tr><tr><td class="docs"><p>Prepares the output directory by creating
@@ -3683,12 +3683,13 @@ helping to organize the code of the tasks.</p>
   (trace-message &quot;Preparing output directory &quot; output-dir)
   (create-dir output-dir)
   (create-dir output-dir &quot;categories&quot;)
-  (create-dir output-dir &quot;videos&quot;)
+  (create-dir output-dir &quot;media&quot;)
   (create-dir output-dir &quot;words&quot;)
   (save-dependencies output-dir))</pre></td></tr><tr><td class="docs"><h3>Preprocessing and Analysis</h3>
 </td><td class="codes"></td></tr><tr><td class="docs"><h4>Categories</h4>
 </td><td class="codes"></td></tr><tr><td class="docs"><p>Loads a single resource for a category.
-  The resource is defined by an URL and can have on the following formats:</p>
+  The resource is defined by an absolute path to a local file or an URL. If both are given, the local file takes precedence.
+  The resource can have one of the following types:</p>
 
 <ul>
 <li><code>:plain</code> A plain text file, which can be simply tokenized to extract the words</li>
@@ -3702,14 +3703,15 @@ which occur in every Wikipedia page.</p>
 reside in <a href="#distillery.data">distillery.data</a>.</p></li>
 </ul>
 </td><td class="codes"><pre class="brush: clojure">(defn- load-category-resource
-  [{:keys [id]} {:keys [type url] :as resource}]
-  (trace-message &quot;Loading category resource &quot; url)
-  (assoc resource :words
-    (-&gt; (case type
-          :plain (load-text url)
-          :html (load-text-from-html url)
-          :wikipedia (load-text-from-wikipedia url))
-        words-from-text)))</pre></td></tr><tr><td class="docs"><p>Loads all resources for one category.</p>
+  [{:keys [id]} {:keys [type url file] :as resource}]
+  (trace-message &quot;Loading category resource &quot; file)
+  (let [url (if file (str &quot;file:///&quot; file) url)]
+    (assoc resource :words
+      (-&gt; (case type
+            :plain (load-text url)
+            :html (load-text-from-html url)
+            :wikipedia (load-text-from-wikipedia url))
+          words-from-text))))</pre></td></tr><tr><td class="docs"><p>Loads all resources for one category.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn- load-category-resources
   [job {:keys [id resources] :as category}]
   (trace-message &quot;Loading category resources for '&quot; id &quot;'&quot;)
@@ -3758,72 +3760,72 @@ reside in <a href="#distillery.data">distillery.data</a>.</p></li>
                        categories))))]
      job*)))</pre></td></tr><tr><td class="docs"><h4>Speech Recognition Results</h4>
 </td><td class="codes"></td></tr><tr><td class="docs"><p>Loads the <a href="data-structures.html#SpeechRecognitionResult">Speech Recognition Result</a>
-  for a video and extends the <a href="data-structures.html#VideoDescription">Video Description</a>
+  for a medium and extends the <a href="data-structures.html#MediumDescription">Medium Description</a>
   by the slot <code>:results</code>.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn- load-speech-recognition-result
-  [{:keys [id results-file] :as video}]
+  [{:keys [id results-file] :as medium}]
   (trace-message &quot;Loading results of &quot; id)
   (let [results (-&gt; results-file
                     load-data
                     proc/strip-alternates
                     proc/reverse-index-results)]
-    (assoc video :results results)))</pre></td></tr><tr><td class="docs"><p><strong>TASK</strong> - Loads the speech recognition results for all videos.</p>
+    (assoc medium :results results)))</pre></td></tr><tr><td class="docs"><p><strong>TASK</strong> - Loads the speech recognition results for all media.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn load-speech-recognition-results
   [job]
   (trace-block
    &quot;Loading speech recognition results&quot;
-   (update-in job [:videos]
-              #(vec ((map-fn job) load-speech-recognition-result %)))))</pre></td></tr><tr><td class="docs"><p>Extends a <a href="data-structures.html#VideoDescription">Video Description</a>
+   (update-in job [:media]
+              #(vec ((map-fn job) load-speech-recognition-result %)))))</pre></td></tr><tr><td class="docs"><p>Extends a <a href="data-structures.html#MediumDescription">Medium Description</a>
   by the slots <code>:phrase-count</code>, <code>:word-count</code>, and <code>:confidence</code>.</p>
-</td><td class="codes"><pre class="brush: clojure">(defn- build-video-statistics
-  [{:keys [id results] :as video}]
-  (trace-message &quot;Building statistics for video '&quot; id &quot;'&quot;)
-  (assoc video
+</td><td class="codes"><pre class="brush: clojure">(defn- build-medium-statistics
+  [{:keys [id results] :as medium}]
+  (trace-message &quot;Building statistics for medium '&quot; id &quot;'&quot;)
+  (assoc medium
     :phrase-count (count results)
     :word-count (count (proc/words results))
-    :confidence (mean (map :confidence results))))</pre></td></tr><tr><td class="docs"><p>Extends a <a href="data-structures.html#VideoDescription">Video Description</a>
-  by the slot <code>:index</code>, which is a map, pointing to <a href="data-structures.html#VideoWord">Video Words</a>,
+    :confidence (mean (map :confidence results))))</pre></td></tr><tr><td class="docs"><p>Extends a <a href="data-structures.html#MediumDescription">Medium Description</a>
+  by the slot <code>:index</code>, which is a map, pointing to <a href="data-structures.html#MediumWord">Medium Words</a>,
   and by the slot <code>:index-stats</code>, which holds the <a href="data-structures.html#IndexStatistics">Index Statistics</a>.</p>
-</td><td class="codes"><pre class="brush: clojure">(defn- build-video-index
-  [job video]
-  (trace-message &quot;Building index for video '&quot; (:id video) &quot;'&quot;)
-  (proc/add-video-word-index video :predicate (word-predicate job)))</pre></td></tr><tr><td class="docs"><p>Merges the video indexes into one global <a href="data-structures.html#WordIndex">Word Index</a>.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn- build-medium-index
+  [job medium]
+  (trace-message &quot;Building index for medium '&quot; (:id medium) &quot;'&quot;)
+  (proc/add-medium-word-index medium :predicate (word-predicate job)))</pre></td></tr><tr><td class="docs"><p>Merges the medium indexes into one global <a href="data-structures.html#WordIndex">Word Index</a>.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn- build-global-index
-  [{:keys [videos]}]
+  [{:keys [media]}]
   (trace-block
    &quot;Merging indexes&quot;
-   (apply (partial merge-with proc/merge-index-entries) (map :index videos))))</pre></td></tr><tr><td class="docs"><p><strong>TASK</strong> - Analyzes the speech recognition results and generates the index structures including
-  the <a href="data-structures.html#VideoWord">Video Words</a> and the <a href="data-structures.html#WordIndex">Word Index</a>.</p>
+   (apply (partial merge-with proc/merge-index-entries) (map :index media))))</pre></td></tr><tr><td class="docs"><p><strong>TASK</strong> - Analyzes the speech recognition results and generates the index structures including
+  the <a href="data-structures.html#MediumWord">Medium Words</a> and the <a href="data-structures.html#WordIndex">Word Index</a>.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn analyze-speech-recognition-results
   [job]
   (trace-block
-   &quot;Analyzing videos&quot;
+   &quot;Analyzing media&quot;
    (let [job* (update-in
-               job [:videos]
-               (fn [videos]
+               job [:media]
+               (fn [media]
                  (vec ((map-fn job)
-                       (fn [video] (build-video-index job (build-video-statistics video)))
-                       videos))))
+                       (fn [medium] (build-medium-index job (build-medium-statistics medium)))
+                       media))))
          job* (assoc job*
                 :words (build-global-index job*))]
      job*)))</pre></td></tr><tr><td class="docs"><h4>Similarity Matching</h4>
-</td><td class="codes"></td></tr><tr><td class="docs"><p><strong>TASK</strong> - Matches the <a href="data-structures.html#VideoWord">Video Words</a> of all videos against
+</td><td class="codes"></td></tr><tr><td class="docs"><p><strong>TASK</strong> - Matches the <a href="data-structures.html#MediumWord">Medium Words</a> of all media against
   the <a href="data-structures.html#CategoryWords">Category Words</a> of all categories
-  and completes the given <a href="data-structures.html#VideoResult">Video Results</a>
+  and completes the given <a href="data-structures.html#MediumResult">Medium Results</a>
   with the slots <code>:matches</code> and <code>:max-score</code>.</p>
-</td><td class="codes"><pre class="brush: clojure">(defn match-videos
-  [{:keys [videos] :as job}]
+</td><td class="codes"><pre class="brush: clojure">(defn match-media
+  [{:keys [media] :as job}]
   (trace-block
-   &quot;Matching videos against categories&quot;
+   &quot;Matching media against categories&quot;
    (assoc job
-     :videos (vec ((map-fn job)
-                   (partial proc/match-video job)
-                   videos)))))</pre></td></tr><tr><td class="docs"><p><strong>TASK</strong> - Looks up the matching scores from the <a href="data-structures.html#VideoResult">Video Results</a>
+     :media (vec ((map-fn job)
+                   (partial proc/match-medium job)
+                   media)))))</pre></td></tr><tr><td class="docs"><p><strong>TASK</strong> - Looks up the matching scores from the <a href="data-structures.html#MediumResult">Medium Results</a>
   and adds them to the <a href="data-structures.html#CategoryResult">Category Results</a>.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn lookup-categories-matches
   [{:keys [categories] :as job}]
   (trace-block
-   &quot;Looking up category matching scores against videos&quot;
+   &quot;Looking up category matching scores against media&quot;
    (assoc job
      :categories (vec (map
                        (partial proc/lookup-category-match job)
@@ -3833,7 +3835,7 @@ reside in <a href="#distillery.data">distillery.data</a>.</p></li>
   by adding the slots <code>:max-score</code> and <code>:max-word-score</code>.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn matching-stats
   [job]
-  (let [matches (mapcat #(vals (:matches %)) (:videos job))
+  (let [matches (mapcat #(vals (:matches %)) (:media job))
         scores (map :score matches)
         word-scores (mapcat #(vals (:word-scores %)) matches)]
         (assoc job
@@ -3846,15 +3848,15 @@ reside in <a href="#distillery.data">distillery.data</a>.</p></li>
   (let [path (combine-path output-dir result-file)]
     (xr/save-result path job))
   nil)</pre></td></tr><tr><td class="docs"><h3>Text Result Generation</h3>
-</td><td class="codes"></td></tr><tr><td class="docs"><p><strong>TASK</strong> - Writes a text file with all recognized phrases for each video.</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p><strong>TASK</strong> - Writes a text file with all recognized phrases for each medium.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn save-result-as-txt
   [{:keys [output-dir] :as job}]
-  (doseq [video (:videos job)]
-    (let [dir (combine-path output-dir &quot;videos&quot; (:id video))
+  (doseq [medium (:media job)]
+    (let [dir (combine-path output-dir &quot;media&quot; (:id medium))
           path (combine-path dir &quot;transcript.txt&quot;)]
       (when (not (file-exists? dir))
         (create-dir dir))
-      (tr/save-result video path)))
+      (tr/save-result medium path)))
   nil)</pre></td></tr><tr><td class="docs"><h3>Website Generation</h3>
 </td><td class="codes"></td></tr><tr><td class="docs"><p>Builds the main menu structure.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn- create-main-menu
@@ -3862,7 +3864,7 @@ reside in <a href="#distillery.data">distillery.data</a>.</p></li>
   [[(txt :frame-top-menu-project) &quot;index.html&quot;]
    (when (seq categories)
      [(txt :frame-top-menu-categories) &quot;categories.html&quot;])
-   [(txt :frame-top-menu-videos) &quot;videos.html&quot;]])</pre></td></tr><tr><td class="docs"><p>Generates a HTML page by calling the page function <code>page-f</code>
+   [(txt :frame-top-menu-media) &quot;media.html&quot;]])</pre></td></tr><tr><td class="docs"><p>Generates a HTML page by calling the page function <code>page-f</code>
   with the <a href="data-structures.html#AnalysisResults">Analysis Results</a> <code>args</code>.
   Saves the generated page in the <code>output-dir</code> of the job.
   The filename of the page is specified by the <code>page-name</code>.</p>
@@ -3926,11 +3928,11 @@ reside in <a href="#distillery.data">distillery.data</a>.</p></li>
 </td><td class="codes"><pre class="brush: clojure">(defn create-categories-page
   [job]
   (trace-message &quot;Creating categories overview page&quot;)
-  (create-page &quot;categories.html&quot; v-index/render-categories-page job))</pre></td></tr><tr><td class="docs"><p><strong>TASK</strong> - Creates the overview page for all videos.</p>
-</td><td class="codes"><pre class="brush: clojure">(defn create-videos-page
+  (create-page &quot;categories.html&quot; v-index/render-categories-page job))</pre></td></tr><tr><td class="docs"><p><strong>TASK</strong> - Creates the overview page for all media.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn create-media-page
   [job]
-  (trace-message &quot;Creating videos overview page&quot;)
-  (create-page &quot;videos.html&quot; v-index/render-videos-page job))</pre></td></tr><tr><td class="docs"><h4>Category Pages</h4>
+  (trace-message &quot;Creating media overview page&quot;)
+  (create-page &quot;media.html&quot; v-index/render-media-page job))</pre></td></tr><tr><td class="docs"><h4>Category Pages</h4>
 </td><td class="codes"></td></tr><tr><td class="docs"><p>Creates the include file for a word in the context of a category.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn- create-category-word-include
   [{:keys [output-dir] :as job} category {:keys [path] :as word}]
@@ -3956,7 +3958,7 @@ reside in <a href="#distillery.data">distillery.data</a>.</p></li>
   (create-include
     (str path &quot;.inc.html&quot;)
     v-match/render-category-match-include
-    (assoc job :category category :match match)))</pre></td></tr><tr><td class="docs"><p>Create includes for all video matches of a category.</p>
+    (assoc job :category category :match match)))</pre></td></tr><tr><td class="docs"><p>Create includes for all medium matches of a category.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn- create-category-match-includes
   [{:keys [output-dir configuration] :as job} {:keys [id matches path] :as category}]
   (if (cfg/value :skip-match-includes configuration)
@@ -3967,7 +3969,7 @@ reside in <a href="#distillery.data">distillery.data</a>.</p></li>
        (create-dir (combine-path output-dir matches-path))
        ((map-fn  job)
         (fn [match]
-          (let [match-path (combine-path matches-path (:video-id match))]
+          (let [match-path (combine-path matches-path (:medium-id match))]
             (create-category-match-include job category (assoc match :path match-path))))
         (vals matches))))))</pre></td></tr><tr><td class="docs"><p>Creates the word cloud for a category.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn- create-category-cloud
@@ -4006,73 +4008,73 @@ reside in <a href="#distillery.data">distillery.data</a>.</p></li>
     ((map-fn job)
      #(create-category-page job %)
      (:categories job))))
-  nil)</pre></td></tr><tr><td class="docs"><h4>Video Pages</h4>
-</td><td class="codes"></td></tr><tr><td class="docs"><p>Creates the include file for a word in the context of a video.</p>
-</td><td class="codes"><pre class="brush: clojure">(defn- create-video-word-include
-  [{:keys [output-dir] :as job} video {:keys [path] :as word}]
+  nil)</pre></td></tr><tr><td class="docs"><h4>Medium Pages</h4>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>Creates the include file for a word in the context of a medium.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn- create-medium-word-include
+  [{:keys [output-dir] :as job} medium {:keys [path] :as word}]
   (create-include
     (str path &quot;.inc.html&quot;)
-    v-word/render-video-word-include
-    (assoc job :video video :word word)))</pre></td></tr><tr><td class="docs"><p>Create includes for all words of a video.</p>
-</td><td class="codes"><pre class="brush: clojure">(defn- create-video-word-includes
-  [{:keys [output-dir configuration] :as job} {:keys [id index path] :as video}]
+    v-word/render-medium-word-include
+    (assoc job :medium medium :word word)))</pre></td></tr><tr><td class="docs"><p>Create includes for all words of a medium.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn- create-medium-word-includes
+  [{:keys [output-dir configuration] :as job} {:keys [id index path] :as medium}]
   (if (cfg/value :skip-word-includes configuration)
-    (trace-message &quot;Skipping word includes for video '&quot; id &quot;'&quot;)
+    (trace-message &quot;Skipping word includes for medium '&quot; id &quot;'&quot;)
     (trace-block
-     (str &quot;Creating word includes for video '&quot; id &quot;'&quot;)
+     (str &quot;Creating word includes for medium '&quot; id &quot;'&quot;)
      (let [words-path (combine-path path &quot;words&quot;)]
        (create-dir (combine-path output-dir words-path))
        ((map-fn job)
         (fn [word]
           (let [word-path (combine-path words-path (:id word))]
-            (create-video-word-include job video (assoc word :path word-path))))
-        (vals index))))))</pre></td></tr><tr><td class="docs"><p>Creates the word cloud for a video.</p>
-</td><td class="codes"><pre class="brush: clojure">(defn- create-video-cloud
-  [{:keys [output-dir configuration] :as job} {:keys [id index path] :as video}]
+            (create-medium-word-include job medium (assoc word :path word-path))))
+        (vals index))))))</pre></td></tr><tr><td class="docs"><p>Creates the word cloud for a medium.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn- create-medium-cloud
+  [{:keys [output-dir configuration] :as job} {:keys [id index path] :as medium}]
   (if (cfg/value :skip-wordclouds configuration)
-    (do (trace-message &quot;Skipping wordcloud for video '&quot; id &quot;'&quot;) [])
+    (do (trace-message &quot;Skipping wordcloud for medium '&quot; id &quot;'&quot;) [])
     (trace-block
      (str &quot;Creating wordcloud for &quot; id)
-     (build-cloud-ui-data (create-cloud (build-cloud-word-data index configuration :video-cloud)
+     (build-cloud-ui-data (create-cloud (build-cloud-word-data index configuration :medium-cloud)
                                         (combine-path output-dir path &quot;cloud.png&quot;)
                                         configuration
-                                        :video-cloud)))))</pre></td></tr><tr><td class="docs"><p>Create the main page for a certain video.</p>
-</td><td class="codes"><pre class="brush: clojure">(defn- create-video-page
-  [{:keys [output-dir configuration] :as job} {:keys [id index video-file] :as video}]
-  (trace-message &quot;Creating video page for '&quot; id &quot;'&quot;)
-  (let [video-path (combine-path &quot;videos&quot; id)]
-    (create-dir (combine-path output-dir video-path))
-    (let [video* (assoc video :path video-path)
-          cloud (create-video-cloud job video*)
-          video* (assoc video* :cloud cloud)
+                                        :medium-cloud)))))</pre></td></tr><tr><td class="docs"><p>Create the main page for a certain medium.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn- create-medium-page
+  [{:keys [output-dir configuration] :as job} {:keys [id index medium-file] :as medium}]
+  (trace-message &quot;Creating medium page for '&quot; id &quot;'&quot;)
+  (let [medium-path (combine-path &quot;media&quot; id)]
+    (create-dir (combine-path output-dir medium-path))
+    (let [medium* (assoc medium :path medium-path)
+          cloud (create-medium-cloud job medium*)
+          medium* (assoc medium* :cloud cloud)
           pindex (proc/partition-index index)
-          video* (assoc video* :pindex pindex)
-          args (assoc job :video video*)]
+          medium* (assoc medium* :pindex pindex)
+          args (assoc job :medium medium*)]
       (if (cfg/value :skip-media-copy configuration)
-        (trace-message &quot;Skipping copy mediafile for video '&quot; id &quot;'&quot;)
-        (let [video-target-file (combine-path output-dir video-path (str id &quot;.mp4&quot;))]
-          (trace-message &quot;Copy mediafile for video '&quot; id &quot;'&quot;)
-          (when (not (file-exists? video-target-file))
-            (copy-file (get-path video-file) (get-path video-target-file)))))
+        (trace-message &quot;Skipping copy mediafile for medium '&quot; id &quot;'&quot;)
+        (let [medium-target-file (combine-path output-dir medium-path (str id &quot;.mp4&quot;))]
+          (trace-message &quot;Copy mediafile for medium '&quot; id &quot;'&quot;)
+          (when (not (file-exists? medium-target-file))
+            (copy-file (get-path medium-file) (get-path medium-target-file)))))
       (create-page
-       (combine-path video-path &quot;index.html&quot;)
-       v-video/render-video-page
+       (combine-path medium-path &quot;index.html&quot;)
+       v-medium/render-medium-page
        args)
-      (create-video-word-includes job video*))))</pre></td></tr><tr><td class="docs"><p><strong>TASK</strong> - Creates one page for every video
+      (create-medium-word-includes job medium*))))</pre></td></tr><tr><td class="docs"><p><strong>TASK</strong> - Creates one page for every medium
   including the word clouds and the word include files.</p>
-</td><td class="codes"><pre class="brush: clojure">(defn create-video-pages
+</td><td class="codes"><pre class="brush: clojure">(defn create-medium-pages
   [job]
   (trace-block
-   &quot;Creating video pages&quot;
+   &quot;Creating medium pages&quot;
    (doall
     ((map-fn job)
-     #(create-video-page job %)
-     (:videos job))))
+     #(create-medium-page job %)
+     (:media job))))
   nil)</pre></td></tr><tr><td class="docs"><h2>Debug Tasks</h2>
 </td><td class="codes"></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn print-reverse-indexed-results
-  [{:keys [video]}]
-  (let [results (load-data (:results-file video))]
+  [{:keys [medium]}]
+  (let [results (load-data (:results-file medium))]
     (pp/pprint (proc/reverse-index-results [(first results)]))))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn show-main-page
   [{:keys [output-dir]}]
@@ -4095,9 +4097,9 @@ reside in <a href="#distillery.data">distillery.data</a>.</p></li>
   (:require [clojure.java.io :refer (writer)])
   (:require [mastersign.files :refer :all]))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn save-result
-  [video file]
+  [medium file]
   (with-open [w (writer file)]
-    (doseq [result (:results video)]
+    (doseq [result (:results medium)]
         (.write w (str/join &quot; &quot; (map :text (:words result))))
         (.write w (format &quot;%n&quot;)))))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#distillery.view.base" name="distillery.view.base"><h1 class="project-name">distillery.view.base</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns distillery.view.base
@@ -4171,7 +4173,7 @@ reside in <a href="#distillery.data">distillery.data</a>.</p></li>
   (:require [distillery.view.cloud :as cloud])
   (:require [distillery.view.glossary :as glossary])
   (:require [distillery.view.hitlist :as hitlist])
-  (:require [distillery.view.html :refer :all]))</pre></td></tr><tr><td class="docs"><p>Creates the headline for the video page.</p>
+  (:require [distillery.view.html :refer :all]))</pre></td></tr><tr><td class="docs"><p>Creates the headline for the medium page.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn- render-headline
   [{:keys [category]}]
   (headline 2 (:name category)))</pre></td></tr><tr><td class="docs">
@@ -4202,14 +4204,14 @@ reside in <a href="#distillery.data">distillery.data</a>.</p></li>
   (innerpage &quot;cloud&quot; (txt :category-wordcloud-h) false
              [(paragraph &quot;explanation&quot; (txt :category-wordcloud-d))
               (cloud/render-cloud id cloud)]))</pre></td></tr><tr><td class="docs"><p>Creates the HTML for the overview page.</p>
-</td><td class="codes"><pre class="brush: clojure">(defn- render-videos
-  [{:keys [videos category max-score configuration] :as args}]
-  (let [video-fn (fn [mid] (first (filter #(= mid (:id %)) videos)))]
-    (innerpage &quot;videos&quot; (txt :category-videos-h) false
-               [(paragraph &quot;explanation&quot; (txt :category-videos-d))
-                (hitlist/render-video-matchlist
+</td><td class="codes"><pre class="brush: clojure">(defn- render-media
+  [{:keys [media category max-score configuration] :as args}]
+  (let [medium-fn (fn [mid] (first (filter #(= mid (:id %)) media)))]
+    (innerpage &quot;media&quot; (txt :category-media-h) false
+               [(paragraph &quot;explanation&quot; (txt :category-media-d))
+                (hitlist/render-medium-matchlist
                  category
-                 videos
+                 media
                  configuration)])))</pre></td></tr><tr><td class="docs"><p>Create the HTML for the word frame.
    The word frame is an empty container to load a category word page into.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn- render-category-word-frame
@@ -4226,14 +4228,14 @@ reside in <a href="#distillery.data">distillery.data</a>.</p></li>
    :secondary-menu [[(txt :category-menu-overview) (jshref &quot;innerpage('overview')&quot;)]
                     (when-not (cfg/value :skip-wordclouds configuration)
                       [(txt :category-menu-wordcloud) (jshref &quot;innerpage('cloud')&quot;)])
-                    [(txt :category-menu-videos) (jshref &quot;innerpage('videos')&quot;)]
+                    [(txt :category-menu-media) (jshref &quot;innerpage('media')&quot;)]
                     [(txt :category-menu-glossary) (jshref &quot;innerpage('glossary')&quot;)]]
    :page
      [(render-headline args)
       (render-overview args)
       (render-glossary args)
       (render-cloud args)
-      (render-videos args)
+      (render-media args)
       (render-category-word-frame args)
       (render-category-match-frame args)]])</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#distillery.view.cloud" name="distillery.view.cloud"><h1 class="project-name">distillery.view.cloud</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns distillery.view.cloud
@@ -4299,7 +4301,7 @@ reside in <a href="#distillery.data">distillery.data</a>.</p></li>
 </td><td class="codes"><pre class="brush: clojure">(def main-menu
   [[(txt :frame-top-menu-project) &quot;index.html&quot;]
    [(txt :frame-top-menu-categories) &quot;categories.html&quot;]
-   [(txt :frame-top-menu-videos) &quot;videos.html&quot;]])</pre></td></tr><tr><td class="docs">
+   [(txt :frame-top-menu-media) &quot;media.html&quot;]])</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(def copyright
   {:tag :p
    :content
@@ -4322,14 +4324,6 @@ reside in <a href="#distillery.data">distillery.data</a>.</p></li>
    &quot;distillery.css&quot;
    &quot;jquery.js&quot;
    &quot;distillery.js&quot;
-;   &quot;video.js&quot;
-;   &quot;video-js.min.css&quot;
-;   &quot;video-js.png&quot;
-;   &quot;video-js.swf&quot;
-;   &quot;vjs.eot&quot;
-;   &quot;vjs.woff&quot;
-;   &quot;vjs.ttf&quot;
-;   &quot;vjs.svg&quot;
    ])</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn- copy-stream-to-file
   [^InputStream s ^Path p]
@@ -4422,7 +4416,7 @@ reside in <a href="#distillery.data">distillery.data</a>.</p></li>
     (div &quot;hitlist&quot;
          [(olist (map item-gen hitlist))])))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn render-category-matchlist
-  [{:keys [matches max-score] :as video} categories config]
+  [{:keys [matches max-score] :as medium} categories config]
   (let [matchlist (-&gt;&gt; matches
                        (filter #(&gt;= (:score (second %)) (cfg/value [:min-match-score] config)))
                        (sort-by #(:score (second %)))
@@ -4437,7 +4431,7 @@ reside in <a href="#distillery.data">distillery.data</a>.</p></li>
                       (bar
                        [(span &quot;hitlist_text&quot;
                               (link
-                               (str &quot;../../categories/&quot; category-id &quot;/index.html?match=&quot; (:id video))
+                               (str &quot;../../categories/&quot; category-id &quot;/index.html?match=&quot; (:id medium))
                                (:name category)))
                         (span &quot;hitlist_stats&quot;
                               (strong (stats-str-fn score rel-score)))]
@@ -4445,29 +4439,29 @@ reside in <a href="#distillery.data">distillery.data</a>.</p></li>
                        rel-score))))]
     (div &quot;hitlist&quot;
          [(olist (map item-gen matchlist))])))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn render-video-matchlist
-  [{:keys [matches] :as category} videos config]
-  (let [rel-score-fn (fn [match] (let [video (first (filter #(= (:id %) (:video-id match)) videos))
-                                       max-score (:max-score video)]
+</td><td class="codes"><pre class="brush: clojure">(defn render-medium-matchlist
+  [{:keys [matches] :as category} media config]
+  (let [rel-score-fn (fn [match] (let [medium (first (filter #(= (:id %) (:medium-id match)) media))
+                                       max-score (:max-score medium)]
                                    (/ (:score match) max-score)))
         matchlist (-&gt;&gt; matches
                        (filter #(&gt;= (:score (second %)) (cfg/value [:min-match-score] config)))
                        (sort-by #(rel-score-fn (second %)))
                        reverse)
-        color (or (cfg/value [:video-cloud :color] config) [0 0 0])
+        color (or (cfg/value [:medium-cloud :color] config) [0 0 0])
         stats-str-fn (fn [score rel-score]
                        (format &quot;%1.3f | %05.1f%%&quot; score (* rel-score 100)))
-        item-gen (fn [[video-id {:keys [score] :as m}]]
-                   (let [video (first (filter #(= (:id %) video-id) videos))
+        item-gen (fn [[medium-id {:keys [score] :as m}]]
+                   (let [medium (first (filter #(= (:id %) medium-id) media))
                          rel-score (rel-score-fn m)]
                      (list-item
                       (bar
                        [(span &quot;hitlist_text&quot;
                               (link
-                               (str &quot;../../videos/&quot; video-id &quot;/index.html?match=&quot; (:id category))
+                               (str &quot;../../media/&quot; medium-id &quot;/index.html?match=&quot; (:id category))
                                {:tag :span
-                                :attrs {:title (:name video)}
-                                :content (:name video)}))
+                                :attrs {:title (:name medium)}
+                                :content (:name medium)}))
                         (span &quot;hitlist_stats&quot;
                               (strong (stats-str-fn score rel-score)))]
                        color
@@ -4560,14 +4554,14 @@ reside in <a href="#distillery.data">distillery.data</a>.</p></li>
    configuration
    :main-cloud))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn- render-main-overview
-  [{:keys [job-description videos categories words] :as args}]
+  [{:keys [job-description media categories words] :as args}]
   (innerpage &quot;overview&quot; (txt :main-overview-h) true
              [(paragraph &quot;explanation&quot; (txt :main-overview-d))
               (headline 4 (txt :main-overview-description-h))
               (paragraph job-description)
               (headline 4 (txt :main-overview-content-h))
               (ulist &quot;main_statistic&quot;
-                     [(list-item (str (txt :main-overview-videos) (count videos)))
+                     [(list-item (str (txt :main-overview-media) (count media)))
                       (list-item (str (txt :main-overview-categories) (count categories)))
                       (list-item (str (txt :main-overview-words) (count words)))])
               (headline 4 (txt :main-overview-hitlist-h))
@@ -4625,26 +4619,26 @@ reside in <a href="#distillery.data">distillery.data</a>.</p></li>
    :secondary-menu [[(txt :categories-menu-overview) (jshref &quot;innerpage('overview')&quot;)]]
    :page
      [(headline 2 (txt :categories-h))
-      (render-categories-list args)]])</pre></td></tr><tr><td class="docs"><p>Renders a video link as list item.</p>
-</td><td class="codes"><pre class="brush: clojure">(defn- render-videos-list-item
-  [{:keys [id name] :as video}]
-  (list-item (link (str &quot;videos/&quot; id &quot;/index.html&quot;) name)))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn- render-videos-list
-  [{:keys [videos] :as args}]
-  (let [videos-list (-&gt;&gt; videos
+      (render-categories-list args)]])</pre></td></tr><tr><td class="docs"><p>Renders a medium link as list item.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn- render-media-list-item
+  [{:keys [id name] :as medium}]
+  (list-item (link (str &quot;media/&quot; id &quot;/index.html&quot;) name)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn- render-media-list
+  [{:keys [media] :as args}]
+  (let [media-list (-&gt;&gt; media
                         (into (sorted-set-by (key-comp :name)))
-                        (map render-videos-list-item)
+                        (map render-media-list-item)
                         (ulist))]
-    (innerpage &quot;overview&quot; (txt :videos-overview-h) true
-               [(paragraph &quot;explanation&quot; (txt :videos-overview-d))
-                videos-list])))</pre></td></tr><tr><td class="docs"><p>Renders the videos main page.</p>
-</td><td class="codes"><pre class="brush: clojure">(defn render-videos-page
+    (innerpage &quot;overview&quot; (txt :media-overview-h) true
+               [(paragraph &quot;explanation&quot; (txt :media-overview-d))
+                media-list])))</pre></td></tr><tr><td class="docs"><p>Renders the media main page.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn render-media-page
   [{:keys [job-name] :as args}]
-  [:title (build-title args (txt :videos-title))
-   :secondary-menu [[(txt :videos-menu-overview) (jshref &quot;innerpage('overview')&quot;)]]
+  [:title (build-title args (txt :media-title))
+   :secondary-menu [[(txt :media-menu-overview) (jshref &quot;innerpage('overview')&quot;)]]
    :page
-     [(headline 2 (txt :videos-h))
-      (render-videos-list args)]])</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#distillery.view.match" name="distillery.view.match"><h1 class="project-name">distillery.view.match</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+     [(headline 2 (txt :media-h))
+      (render-media-list args)]])</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#distillery.view.match" name="distillery.view.match"><h1 class="project-name">distillery.view.match</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns distillery.view.match
   (:require [clojure.string :as string])
   (:require [net.cgrand.enlive-html :as eh])
@@ -4653,8 +4647,8 @@ reside in <a href="#distillery.data">distillery.data</a>.</p></li>
   (:require [distillery.text :refer [txt]])
   (:require [distillery.view.html :refer :all]))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn- render-category-match-word-list
-  [{:keys [video match max-score max-word-score] :as args}]
-  (let [index (:index video)
+  [{:keys [medium match max-score max-word-score] :as args}]
+  (let [index (:index medium)
         items (-&gt;&gt; (:word-scores match)
                    (sort-by second)
                    reverse
@@ -4667,14 +4661,14 @@ reside in <a href="#distillery.data">distillery.data</a>.</p></li>
                                        lexical-form)]))))]
     (div (ulist items))))</pre></td></tr><tr><td class="docs"><p>Renders the include part for the match frame of a category page.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn render-category-match-include
-  [{:keys [videos category match max-score] :as args}]
-  (let [{:keys [video-id]} match
-        video (first (filter #(= (:id %) video-id) videos))]
-    [(paragraph [(str (txt :video) &quot;: &quot;) (strong (:name video)) {:tag :br}
+  [{:keys [media category match max-score] :as args}]
+  (let [{:keys [medium-id]} match
+        medium (first (filter #(= (:id %) medium-id) media))]
+    [(paragraph [(str (txt :medium) &quot;: &quot;) (strong (:name medium)) {:tag :br}
                  (str (txt :category) &quot;: &quot;) (strong (:name category))])
      (paragraph (str (txt :match-normalized) (format &quot;%.4f&quot; (/ (:score match) max-score))))
      (paragraph &quot;explanation&quot; (txt :match-d))
-     (render-category-match-word-list (assoc args :video video))]))</pre></td></tr><tr><td class="docs">
+     (render-category-match-word-list (assoc args :medium medium))]))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn- render-match-matrix-head-cell
   [{:keys [id name] :as category}]
   {:tag :th
@@ -4687,44 +4681,44 @@ reside in <a href="#distillery.data">distillery.data</a>.</p></li>
                   {:tag :td :content }
                   (map render-match-matrix-head-cell categories)))})</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn- render-match-matrix-row
-  [matrix max-score category-ids {:keys [id name] :as video}]
+  [matrix max-score category-ids {:keys [id name] :as medium}]
   {:tag :tr
    :content
    (vec (cons {:tag :th
                :content [{:tag :a
-                          :attrs {:href (str &quot;videos/&quot; id &quot;/index.html&quot;)
+                          :attrs {:href (str &quot;media/&quot; id &quot;/index.html&quot;)
                                   :title name}
                           :content name}]}
               (map
                (fn [category-id]
                  (let [match (get-in matrix [category-id id])
                        score (:score match)
-                       video-max-score (:max-score video)
+                       medium-max-score (:max-score medium)
                        normalized-score (if (&gt; max-score 0) (/ score max-score) 0)
-                       video-normalized-score (if (&gt; video-max-score 0) (/ score video-max-score) 0)]
+                       medium-normalized-score (if (&gt; medium-max-score 0) (/ score medium-max-score) 0)]
                    (if match
                      {:tag :td
-                      :attrs {:data-video-id id
+                      :attrs {:data-medium-id id
                               :data-category-id category-id
-                              :style (str &quot;background-color: rgba(234,30,106,&quot; video-normalized-score &quot;)&quot;)}
+                              :style (str &quot;background-color: rgba(234,30,106,&quot; medium-normalized-score &quot;)&quot;)}
                       :content [(link (str &quot;categories/&quot; category-id &quot;/index.html?match=&quot; id)
                                       (format &quot;%.1f%%&quot; (* 100 normalized-score)))]}
                      {:tag :td :content []})))
                category-ids)))})</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn render-match-matrix
-  [{:keys [videos categories max-score] :as args}]
+  [{:keys [media categories max-score] :as args}]
   (let [matrix (-&gt;&gt; categories
                     (map
                      (fn [category]
                        [(:id category)
-                        (-&gt;&gt; videos
+                        (-&gt;&gt; media
                              (map
-                              (fn [video]
-                                [(:id video)
-                                 (get (:matches video) (:id category))]))
+                              (fn [medium]
+                                [(:id medium)
+                                 (get (:matches medium) (:id category))]))
                              (map
-                              (fn [[video-id match]]
-                                [video-id match]))
+                              (fn [[medium-id match]]
+                                [medium-id match]))
                              (apply concat)
                              (apply hash-map))]))
                     (apply concat)
@@ -4740,7 +4734,119 @@ reside in <a href="#distillery.data">distillery.data</a>.</p></li>
          [(render-match-matrix-head-row categories)]}
         {:tag :tbody
          :content
-         (vec (map (partial render-match-matrix-row matrix max-score category-ids) videos))}]}]}))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#distillery.view.transcript" name="distillery.view.transcript"><h1 class="project-name">distillery.view.transcript</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+         (vec (map (partial render-match-matrix-row matrix max-score category-ids) media))}]}]}))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#distillery.view.medium" name="distillery.view.medium"><h1 class="project-name">distillery.view.medium</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(ns distillery.view.medium
+  (:require [clojure.string :as string])
+  (:require [net.cgrand.enlive-html :as eh])
+  (:require [mastersign.html :refer :all])
+  (:require [mastersign.files :refer :all])
+  (:require [distillery.config :as cfg])
+  (:require [distillery.text :refer [txt]])
+  (:require [distillery.view.html :refer :all])
+  (:require [distillery.view.cloud :as cloud])
+  (:require [distillery.view.transcript :as transcript])
+  (:require [distillery.view.glossary :as glossary])
+  (:require [distillery.view.hitlist :as hitlist]))</pre></td></tr><tr><td class="docs"><p>Creates the headline for the medium page.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn- render-headline
+  [{:keys [medium]}]
+  (headline 2 (:name medium)))</pre></td></tr><tr><td class="docs"><p>Creates the HTML for the video display box.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn- render-video
+  [{:keys [medium]}]
+  {:tag :figure
+   :attrs {:class &quot;video-box&quot;}
+   :content
+   [{:tag :video
+     :attrs {:id &quot;main_video&quot;
+             :class &quot;video-js vjs-default-skin&quot;
+             :controls &quot;controls&quot;
+             :preload &quot;auto&quot;
+             :width &quot;540&quot;
+             :height &quot;360&quot; }
+     :content [{:tag :source
+                :attrs
+                {:src (str (:id medium) &quot;.mp4&quot;)
+                 :type &quot;video/mp4&quot; }}]}]})</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn- render-hitlist
+  [{:keys [configuration] :as job} {:keys [id index] :as medium}]
+  (hitlist/render-occurrence-hitlist
+   (vals index)
+   (fn [w] (filter #(= id (:medium-id %)) (:occurrences w)))
+   configuration
+   :medium-cloud))</pre></td></tr><tr><td class="docs"><p>Creates the HTML for the waveform.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn- render-waveform
+  [{:keys [output-dir] :as job} {:keys [id waveform-file] :as medium}]
+  (copy-file
+   (get-path waveform-file)
+   (get-path output-dir &quot;media&quot; id &quot;waveform.png&quot;))
+  (div &quot;medium_waveform&quot;
+       {:tag :img
+        :attrs { :class &quot;waveform_img&quot;
+                 :alt (txt :medium-overview-waveform)
+                 :src &quot;waveform.png&quot; }
+        :content []}))</pre></td></tr><tr><td class="docs"><p>Creates the HTML for the overview page.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn- render-overview
+  [{:keys [medium] :as job}]
+  (innerpage &quot;overview&quot; (txt :medium-overview-h) true
+             [(ulist &quot;medium_statistic&quot;
+                     [(list-item (str (txt :medium-overview-duration) (transcript/format-time (:duration medium))))
+                      (list-item (str (txt :medium-overview-phrase-count) (:phrase-count medium)))
+                      (list-item (str (txt :medium-overview-word-count) (:word-count medium)))
+                      (list-item (str (txt :medium-overview-index-size) (count (:index medium))))
+                      (list-item (str (txt :medium-overview-mean-confidence) (format &quot;%1.1f%%&quot; (* 100 (:confidence medium)))))])
+              (headline 4 (txt :medium-overview-waveform-h))
+              (paragraph &quot;explanation&quot; (txt :medium-overview-waveform-d))
+              (render-waveform job medium)
+              (headline 4 (txt :medium-overview-hitlist-h))
+              (paragraph &quot;explanation&quot; (txt :medium-overview-hitlist-d))
+              (render-hitlist job medium)]))</pre></td></tr><tr><td class="docs"><p>Creates the HTML for the transcript with all phrases.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn- render-medium-transcript
+  [{{:keys [results index] :as medium} :medium :as args}]
+  (innerpage &quot;transcript&quot; (txt :medium-transcript-h) false
+             [(paragraph &quot;explanation&quot; (txt :medium-transcript-d))
+              (transcript/render-transcript results :index index)]))</pre></td></tr><tr><td class="docs"><p>Create the HTML for the medium glossary.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn- render-medium-glossary
+  [{{:keys [pindex] :as medium} :medium :as args}]
+  (innerpage &quot;glossary&quot; (txt :medium-glossary-h) false
+             [(paragraph &quot;explanation&quot; (txt :medium-glossary-d))
+              (glossary/render-glossary pindex)]))</pre></td></tr><tr><td class="docs"><p>Create the HTML for the medium word cloud.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn- render-cloud
+  [{{:keys [id cloud] :as medium} :medium :as args}]
+  (innerpage &quot;cloud&quot; (txt :medium-wordcloud-h) false
+             [(paragraph &quot;explanation&quot; (txt :medium-wordcloud-d))
+              (cloud/render-cloud id cloud)]))</pre></td></tr><tr><td class="docs"><p>Create the HTML for the media categories.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn- render-categories
+  [{:keys [configuration categories medium max-score] :as args}]
+  (let [category-fn (fn [cid] (first (filter #(= cid (:id %)) categories)))]
+    (innerpage &quot;categories&quot; (txt :medium-categories-h) false
+               [(paragraph &quot;explanation&quot; (txt :medium-categories-d))
+                (hitlist/render-category-matchlist
+                 medium
+                 categories
+                 configuration)])))</pre></td></tr><tr><td class="docs"><p>Create the HTML for the word frame.
+  The word frame is an empty container to load a medium word page into.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn- render-medium-word-frame
+  [args]
+  (innerpage &quot;word&quot; (txt :medium-word-h) false nil))</pre></td></tr><tr><td class="docs"><p>Renders the main page for a medium.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn render-medium-page
+  [{:keys [job-name medium categories configuration] :as args}]
+  [:base-path &quot;../../&quot;
+   :title (build-title args (txt :medium-title))
+   :secondary-menu [[(txt :medium-menu-overview) (jshref &quot;innerpage('overview')&quot;)]
+                    (when-not (cfg/value :skip-wordclouds configuration)
+                      [(txt :medium-menu-wordcloud) (jshref &quot;innerpage('cloud')&quot;)])
+                    [(txt :medium-menu-transcript) (jshref &quot;innerpage('transcript')&quot;)]
+                    (when (seq categories)
+                      [(txt :medium-menu-categories) (jshref &quot;innerpage('categories')&quot;)])
+                    [(txt :medium-menu-glossary) (jshref &quot;innerpage('glossary')&quot;)]]
+   :page
+   [(render-headline args)
+    (render-video args)
+    (render-overview args)
+    (render-medium-transcript args)
+    (render-medium-glossary args)
+    (render-cloud args)
+    (render-categories args)
+    (render-medium-word-frame args)]])</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#distillery.view.transcript" name="distillery.view.transcript"><h1 class="project-name">distillery.view.transcript</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns distillery.view.transcript
   (:require [clojure.string :as string])
   (:require [net.cgrand.enlive-html :as eh])
@@ -4776,124 +4882,11 @@ reside in <a href="#distillery.data">distillery.data</a>.</p></li>
   (map #(render-word % :index index :pivot pivot) words))</pre></td></tr><tr><td class="docs"><p>Creates the HTML for a single phrase.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn- render-result
   [result &amp; {:keys [index pivot]}]
-  (div &quot;phrase&quot; [(span &quot;tc&quot; (jslink (format &quot;video_jump(%f)&quot; (double (:start result))) (format-time (:start result))))
+  (div &quot;phrase&quot; [(span &quot;tc&quot; (jslink (format &quot;medium_jump(%f)&quot; (double (:start result))) (format-time (:start result))))
                  (span &quot;pt&quot; (render-phrase result :index index :pivot pivot))]))</pre></td></tr><tr><td class="docs"><p>Creates the HTML for a sequence of phrases.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn render-transcript
   [results &amp; {:keys [index pivot]}]
-  (div &quot;transcript&quot; (map #(render-result % :index index :pivot pivot) results)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#distillery.view.video" name="distillery.view.video"><h1 class="project-name">distillery.view.video</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(ns distillery.view.video
-  (:require [clojure.string :as string])
-  (:require [net.cgrand.enlive-html :as eh])
-  (:require [mastersign.html :refer :all])
-  (:require [mastersign.files :refer :all])
-  (:require [distillery.config :as cfg])
-  (:require [distillery.text :refer [txt]])
-  (:require [distillery.view.html :refer :all])
-  (:require [distillery.view.cloud :as cloud])
-  (:require [distillery.view.transcript :as transcript])
-  (:require [distillery.view.glossary :as glossary])
-  (:require [distillery.view.hitlist :as hitlist]))</pre></td></tr><tr><td class="docs"><p>Creates the headline for the video page.</p>
-</td><td class="codes"><pre class="brush: clojure">(defn- render-headline
-  [{:keys [video]}]
-  (headline 2 (:name video)))</pre></td></tr><tr><td class="docs"><p>Creates the HTML for the video display box.</p>
-</td><td class="codes"><pre class="brush: clojure">(defn- render-video
-  [{:keys [video]}]
-  {:tag :figure
-   :attrs {:class &quot;video-box&quot;}
-   :content
-   [{:tag :video
-     :attrs {:id &quot;main_video&quot;
-             :class &quot;video-js vjs-default-skin&quot;
-             :controls &quot;controls&quot;
-             :preload &quot;auto&quot;
-             :width &quot;540&quot;
-             :height &quot;360&quot; }
-     :content [{:tag :source
-                :attrs
-                {:src (str (:id video) &quot;.mp4&quot;)
-                 :type &quot;video/mp4&quot; }}]}]})</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn- render-hitlist
-  [{:keys [configuration] :as job} {:keys [id index] :as video}]
-  (hitlist/render-occurrence-hitlist
-   (vals index)
-   (fn [w] (filter #(= id (:video-id %)) (:occurrences w)))
-   configuration
-   :video-cloud))</pre></td></tr><tr><td class="docs"><p>Creates the HTML for the waveform.</p>
-</td><td class="codes"><pre class="brush: clojure">(defn- render-waveform
-  [{:keys [output-dir] :as job} {:keys [id waveform-file] :as video}]
-  (copy-file
-   (get-path waveform-file)
-   (get-path output-dir &quot;videos&quot; id &quot;waveform.png&quot;))
-  (div &quot;video_waveform&quot;
-       {:tag :img
-        :attrs { :class &quot;waveform_img&quot;
-                 :alt (txt :video-overview-waveform)
-                 :src &quot;waveform.png&quot; }
-        :content []}))</pre></td></tr><tr><td class="docs"><p>Creates the HTML for the overview page.</p>
-</td><td class="codes"><pre class="brush: clojure">(defn- render-overview
-  [{:keys [video] :as job}]
-  (innerpage &quot;overview&quot; (txt :video-overview-h) true
-             [(ulist &quot;video_statistic&quot;
-                     [(list-item (str (txt :video-overview-duration) (transcript/format-time (:duration video))))
-                      (list-item (str (txt :video-overview-phrase-count) (:phrase-count video)))
-                      (list-item (str (txt :video-overview-word-count) (:word-count video)))
-                      (list-item (str (txt :video-overview-index-size) (count (:index video))))
-                      (list-item (str (txt :video-overview-mean-confidence) (format &quot;%1.1f%%&quot; (* 100 (:confidence video)))))])
-              (headline 4 (txt :video-overview-waveform-h))
-              (paragraph &quot;explanation&quot; (txt :video-overview-waveform-d))
-              (render-waveform job video)
-              (headline 4 (txt :video-overview-hitlist-h))
-              (paragraph &quot;explanation&quot; (txt :video-overview-hitlist-d))
-              (render-hitlist job video)]))</pre></td></tr><tr><td class="docs"><p>Creates the HTML for the transcript with all phrases.</p>
-</td><td class="codes"><pre class="brush: clojure">(defn- render-video-transcript
-  [{{:keys [results index] :as video} :video :as args}]
-  (innerpage &quot;transcript&quot; (txt :video-transcript-h) false
-             [(paragraph &quot;explanation&quot; (txt :video-transcript-d))
-              (transcript/render-transcript results :index index)]))</pre></td></tr><tr><td class="docs"><p>Create the HTML for the video glossary.</p>
-</td><td class="codes"><pre class="brush: clojure">(defn- render-video-glossary
-  [{{:keys [pindex] :as video} :video :as args}]
-  (innerpage &quot;glossary&quot; (txt :video-glossary-h) false
-             [(paragraph &quot;explanation&quot; (txt :video-glossary-d))
-              (glossary/render-glossary pindex)]))</pre></td></tr><tr><td class="docs"><p>Create the HTML for the video word cloud.</p>
-</td><td class="codes"><pre class="brush: clojure">(defn- render-cloud
-  [{{:keys [id cloud] :as video} :video :as args}]
-  (innerpage &quot;cloud&quot; (txt :video-wordcloud-h) false
-             [(paragraph &quot;explanation&quot; (txt :video-wordcloud-d))
-              (cloud/render-cloud id cloud)]))</pre></td></tr><tr><td class="docs"><p>Create the HTML for the video categories.</p>
-</td><td class="codes"><pre class="brush: clojure">(defn- render-categories
-  [{:keys [configuration categories video max-score] :as args}]
-  (let [category-fn (fn [cid] (first (filter #(= cid (:id %)) categories)))]
-    (innerpage &quot;categories&quot; (txt :video-categories-h) false
-               [(paragraph &quot;explanation&quot; (txt :video-categories-d))
-                (hitlist/render-category-matchlist
-                 video
-                 categories
-                 configuration)])))</pre></td></tr><tr><td class="docs"><p>Create the HTML for the word frame.
-  The word frame is an empty container to load a video word page into.</p>
-</td><td class="codes"><pre class="brush: clojure">(defn- render-video-word-frame
-  [args]
-  (innerpage &quot;word&quot; (txt :video-word-h) false nil))</pre></td></tr><tr><td class="docs"><p>Renders the main page for a video.</p>
-</td><td class="codes"><pre class="brush: clojure">(defn render-video-page
-  [{:keys [job-name video categories configuration] :as args}]
-  [:base-path &quot;../../&quot;
-   :title (build-title args (txt :video-title))
-   ;   :js-code &quot;videojs.options.flash.swf = 'video-js.swf';&quot;
-   :secondary-menu [[(txt :video-menu-overview) (jshref &quot;innerpage('overview')&quot;)]
-                    (when-not (cfg/value :skip-wordclouds configuration)
-                      [(txt :video-menu-wordcloud) (jshref &quot;innerpage('cloud')&quot;)])
-                    [(txt :video-menu-transcript) (jshref &quot;innerpage('transcript')&quot;)]
-                    (when (seq categories)
-                      [(txt :video-menu-categories) (jshref &quot;innerpage('categories')&quot;)])
-                    [(txt :video-menu-glossary) (jshref &quot;innerpage('glossary')&quot;)]]
-   :page
-   [(render-headline args)
-    (render-video args)
-    (render-overview args)
-    (render-video-transcript args)
-    (render-video-glossary args)
-    (render-cloud args)
-    (render-categories args)
-    (render-video-word-frame args)]])</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#distillery.view.word" name="distillery.view.word"><h1 class="project-name">distillery.view.word</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+  (div &quot;transcript&quot; (map #(render-result % :index index :pivot pivot) results)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#distillery.view.word" name="distillery.view.word"><h1 class="project-name">distillery.view.word</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns distillery.view.word
   (:require [clojure.string :as string])
   (:require [net.cgrand.enlive-html :as eh])
@@ -4903,39 +4896,39 @@ reside in <a href="#distillery.data">distillery.data</a>.</p></li>
   (:require [distillery.text :refer [txt]])
   (:require [distillery.view.html :refer :all])
   (:require [distillery.view.transcript :as transcript]))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn- in-video-occurrences
-  [video word]
-  (filter #(= (:video-id %) (:id video)) (:occurrences word)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn- in-medium-occurrences
+  [medium word]
+  (filter #(= (:medium-id %) (:id medium)) (:occurrences word)))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn- render-word-statistic
   [{:keys [word] :as args}]
   (ulist &quot;word_statistic&quot;
          [(list-item (str (txt :main-word-occurrences) (:occurrence-count word)))
           (list-item (str (txt :main-word-mean-confidence) (format &quot;%1.1f%%&quot; (* 100 (:mean-confidence word)) &quot;%&quot;)))]))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn- render-video-word-statistic
-  [{:keys [video word] :as args}]
+</td><td class="codes"><pre class="brush: clojure">(defn- render-medium-word-statistic
+  [{:keys [medium word] :as args}]
   (ulist &quot;word_statistic&quot;
-         [(list-item (str (txt :video-word-occurrences) (count (in-video-occurrences video word))))
-          (list-item (str (txt :video-word-mean-confidence) (format &quot;%1.1f%%&quot; (* 100 (:mean-confidence word)) &quot;%&quot;)))]))</pre></td></tr><tr><td class="docs">
+         [(list-item (str (txt :medium-word-occurrences) (count (in-medium-occurrences medium word))))
+          (list-item (str (txt :medium-word-mean-confidence) (format &quot;%1.1f%%&quot; (* 100 (:mean-confidence word)) &quot;%&quot;)))]))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn- render-category-word-statistic
   [{:keys [category word] :as args}]
   (ulist &quot;word_statistic&quot;
          [(list-item (str (txt :category-word-occurrences) (:occurrence-count word)))]))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn- render-video-word-phrases
-  [{:keys [video word] :as args}]
-  (let [occurrences (in-video-occurrences video word)
+</td><td class="codes"><pre class="brush: clojure">(defn- render-medium-word-phrases
+  [{:keys [medium word] :as args}]
+  (let [occurrences (in-medium-occurrences medium word)
         results (into
                  (sorted-set-by (key-comp :start))
-                 (map #(get (:results video) (:result-no %)) occurrences))]
-    (transcript/render-transcript results :index (:index video) :pivot (:lexical-form word))))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn- render-video-list-item
-  [word-id {:keys [id name] :as video}]
-  (list-item (link (str &quot;videos/&quot; id &quot;/index.html?word=&quot; word-id) name)))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn- render-word-video-list
+                 (map #(get (:results medium) (:result-no %)) occurrences))]
+    (transcript/render-transcript results :index (:index medium) :pivot (:lexical-form word))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn- render-medium-list-item
+  [word-id {:keys [id name] :as medium}]
+  (list-item (link (str &quot;media/&quot; id &quot;/index.html?word=&quot; word-id) name)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn- render-word-medium-list
   [{:keys [word] :as args}]
   (let [word-id (:id word)
-        video-ids (set (map :video-id (:occurrences word)))
-        videos (filter #(contains? video-ids (:id %)) (:videos args))]
-    (ulist (map (partial render-video-list-item word-id) videos))))</pre></td></tr><tr><td class="docs">
+        medium-ids (set (map :medium-id (:occurrences word)))
+        media (filter #(contains? medium-ids (:id %)) (:media args))]
+    (ulist (map (partial render-medium-list-item word-id) media))))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn- render-word-category-list
   [{:keys [categories word] :as args}]
   (let [word-id (:id word)
@@ -4959,31 +4952,31 @@ reside in <a href="#distillery.data">distillery.data</a>.</p></li>
     (if (&gt; (count items) 0)
       (ulist items)
       (paragraph (txt :main-word-category-list-empty)))))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn- render-category-word-video-list
-  [{:keys [videos category word max-word-score] :as args}]
-  (let [video-fn (fn [id] (first (filter #(= id (:id %)) videos)))
+</td><td class="codes"><pre class="brush: clojure">(defn- render-category-word-medium-list
+  [{:keys [media category word max-word-score] :as args}]
+  (let [medium-fn (fn [id] (first (filter #(= id (:id %)) media)))
         category-id (:id category)
         word-id (:id word)
         items (-&gt;&gt; (vals (:matches category))
-                   (map (fn [{:keys [video-id word-scores] :as match}]
-                          [video-id
+                   (map (fn [{:keys [medium-id word-scores] :as match}]
+                          [medium-id
                            (get word-scores word-id)]))
                    (filter #(not (nil? (second %))))
-                   (map (fn [[video-id score]]
-                          (let [video (video-fn video-id)]
+                   (map (fn [[medium-id score]]
+                          (let [medium (medium-fn medium-id)]
                             (list-item
                              [(format &quot;%.4f  &quot; (/ score max-word-score))
-                              (link (str &quot;../../videos/&quot; video-id &quot;/index.html?word=&quot; word-id)
-                                    (:name video))])))))]
+                              (link (str &quot;../../media/&quot; medium-id &quot;/index.html?word=&quot; word-id)
+                                    (:name medium))])))))]
     (if (&gt; (count items) 0)
       (ulist items)
-      (paragraph (txt :category-word-video-list-empty)))))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn- render-video-word-category-list
-  [{:keys [categories video word max-word-score] :as args}]
+      (paragraph (txt :category-word-medium-list-empty)))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn- render-medium-word-category-list
+  [{:keys [categories medium word max-word-score] :as args}]
   (let [category-fn (fn [id] (first (filter #(= id (:id %)) categories)))
-        video-id (:id video)
+        medium-id (:id medium)
         word-id (:id word)
-        items (-&gt;&gt; (vals (:matches video))
+        items (-&gt;&gt; (vals (:matches medium))
                    (map (fn [{:keys [category-id word-scores] :as match}]
                           [category-id
                            (get word-scores word-id)]))
@@ -4996,37 +4989,37 @@ reside in <a href="#distillery.data">distillery.data</a>.</p></li>
                                     (:name category))])))))]
     (if (&gt; (count items) 0)
       (ulist items)
-      (paragraph (txt :video-word-category-list-empty)))))</pre></td></tr><tr><td class="docs"><p>Renders the include part for the word frame.</p>
+      (paragraph (txt :medium-word-category-list-empty)))))</pre></td></tr><tr><td class="docs"><p>Renders the include part for the word frame.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn render-word-include
   [{:keys [word] :as args}]
   (let [{:keys [lexical-form pronunciation]} word]
     [(headline 4 &quot;word_headline&quot; [lexical-form (span &quot;pronunciation&quot; pronunciation)])
      (render-word-statistic args)
-     (headline 4 (txt :main-word-videos-h))
-     (paragraph &quot;explanation&quot; (txt :main-word-videos-d))
-     (render-word-video-list args)
+     (headline 4 (txt :main-word-media-h))
+     (paragraph &quot;explanation&quot; (txt :main-word-media-d))
+     (render-word-medium-list args)
      (headline 4 (txt :main-word-categories-h))
      (paragraph &quot;explanation&quot; (txt :main-word-categories-d))
-     (render-word-category-list args)]))</pre></td></tr><tr><td class="docs"><p>Renders the include part for the word frame of a video page.</p>
-</td><td class="codes"><pre class="brush: clojure">(defn render-video-word-include
+     (render-word-category-list args)]))</pre></td></tr><tr><td class="docs"><p>Renders the include part for the word frame of a medium page.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn render-medium-word-include
   [{:keys [word] :as args}]
   (let [{:keys [lexical-form pronunciation]} word]
     [(headline 4 &quot;word_headline&quot; [lexical-form (span &quot;pronunciation&quot; pronunciation)])
-     (render-video-word-statistic args)
-     (headline 4 (txt :video-word-phrases-h))
-     (paragraph &quot;explanation&quot; (txt :video-word-phrases-d))
-     (render-video-word-phrases args)
-     (headline 4 (txt :video-word-categories-h))
-     (paragraph &quot;explanation&quot; (txt :video-word-categories-d))
-     (render-video-word-category-list args)]))</pre></td></tr><tr><td class="docs"><p>Renders the include part for the word frame of a category page.</p>
+     (render-medium-word-statistic args)
+     (headline 4 (txt :medium-word-phrases-h))
+     (paragraph &quot;explanation&quot; (txt :medium-word-phrases-d))
+     (render-medium-word-phrases args)
+     (headline 4 (txt :medium-word-categories-h))
+     (paragraph &quot;explanation&quot; (txt :medium-word-categories-d))
+     (render-medium-word-category-list args)]))</pre></td></tr><tr><td class="docs"><p>Renders the include part for the word frame of a category page.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn render-category-word-include
   [{:keys [word] :as args}]
   (let [{:keys [lexical-form]} word]
     [(headline 4 &quot;word_headline&quot; lexical-form)
      (render-category-word-statistic args)
-     (headline 4 (txt :category-word-videos-h))
-     (paragraph &quot;explanation&quot; (txt :category-word-videos-d))
-     (render-category-word-video-list args)]))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#distillery.xmlresult" name="distillery.xmlresult"><h1 class="project-name">distillery.xmlresult</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+     (headline 4 (txt :category-word-media-h))
+     (paragraph &quot;explanation&quot; (txt :category-word-media-d))
+     (render-category-word-medium-list args)]))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#distillery.xmlresult" name="distillery.xmlresult"><h1 class="project-name">distillery.xmlresult</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns distillery.xmlresult
   (:import [java.util Locale])
   (:require [clojure.java.io :refer (writer)])
@@ -5042,8 +5035,8 @@ reside in <a href="#distillery.data">distillery.data</a>.</p></li>
   [job category resource]
   [:Resource {:type (name (:type resource))} (:url resource)])</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn- category-match-tag
-  [job category [video-id match]]
-  [:Match {:video-id video-id
+  [job category [medium-id match]]
+  [:Match {:medium-id medium-id
            :score (format-invariant &quot;%.6f&quot; (:score match))}])</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn- category-tag
   [job category]
@@ -5057,8 +5050,8 @@ reside in <a href="#distillery.data">distillery.data</a>.</p></li>
    (tag-list :ResourceList
              (partial category-resource-tag job category)
              (:resources category))])</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn- video-match-tag
-  [job video [category-id match]]
+</td><td class="codes"><pre class="brush: clojure">(defn- medium-match-tag
+  [job medium [category-id match]]
   [:Match {:category-id category-id
            :score (format-invariant &quot;%.6f&quot; (:score match))}])</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn- recognized-word
@@ -5078,28 +5071,28 @@ reside in <a href="#distillery.data">distillery.data</a>.</p></li>
    ;          (:words result))
    ])</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn- speech-recognition-tag
-  [job video]
-  [:SpeechRecognition {:profile (:recognition-profile video)
-                       :profile-name (:recognition-profile-name video)}
+  [job medium]
+  [:SpeechRecognition {:profile (:recognition-profile medium)
+                       :profile-name (:recognition-profile-name medium)}
    (tag-list :PhraseList
              (partial recognized-phrase job)
-             (:results video))])</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn- video-tag
-  [job video]
-  [:Media {:id (:id video)}
-   [:Name {} (:name video)]
+             (:results medium))])</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn- medium-tag
+  [job medium]
+  [:Media {:id (:id medium)}
+   [:Name {} (:name medium)]
    (tag-list :MatchList
-             (partial video-match-tag job video)
+             (partial medium-match-tag job medium)
              (filter
               (fn [[id match]] (&gt;= (:score match) (get-in job [:configuration :min-match-score])))
-              (:matches video)))
-   [:Source {} (:video-file video)]
-   (speech-recognition-tag job video)])</pre></td></tr><tr><td class="docs">
+              (:matches medium)))
+   [:Source {} (:medium-file medium)]
+   (speech-recognition-tag job medium)])</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn- occurrence-tag
-  [job word {:keys [video-id result-no word-no] :as occurrence}]
-  (let [video (first (filter #(= video-id (:id %)) (:videos job)))
-        phrase-start (get-in video [:results result-no :start])]
-    [:Occurrence {:video video-id
+  [job word {:keys [medium-id result-no word-no] :as occurrence}]
+  (let [medium (first (filter #(= medium-id (:id %)) (:media job)))
+        phrase-start (get-in medium [:results result-no :start])]
+    [:Occurrence {:medium medium-id
                   :phrase result-no
                   :no word-no
                   :phrase-start (format-invariant &quot;%.2f&quot; (double phrase-start))}]))</pre></td></tr><tr><td class="docs">
@@ -5121,8 +5114,8 @@ reside in <a href="#distillery.data">distillery.data</a>.</p></li>
               (partial category-tag job)
               (:categories job))
     (tag-list :MediaList
-              (partial video-tag job)
-              (:videos job))
+              (partial medium-tag job)
+              (:media job))
     (tag-list :Glossary
               (partial word-tag job)
               (map val (:words job)))]))</pre></td></tr><tr><td class="docs">
