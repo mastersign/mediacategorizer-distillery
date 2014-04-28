@@ -23,7 +23,7 @@
   (trace-block
    "Result Output"
    (dt/save-result-as-xml job))
-  (when (get-in job [:configuration :visualize-results])
+  (when (get-in job [:configuration :visualize-result])
     (trace-block
      "Result Visualization"
      (dt/prepare-output-dir job)
