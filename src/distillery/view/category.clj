@@ -1,7 +1,10 @@
 (ns distillery.view.category
   (:require [clojure.string :as string])
   (:require [net.cgrand.enlive-html :as eh])
-  (:require [distillery.files :refer :all])
+  (:require [mastersign.html :refer :all])
+  (:require [mastersign.files :refer :all])
+  (:require [distillery.config :as cfg])
+  (:require [distillery.text :refer [txt]])
   (:require [distillery.view.cloud :as cloud])
   (:require [distillery.view.glossary :as glossary])
   (:require [distillery.view.hitlist :as hitlist])
@@ -23,58 +26,62 @@
 (defn- render-overview
   "Creates the HTML for the overview page."
   [{:keys [category] :as job}]
-  (innerpage "overview" "Übersicht" true
+  (innerpage "overview" (txt :category-overview-h) true
              [(ulist "category_statistic"
-                    [(list-item (str "Quellen: " (count (:resources category))))
-                     (list-item (str "Gesamtanzahl Worte: " (count (:words category))))
-                     (list-item (str "Worte im Index: " (count (:index category))))])
+                    [(list-item (str (txt :category-overview-resource-count) (count (:resources category))))
+                     (list-item (str (txt :category-overview-word-count) (count (:words category))))
+                     (list-item (str (txt :category-overview-index-size) (count (:index category))))])
+              (headline 4 (txt :category-overview-hitlist-h))
+              (paragraph "explanation" (txt :category-overview-hitlist-d))
               (render-hitlist job category)]))
 
 (defn- render-glossary
   "Creates the HTML for the category glossary page."
   [{{:keys [pindex] :as category} :category :as args}]
-  (innerpage "glossary" "Glossar" false
-             (glossary/render-glossary pindex)))
+  (innerpage "glossary" (txt :category-glossary-h) false
+             [(paragraph "explanation" (txt :category-glossary-d))
+              (glossary/render-glossary pindex)]))
 
 (defn- render-cloud
   "Creates the HTML for the overview page."
   [{{:keys [id cloud] :as category} :category :as args}]
-  (innerpage "cloud" "Wolke" false
-             (cloud/render-cloud id cloud)))
+  (innerpage "cloud" (txt :category-wordcloud-h) false
+             [(paragraph "explanation" (txt :category-wordcloud-d))
+              (cloud/render-cloud id cloud)]))
 
 (defn- render-videos
   "Creates the HTML for the overview page."
-  [{:keys [videos category max-score] :as args}]
+  [{:keys [videos category max-score configuration] :as args}]
   (let [video-fn (fn [mid] (first (filter #(= mid (:id %)) videos)))]
-    (innerpage "videos" "Videos" false
-               (ulist (map
-                       #(list-item [(format "%.4f  " (/ (:score %) max-score))
-                                    (jslink
-                                     (str "match('" (:video-id %) "');")
-                                     (:name (video-fn (:video-id %))))])
-                       (reverse (sort-by :score (vals (:matches category)))))))))
+    (innerpage "videos" (txt :category-videos-h) false
+               [(paragraph "explanation" (txt :category-videos-d))
+                (hitlist/render-video-matchlist
+                 category
+                 videos
+                 configuration)])))
 
 (defn- render-category-word-frame
   "Create the HTML for the word frame.
    The word frame is an empty container to load a category word page into."
   [args]
-  (innerpage "word" "Wort" false nil))
+  (innerpage "word" (txt :category-word-h) false nil))
 
 (defn- render-category-match-frame
   "Create the HTML for the match frame.
    The word frame is an empty container to load a category match page into."
   [args]
-  (innerpage "match" "Übereinstimmung" false nil))
+  (innerpage "match" (txt :category-match-h) false nil))
 
 (defn render-category-page
   "Renders the main page for a category."
-  [{:keys [job-name category] :as args}]
+  [{:keys [job-name category configuration] :as args}]
   [:base-path "../../"
-   :title (str job-name " - " "Kategorie")
-   :secondary-menu [["Übersicht" (jshref "innerpage('overview')")]
-                    ["Wortwolke" (jshref "innerpage('cloud')")]
-                    ["Videos" (jshref "innerpage('videos')")]
-                    ["Glossar" (jshref "innerpage('glossary')")]]
+   :title (build-title args (txt :category-title))
+   :secondary-menu [[(txt :category-menu-overview) (jshref "innerpage('overview')")]
+                    (when-not (cfg/value :skip-wordclouds configuration)
+                      [(txt :category-menu-wordcloud) (jshref "innerpage('cloud')")])
+                    [(txt :category-menu-videos) (jshref "innerpage('videos')")]
+                    [(txt :category-menu-glossary) (jshref "innerpage('glossary')")]]
    :page
      [(render-headline args)
       (render-overview args)

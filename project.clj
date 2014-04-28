@@ -1,4 +1,4 @@
-(defproject distillery "0.1.0"
+(defproject distillery "0.2.0"
   :description "A Clojure application to filter the most relevant words from speech recognition results."
   :url "http://informatik.fh-brandenburg.de/~kiertsch/"
   :license {:name "None"
@@ -8,6 +8,5 @@
                  [org.clojure/data.xml "0.0.7"]
                  [enlive "1.1.1"]]
   :global-vars {*warn-on-reflection* true}
-  :aot [distillery.core]
-  :main distillery.core)
-
+  :profiles {:uberjar {:main distillery.core
+                       :aot [distillery.core]}})

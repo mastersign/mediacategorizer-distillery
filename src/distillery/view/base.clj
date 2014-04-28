@@ -1,6 +1,8 @@
 (ns distillery.view.base
   (:require [net.cgrand.enlive-html :as eh])
-  (:require [distillery.files :refer :all])
+  (:require [mastersign.html :refer :all])
+  (:require [mastersign.files :refer :all])
+  (:require [distillery.text :refer [txt]])
   (:require [distillery.view.defaults :as defaults])
   (:require [distillery.view.html :refer :all]))
 
@@ -26,7 +28,7 @@
 (defn fix-menu-urls
   "Fixes all relative URLs in the menu by suffixing with the given base path."
   [base-path menu]
-  (let [map-map (fn [f m] (into {} (for [[k v] m] [k (f v)])))]
+  (let [map-map (fn [f m] (map (fn [pair] (when pair [(first pair) (f (second pair))])) m))]
     (map-map (partial fix-url base-path) menu)))
 
 (defn render
@@ -42,12 +44,15 @@
              page
              foot]}]
 
-  (let [title (if title (str "distillery - " title) "distillery")
+  (let [title-prefix (txt :frame-title-prefix)
+        title (if title
+                (if title-prefix (str title-prefix " - " title) title)
+                title-prefix)
         js-code (if js-code (str "$(function () { " js-code " });") nil)
         head (or head (headline 1 title))
         foot (or foot defaults/copyright)
         main-menu (menu
-                    (or main-menu (fix-menu-urls base-path defaults/main-menu))
+                    (fix-menu-urls base-path (or main-menu defaults/main-menu))
                     :title (or main-menu-title defaults/main-menu-title))
         secondary-menu (if secondary-menu
                          (menu

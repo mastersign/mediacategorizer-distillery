@@ -71,7 +71,14 @@
          (string/join " "))))
 
 (defn load-text-from-wikipedia
-  "Loads the textual content from an Wikipedia page."
+  "Loads the textual content from an Wikipedia page.
+
+  Takes the resource directly if the given URL uses the file protocol;
+  otherwise appends the query `?action=render` to the URL to get
+  a stripped version of the wikipedia page.
+
+  Removes a number of typical elements from the page
+  which occures in most wikipedia paged."
   [^String url & opts]
   (let [url (if (.startsWith url "file://")
               url
@@ -96,7 +103,7 @@
          (string/join " "))))
 
 (defn words-from-text
-  "Creates a sequence of words from a text."
+  "Creates a sequence of words from a plain text."
   [text]
   (->> (string/split text #"\b")
        (filter #(not (string/blank? %)))
@@ -159,12 +166,19 @@
 ;; ## Collection Math
 ;; A few helper functions to simplify some mathematical tasks on collections.
 
+(defn safe-max
+  "Computes the maximum of a numeric sequence.
+  Returns `0` if the sequence is empty."
+  [xs]
+  (if (empty? xs) 0 (apply max xs)))
+
 (defn sum
   "Computes the sum of a numeric sequence."
   [xs] (apply + xs))
 
 (defn mean
-  "Computes the mean value of a numeric sequence."
+  "Computes the mean value of a numeric sequence.
+  Return `0` if the sequence is empty."
   [xs]
   (let [cnt (count xs)]
     (if (> cnt 0) (/ (apply + xs) cnt) 0)))
@@ -172,5 +186,3 @@
 (defn squared-sum
   "Computes the sum of the squared items of a sequence."
   [xs] (apply + (map #(* % %) xs)))
-
-

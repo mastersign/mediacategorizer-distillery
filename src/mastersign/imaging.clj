@@ -6,7 +6,7 @@
   (:import [javax.imageio ImageIO]))
 
 (defn image
-  [w h]
+  ^BufferedImage [w h]
   (BufferedImage. w h BufferedImage/TYPE_INT_ARGB))
 
 (defn create-image
@@ -23,8 +23,8 @@
 
 (defn show-image
   [^Image img]
-  (let [w (.getWidth img)
-        h (.getHeight img)
+  (let [w (.getWidth img nil)
+        h (.getHeight img nil)
         fw (+ w 32)
         fh (+ h 56)
         frame (JFrame. "Image Display")
@@ -42,7 +42,3 @@
       (.setSize fw fh)
       (.setContentPane panel)
       (.setVisible true))))
-
-
-
-

@@ -1,8 +1,10 @@
 (ns distillery.view.word
   (:require [clojure.string :as string])
   (:require [net.cgrand.enlive-html :as eh])
+  (:require [mastersign.html :refer :all])
+  (:require [mastersign.files :refer :all])
   (:require [distillery.data :refer [key-comp any?]])
-  (:require [distillery.files :refer :all])
+  (:require [distillery.text :refer [txt]])
   (:require [distillery.view.html :refer :all])
   (:require [distillery.view.transcript :as transcript]))
 
@@ -13,19 +15,19 @@
 (defn- render-word-statistic
   [{:keys [word] :as args}]
   (ulist "word_statistic"
-         [(list-item (str "Vorkommen: " (:occurrence-count word)))
-          (list-item (format "Mittlere Erkennungssicherheit: %1.1f%%" (* 100 (:mean-confidence word)) "%"))]))
+         [(list-item (str (txt :main-word-occurrences) (:occurrence-count word)))
+          (list-item (str (txt :main-word-mean-confidence) (format "%1.1f%%" (* 100 (:mean-confidence word)) "%")))]))
 
 (defn- render-video-word-statistic
   [{:keys [video word] :as args}]
   (ulist "word_statistic"
-         [(list-item (str "Vorkommen: " (count (in-video-occurrences video word))))
-          (list-item (format "Mittlere Erkennungssicherheit: %1.1f%%" (* 100 (:mean-confidence word)) "%"))]))
+         [(list-item (str (txt :video-word-occurrences) (count (in-video-occurrences video word))))
+          (list-item (str (txt :video-word-mean-confidence) (format "%1.1f%%" (* 100 (:mean-confidence word)) "%")))]))
 
 (defn- render-category-word-statistic
   [{:keys [category word] :as args}]
   (ulist "word_statistic"
-         [(list-item (str "Vorkommen: " (:occurrence-count word)))]))
+         [(list-item (str (txt :category-word-occurrences) (:occurrence-count word)))]))
 
 (defn- render-video-word-phrases
   [{:keys [video word] :as args}]
@@ -68,7 +70,7 @@
                cats)]
     (if (> (count items) 0)
       (ulist items)
-      (paragraph "Dieses Wort kommt in keiner Kategorie vor."))))
+      (paragraph (txt :main-word-category-list-empty)))))
 
 (defn- render-category-word-video-list
   [{:keys [videos category word max-word-score] :as args}]
@@ -88,7 +90,7 @@
                                     (:name video))])))))]
     (if (> (count items) 0)
       (ulist items)
-      (paragraph "Dieses Wort kommt in keinem Video vor."))))
+      (paragraph (txt :category-word-video-list-empty)))))
 
 (defn- render-video-word-category-list
   [{:keys [categories video word max-word-score] :as args}]
@@ -108,7 +110,7 @@
                                     (:name category))])))))]
     (if (> (count items) 0)
       (ulist items)
-      (paragraph "Dieses Wort kommt in keiner Kategorie vor."))))
+      (paragraph (txt :video-word-category-list-empty)))))
 
 (defn render-word-include
   "Renders the include part for the word frame."
@@ -116,9 +118,11 @@
   (let [{:keys [lexical-form pronunciation]} word]
     [(headline 4 "word_headline" [lexical-form (span "pronunciation" pronunciation)])
      (render-word-statistic args)
-     (headline 4 "Videos")
+     (headline 4 (txt :main-word-videos-h))
+     (paragraph "explanation" (txt :main-word-videos-d))
      (render-word-video-list args)
-     (headline 4 "Kategorien")
+     (headline 4 (txt :main-word-categories-h))
+     (paragraph "explanation" (txt :main-word-categories-d))
      (render-word-category-list args)]))
 
 (defn render-video-word-include
@@ -127,9 +131,11 @@
   (let [{:keys [lexical-form pronunciation]} word]
     [(headline 4 "word_headline" [lexical-form (span "pronunciation" pronunciation)])
      (render-video-word-statistic args)
-     (headline 4 "Phrasen")
+     (headline 4 (txt :video-word-phrases-h))
+     (paragraph "explanation" (txt :video-word-phrases-d))
      (render-video-word-phrases args)
-     (headline 4 "Kategorien")
+     (headline 4 (txt :video-word-categories-h))
+     (paragraph "explanation" (txt :video-word-categories-d))
      (render-video-word-category-list args)]))
 
 (defn render-category-word-include
@@ -138,7 +144,6 @@
   (let [{:keys [lexical-form]} word]
     [(headline 4 "word_headline" lexical-form)
      (render-category-word-statistic args)
-     (headline 4 "Videos")
+     (headline 4 (txt :category-word-videos-h))
+     (paragraph "explanation" (txt :category-word-videos-d))
      (render-category-word-video-list args)]))
-
-

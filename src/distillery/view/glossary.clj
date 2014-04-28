@@ -1,4 +1,5 @@
 (ns distillery.view.glossary
+  (:require [mastersign.html :refer :all])
   (:require [distillery.view.html :refer :all]))
 
 (defn- render-glossary-word
@@ -30,24 +31,24 @@
   [pindex]
   (let [index-letters (map first pindex)]
     (->> (letter-list)
-         (map (fn [l] (map #(= % l) index-letters)))
+         (filter (fn [l] (map #(= % l) index-letters)))
          first)))
 
 (defn- render-glossary-partition
   "Creates the HTML for a partion of a glossary."
   [first-letter [letter index-part]]
-  (let [is-first-letter (= letter first-letter)]
-    {:tag :div
+  {:tag :div
      :attrs {:id (str "glossary-part-" (glossary-partition-id letter))
              :class "glossary-part"
-             :display (if is-first-letter "inherit" "none")}
-     :content [(ulist "glossary" (map render-glossary-word (vals index-part)))]}))
+             :style (if (= letter first-letter) "display:block;" "display:none;")}
+     :content [(ulist "glossary" (map render-glossary-word (vals index-part)))]})
 
 (defn render-glossary
   "Create the HTML for a glossary."
   [pindex]
   (let [fl (first-letter pindex)]
-    (vec (cons
-          (render-glossary-navigation pindex)
-          (map (partial render-glossary-partition fl) pindex)))))
-
+    {:tag :div
+     :attrs {:class "glossary"}
+     :content (vec (cons
+                    (render-glossary-navigation pindex)
+                    (map (partial render-glossary-partition fl) pindex)))}))

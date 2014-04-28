@@ -1,7 +1,9 @@
 (ns distillery.view.match
   (:require [clojure.string :as string])
   (:require [net.cgrand.enlive-html :as eh])
+  (:require [mastersign.html :refer :all])
   (:require [distillery.data :refer [key-comp any?]])
+  (:require [distillery.text :refer [txt]])
   (:require [distillery.view.html :refer :all]))
 
 (defn- render-category-match-word-list
@@ -17,16 +19,17 @@
                                       (jslink
                                        (str "word('" id "');")
                                        lexical-form)]))))]
-    (div
-     [(paragraph (format "Gesamt (normalisiert): %.4f" (/ (:score match) max-score)))
-      (ulist items)])))
+    (div (ulist items))))
 
 (defn render-category-match-include
   "Renders the include part for the match frame of a category page."
-  [{:keys [videos category match] :as args}]
+  [{:keys [videos category match max-score] :as args}]
   (let [{:keys [video-id]} match
         video (first (filter #(= (:id %) video-id) videos))]
-    [(headline 4 "match_headline" (:name video))
+    [(paragraph [(str (txt :video) ": ") (strong (:name video)) {:tag :br}
+                 (str (txt :category) ": ") (strong (:name category))])
+     (paragraph (str (txt :match-normalized) (format "%.4f" (/ (:score match) max-score))))
+     (paragraph "explanation" (txt :match-d))
      (render-category-match-word-list (assoc args :video video))]))
 
 (defn- render-match-matrix-head-cell
@@ -55,15 +58,16 @@
                (fn [category-id]
                  (let [match (get-in matrix [category-id id])
                        score (:score match)
-                       normalized-score (/ score max-score)
-                       video-normalized-score (/ score (:max-score video))]
+                       video-max-score (:max-score video)
+                       normalized-score (if (> max-score 0) (/ score max-score) 0)
+                       video-normalized-score (if (> video-max-score 0) (/ score video-max-score) 0)]
                    (if match
                      {:tag :td
                       :attrs {:data-video-id id
                               :data-category-id category-id
                               :style (str "background-color: rgba(234,30,106," video-normalized-score ")")}
                       :content [(link (str "categories/" category-id "/index.html?match=" id)
-                                 (format "%.1f%%" (* 100 normalized-score)))]}
+                                      (format "%.1f%%" (* 100 normalized-score)))]}
                      {:tag :td :content []})))
                category-ids)))})
 
@@ -97,4 +101,3 @@
         {:tag :tbody
          :content
          (vec (map (partial render-match-matrix-row matrix max-score category-ids) videos))}]}]}))
-

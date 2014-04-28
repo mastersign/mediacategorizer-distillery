@@ -1,1 +1,1 @@
-lein marg -d doc/api -f index.html
+lein marg -d doc -f api.html

@@ -42,37 +42,17 @@
     (get results (:result-no word))))
 
 (defn word-text
-  "Returns the text of a word. The word can be a string or a map with a the key :lexical-form."
+  "Returns the text of a word.
+  The word can be a string or a map with a the key `:lexical-form.`"
   [word]
   (or (if (map? word) (:lexical-form word) word) ""))
 
 (defn no-punctuation?
   "Checks whether the given word ends with a colon."
   [word]
-  (let [^String text (:text word)]
-    (not (or
-          (.endsWith text ".")
-          (.endsWith text ",")
-          (.endsWith text ":")
-          (.endsWith text ";")
-          (= text "@")
-          (= text "(")
-          (= text ")")
-          (= text "[")
-          (= text "]")
-          (= text "{")
-          (= text "}")
-          (= text "<")
-          (= text ">")
-          (= text "=")
-          (= text "§")
-          (= text "$")
-          (= text "&")
-          (= text "%")
-          (= text "?")
-          (= text "!")
-          (= text "/")
-          (= text "\\")))))
+  (let [^String text (:text word)
+        regex (re-pattern "\\W")]
+    (not (re-find regex text))))
 
 (defn not-short?
   "Checks whether a word is long enough to be relevant."
@@ -147,7 +127,7 @@
   [words]
   (->> words
        (map :appearance)
-       (apply max)))
+       (safe-max)))
 
 (defn correction-candidates
   "Returns frequent words that are most likely false recognized."
@@ -185,12 +165,12 @@
   [{:keys [^String lexical-form] :as word}]
   (comment "TODO Needs to be improved for arbitrary characters!")
   (-> lexical-form
-      (.replace " " "_")
       (.toLowerCase)
       (.replace "ß" "ss")
       (.replace "ä" "ae")
       (.replace "ö" "oe")
-      (.replace "ü" "ue")))
+      (.replace "ü" "ue")
+      (string/replace #"\W" "_")))
 
 (defn- compute-index-entry-stats
   [{:keys [occurrences] :as entry}]
@@ -233,7 +213,7 @@
                    (reduce-by-sorted :id add-occurrence nil)
                    (map-values compute-index-entry-stats))
         index-stats {:count (count index)
-                     :max-occurrence-count (apply max (map :occurrence-count (vals index)))}
+                     :max-occurrence-count (safe-max (map :occurrence-count (vals index)))}
         index (map-values (partial compute-index-entry-match-value index-stats) index)]
     (assoc video
       :index index
@@ -260,7 +240,7 @@
                    (reduce-by-sorted :id add-occurrence nil)
                    (map-values compute-index-entry-stats))
         index-stats {:count (count index)
-                     :max-occurrence-count (apply max (map :occurrence-count (vals index)))}
+                     :max-occurrence-count (safe-max (map :occurrence-count (vals index)))}
         index (map-values (partial compute-index-entry-match-value index-stats) index)]
     (assoc category
       :index index
@@ -284,6 +264,8 @@
        (map-values #(apply sorted-map (apply concat %)))))
 
 (defn- compute-matching-score
+  "Builds a [Category Match](data-structures.html#CategoryMatch) between
+  the given `video` and `category`."
   [video category]
   (let [cwidx (:index category)
         mwidx (:index video)
@@ -300,16 +282,21 @@
      :score score}))
 
 (defn match-video
+  "Builds the matches between all categories in the
+  [Analysis Results](data-structures.html#AnalysisResults) `job`
+  and the given `video`."
   [{:keys [categories configuration] :as job} video]
-  (let [matches (->> categories
-                  (map #(compute-matching-score video %))
-                  (filter #(>= (:score %) 0.0))
-                  (map #(vector (:category-id %) %))
-                  (apply concat)
-                  (apply sorted-map))]
+  (let [matches (if (not (empty? categories))
+                  (->> categories
+                       (map #(compute-matching-score video %))
+                       (filter #(>= (:score %) 0.0))
+                       (map #(vector (:category-id %) %))
+                       (apply concat)
+                       (apply sorted-map))
+                  {})]
   (assoc video
     :matches matches
-    :max-score (apply max (map :score (vals matches))))))
+    :max-score (safe-max (map :score (vals matches))))))
 
 (defn- lookup-matching-score
   [category video]
@@ -328,5 +315,4 @@
                   (apply sorted-map))]
   (assoc category
     :matches matches
-    :max-score (apply max (map :score (vals matches))))))
-
+    :max-score (safe-max (map :score (vals matches))))))

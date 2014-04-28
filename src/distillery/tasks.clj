@@ -1,16 +1,22 @@
+;; # The Namespace for Tasks
+;; A task is a high-level processing step in this application.
+;; Every task deals with a well delimited portion of the processing.
+;; The tasks are used by [distillery.core](#distillery.core).
+
 (ns distillery.tasks
   (:require [clojure.string :as string])
   (:require [clojure.pprint :as pp])
   (:require [clojure.java.browse :refer (browse-url)])
-  (:require [distillery.trace :refer :all])
+  (:require [mastersign.html :refer (save-page)])
+  (:require [mastersign.trace :refer :all])
+  (:require [mastersign.files :refer :all])
   (:require [distillery.config :as cfg])
+  (:require [distillery.text :refer [txt]])
   (:require [distillery.data :refer :all])
-  (:require [distillery.files :refer :all])
   (:require [distillery.blacklist :refer :all])
   (:require [distillery.processing :as proc])
   (:require [distillery.blacklist :as bl])
   (:require [distillery.xmlresult :as xr])
-  (:require [distillery.view.html :refer (save-page)])
   (:require [distillery.view.dependencies :refer (save-dependencies)])
   (:require [distillery.view.base :refer (render)])
   (:require [distillery.view.cloud :refer (build-cloud-word-data build-cloud-ui-data create-cloud)])
@@ -33,6 +39,16 @@
     #(doall (map %1 %2))))
 
 (defmacro process-pipeline
+  "This macro allows the definition of a pipeline
+  similar to `->`, but with the automatic generation
+  of tracing messages which allow the monitoring of
+  the pipeline during execution.
+
+  The first argument `pipe-name` is the name of the pipeline,
+  the second `x` is the initial argument for the first function
+  in the pipeline,
+  and the all following arguments `fs` are functions,
+  defining the process steps."
   [pipe-name x & fs]
   (let [trc (gensym "trc")]
   `(let [~trc (fn [x# no#] (trace-message ~(str "PIPELINE_STEP " pipe-name " ") (inc no#)) x#)]
@@ -46,13 +62,25 @@
                           fs)))))))
 
 (defmacro process-task-group
+  "This macro allows a group of potentially parallel tasks
+  be executed, and monitored by automatically generated
+  trace messages.
+
+  The first argument `group-name` is a name for the process group,
+  the second argument `job` is a job description and contains the configuration
+  for the parallelization,
+  the third argument `f` is a function which is called for every task in the group,
+  and all following arguments are process tasks."
   [group-name job f xs]
   `(let [f# (fn [x#] (let [res# (~f x#)] (trace-message ~(str "TASK_END " group-name)) res#))]
      (trace-message ~(str "TASKGROUP " group-name " [" (count xs) "]"))
-     (let [resv# (doall ((map-fn ~job) f# ~xs))]
+     (let [resv# ((map-fn ~job) f# ~xs)]
      (trace-message ~(str "TASKGROUP_END " group-name))
        resv#)))
 
+;; The private var `filter-map` holds a look-up-table
+;; mapping the filter keywords from the configuration to
+;; actual predicates.
 (def ^:private filter-map
   {:not-short proc/not-short?
    :noun proc/noun?
@@ -69,11 +97,30 @@
 
 
 ;; ## Task Functions
+;; The following public functions represent all process tasks used by the
+;; core tasks in [distillery.core](#distillery.core).
+;; The task functions are accompanied by some private functions,
+;; helping to organize the code of the tasks.
+;;
+;; The task functions are grouped by the following goals:
+;;
+;;  * Dependencies
+;;  * Preprocessing and Analysis
+;;      + Categories
+;;      + Speech Recognition Results
+;;      + Similarity Matching
+;;  * XML Result Generation
+;;  * Website Generation
+;;      + Main Pages
+;;      + Category Pages
+;;      + Video Pages
+
 
 ;; ### Dependencies
 
 (defn prepare-output-dir
-  "Prepares the output directory by creating a number of sub directories and copying site dependencies."
+  "Prepares the output directory by creating
+  a number of sub directories and copying site dependencies."
   [{:keys [output-dir]}]
   (trace-message "Preparing output directory " output-dir)
   (create-dir output-dir)
@@ -83,12 +130,23 @@
   (save-dependencies output-dir))
 
 
-;; ### Preprocessing, Analysis
+;; ### Preprocessing and Analysis
 
 ;; #### Categories
 
 (defn- load-category-resource
-  "Loads a single resource for a category."
+  "Loads a single resource for a category.
+  The resource is defined by an URL and can have on the following formats:
+
+  * `:plain` A plain text file, which can be simply tokenized to extract the words
+  * `:html` A HTML file, where the text is extracted by taking the page body
+    and concatenating all textual content from the markup.
+  * `:wikipedia` A Wikipedia page, which is preprocessed
+    to remove the navigation elements and some common headlines
+    which occur in every Wikipedia page.
+
+  The preprocessing functions to extract the words from the resources
+  reside in [distillery.data](#distillery.data)."
   [{:keys [id]} {:keys [type url] :as resource}]
   (trace-message "Loading category resource " url)
   (assoc resource :words
@@ -100,7 +158,7 @@
 
 
 (defn- load-category-resources
-  "Loads the resources for a category."
+  "Loads all resources for one category."
   [job {:keys [id resources] :as category}]
   (trace-message "Loading category resources for '" id "'")
   (let [resources* ((map-fn job) #(load-category-resource category %) resources)
@@ -111,7 +169,7 @@
 
 
 (defn load-categories
-  "Loads the resources of the categories."
+  "**TASK** - Loads all resources for all categories."
   [{:keys [categories] :as job}]
   (trace-block
    "Loading category resources"
@@ -120,6 +178,9 @@
 
 
 (defn- build-category-words
+  "Extends a [Category Description](data-structures.html#CategoryDescription)
+  by adding the slot `:words` with a collection of
+  [Descriptive Words](data-structures.html#DescriptiveWord)."
   [{:keys [id words] :as category}]
   (trace-message "Building words for category '" id "'")
   (assoc category :words
@@ -132,13 +193,17 @@
 
 
 (defn- build-category-index
+  "Extends a [Category Description](data-structures.html#CategoryDescription)
+  by adding the slot `:index` with a map pointing to
+  [Category Words](data-structures.html#CategoryWords) and
+  the slot `:index-stats` with the [Index Statistics](data-structures.html#IndexStatistics)."
   [job category]
   (trace-message "Building index for category '" (:id category) "'")
   (proc/add-category-word-index category :predicate (word-predicate job)))
 
 
 (defn analyze-categories
-  "Analyzes the categories and generates the index structures."
+  "**TASK** - Analyzes the categories and generates the index structures."
   [job]
   (trace-block
    "Analyzing categories"
@@ -158,7 +223,9 @@
 
 
 (defn- load-speech-recognition-result
-  "Loads the speech recognition results for a video."
+  "Loads the [Speech Recognition Result](data-structures.html#SpeechRecognitionResult)
+  for a video and extends the [Video Description](data-structures.html#VideoDescription)
+  by the slot `:results`."
   [{:keys [id results-file] :as video}]
   (trace-message "Loading results of " id)
   (let [results (-> results-file
@@ -169,7 +236,7 @@
 
 
 (defn load-speech-recognition-results
-  "Loads the speech recognition results for the videos."
+  "**TASK** - Loads the speech recognition results for all videos."
   [job]
   (trace-block
    "Loading speech recognition results"
@@ -178,26 +245,27 @@
 
 
 (defn- build-video-statistics
+  "Extends a [Video Description](data-structures.html#VideoDescription)
+  by the slots `:phrase-count`, `:word-count`, and `:confidence`."
   [{:keys [id results] :as video}]
   (trace-message "Building statistics for video '" id "'")
-  (let [last-result (last results)
-        duration (+ (:start last-result) (:duration last-result))]
-    (assoc video
-      :phrase-count (count results)
-      :word-count (count (proc/words results))
-      :confidence (mean (map :confidence results))
-      :duration duration)))
+  (assoc video
+    :phrase-count (count results)
+    :word-count (count (proc/words results))
+    :confidence (mean (map :confidence results))))
 
 
 (defn- build-video-index
-  "Analyzes the speech recognition results of a single video and builds the video word index."
+  "Extends a [Video Description](data-structures.html#VideoDescription)
+  by the slot `:index`, which is a map, pointing to [Video Words](data-structures.html#VideoWord),
+  and by the slot `:index-stats`, which holds the [Index Statistics](data-structures.html#IndexStatistics)."
   [job video]
   (trace-message "Building index for video '" (:id video) "'")
   (proc/add-video-word-index video :predicate (word-predicate job)))
 
 
 (defn- build-global-index
-  "Merges the video indexes into one global word index."
+  "Merges the video indexes into one global [Word Index](data-structures.html#WordIndex)."
   [{:keys [videos]}]
   (trace-block
    "Merging indexes"
@@ -205,7 +273,8 @@
 
 
 (defn analyze-speech-recognition-results
-  "Analyzes the speech recognition results and generates the index structures."
+  "**TASK** - Analyzes the speech recognition results and generates the index structures including
+  the [Video Words](data-structures.html#VideoWord) and the [Word Index](data-structures.html#WordIndex)."
   [job]
   (trace-block
    "Analyzing videos"
@@ -222,9 +291,12 @@
 
 ;; #### Similarity Matching
 
+
 (defn match-videos
-  "Matches the video indexes against the category indexes
-  and adds the matching scores to the videos."
+  "**TASK** - Matches the [Video Words](data-structures.html#VideoWord) of all videos against
+  the [Category Words](data-structures.html#CategoryWords) of all categories
+  and completes the given [Video Results](data-structures.html#VideoResult)
+  with the slots `:matches` and `:max-score`."
   [{:keys [videos] :as job}]
   (trace-block
    "Matching videos against categories"
@@ -235,8 +307,8 @@
 
 
 (defn lookup-categories-matches
-  "Looks up the matching scores from the videos
-  and adds them to the categories."
+  "**TASK** - Looks up the matching scores from the [Video Results](data-structures.html#VideoResult)
+  and adds them to the [Category Results](data-structures.html#CategoryResult)."
   [{:keys [categories] :as job}]
   (trace-block
    "Looking up category matching scores against videos"
@@ -247,37 +319,73 @@
 
 
 (defn matching-stats
-  "Builds some statistic values over the matching scores."
+  "**TASK** - Builds some statistic values over the matching scores for the whole job.
+
+  Completes the given [Analysis Results](data-structures.html#AnalysisResults)
+  by adding the slots `:max-score` and `:max-word-score`."
   [job]
   (let [matches (mapcat #(vals (:matches %)) (:videos job))
         scores (map :score matches)
         word-scores (mapcat #(vals (:word-scores %)) matches)]
         (assoc job
-          :max-score (apply max scores)
-          :max-word-score (apply max word-scores))))
+          :max-score (safe-max scores)
+          :max-word-score (safe-max word-scores))))
 
 
-;; ### Output Generation
+;; ### XML Result Generation
+
+
+(defn save-result-as-xml
+  "**TASK** - Writes the essential analysis and matching results to a XML file,
+  specified by the [Job Description](data-structures.html#JobDescription)."
+  [{:keys [output-dir result-file] :as job}]
+  (let [path (combine-path output-dir result-file)]
+    (xr/save-result path job))
+  nil)
+
+
+;; ### Website Generation
+
+
+(defn- create-main-menu
+  "Builds the main menu structure."
+  [{:keys [categories] :as args}]
+  [[(txt :frame-top-menu-project) "index.html"]
+   (when (seq categories)
+     [(txt :frame-top-menu-categories) "categories.html"])
+   [(txt :frame-top-menu-videos) "videos.html"]])
+
 
 (defn- create-page
+  "Generates a HTML page by calling the page function `page-f`
+  with the [Analysis Results](data-structures.html#AnalysisResults) `args`.
+  Saves the generated page in the `output-dir` of the job.
+  The filename of the page is specified by the `page-name`."
   [page-name page-f {:keys [output-dir] :as args}]
-  (let [target-file (combine-path output-dir page-name)]
-    (->> args
-         page-f
-         (apply render)
-         (save-page target-file))))
+  (let [target-file (combine-path output-dir page-name)
+        page-def (-> args
+                     page-f
+                     (concat [:main-menu (create-main-menu args)]))
+        page (apply render page-def)]
+    (save-page target-file page)))
 
 
 (defn- create-include
+  "Generates a HTML include file by calling the include function `include-f`
+  with the [Analysis Results](data-structures.html#AnalysisResults) `args`.
+  Saves the generated include in the `output-dir` of the job.
+  The filename of the include is specified by the `include-name`."
   [include-name include-f {:keys [output-dir] :as args}]
   (let [target-file (combine-path output-dir include-name)]
     (->> args
          include-f
          (save-page target-file))))
 
+
 ;; #### Main Pages
 
-(defn create-word-include
+
+(defn- create-word-include
   "Creates the include file for a word in the global context."
   [{:keys [output-dir] :as job} {:keys [path] :as word}]
   (create-include
@@ -286,8 +394,8 @@
     (assoc job :word word)))
 
 
-(defn create-word-includes
-  "Create includes for all words of the project."
+(defn- create-word-includes
+  "Create the include files for all words of the project."
   [{:keys [output-dir configuration words] :as job}]
   (if (cfg/value :skip-word-includes configuration)
     (trace-message "Skipping global word includes")
@@ -303,20 +411,21 @@
 
 
 (defn- create-main-cloud
-  "Creates the word cloud the global context."
+  "Creates the word cloud for the global context."
   [{:keys [output-dir configuration words] :as job}]
   (if (cfg/value :skip-wordclouds configuration)
     (do (trace-message "Skipping global wordcloud") [])
     (trace-block
      "Creating global wordcloud"
-     (build-cloud-ui-data (create-cloud (build-cloud-word-data words)
+     (build-cloud-ui-data (create-cloud (build-cloud-word-data words configuration :main-cloud)
                                         (combine-path output-dir "cloud.png")
                                         configuration
                                         :main-cloud)))))
 
 
 (defn create-index-page
-  "Creates the main page for the site."
+  "**TASK** - Creates the main page for the website including the
+  global word cloud and the include files for all words."
   [job]
   (trace-message "Creating index page")
   (let [cloud (create-main-cloud job)
@@ -328,14 +437,14 @@
 
 
 (defn create-categories-page
-  "Creates the overview page for all categories."
+  "**TASK** - Creates the overview page for all categories."
   [job]
   (trace-message "Creating categories overview page")
   (create-page "categories.html" v-index/render-categories-page job))
 
 
 (defn create-videos-page
-  "Creates the overview page for all videos."
+  "**TASK** - Creates the overview page for all videos."
   [job]
   (trace-message "Creating videos overview page")
   (create-page "videos.html" v-index/render-videos-page job))
@@ -343,7 +452,7 @@
 
 ;; #### Category Pages
 
-(defn create-category-word-include
+(defn- create-category-word-include
   "Creates the include file for a word in the context of a category."
   [{:keys [output-dir] :as job} category {:keys [path] :as word}]
   (create-include
@@ -352,7 +461,7 @@
     (assoc job :category category :word word)))
 
 
-(defn create-category-word-includes
+(defn- create-category-word-includes
   "Create includes for all words of a category."
   [{:keys [output-dir configuration] :as job} {:keys [id index path] :as category}]
   (if (cfg/value :skip-word-includes configuration)
@@ -377,7 +486,7 @@
     (assoc job :category category :match match)))
 
 
-(defn create-category-match-includes
+(defn- create-category-match-includes
   "Create includes for all video matches of a category."
   [{:keys [output-dir configuration] :as job} {:keys [id matches path] :as category}]
   (if (cfg/value :skip-match-includes configuration)
@@ -400,13 +509,13 @@
     (do (trace-message "Skipping wordcloud for category '" id "'") [])
     (trace-block
      (str "Creating wordcloud for category '" id "'")
-     (build-cloud-ui-data (create-cloud (build-cloud-word-data index)
+     (build-cloud-ui-data (create-cloud (build-cloud-word-data index configuration :category-cloud)
                                         (combine-path output-dir path "cloud.png")
                                         configuration
                                         :category-cloud)))))
 
 
-(defn create-category-page
+(defn- create-category-page
   "Create the main page for a certain category."
   [{:keys [output-dir] :as job} {:keys [id index] :as category}]
   (trace-message "Creating category page for '" id "'")
@@ -431,7 +540,8 @@
 
 
 (defn create-category-pages
-  "Creates one page for every category."
+  "**TASK** - Creates one page for every category
+  including the word clouds and the word include files."
   [job]
   (trace-block
    "Creating category pages"
@@ -444,7 +554,7 @@
 
 ;; #### Video Pages
 
-(defn create-video-word-include
+(defn- create-video-word-include
   "Creates the include file for a word in the context of a video."
   [{:keys [output-dir] :as job} video {:keys [path] :as word}]
   (create-include
@@ -453,7 +563,7 @@
     (assoc job :video video :word word)))
 
 
-(defn create-video-word-includes
+(defn- create-video-word-includes
   "Create includes for all words of a video."
   [{:keys [output-dir configuration] :as job} {:keys [id index path] :as video}]
   (if (cfg/value :skip-word-includes configuration)
@@ -476,13 +586,13 @@
     (do (trace-message "Skipping wordcloud for video '" id "'") [])
     (trace-block
      (str "Creating wordcloud for " id)
-     (build-cloud-ui-data (create-cloud (build-cloud-word-data index)
+     (build-cloud-ui-data (create-cloud (build-cloud-word-data index configuration :video-cloud)
                                         (combine-path output-dir path "cloud.png")
                                         configuration
                                         :video-cloud)))))
 
 
-(defn create-video-page
+(defn- create-video-page
   "Create the main page for a certain video."
   [{:keys [output-dir configuration] :as job} {:keys [id index video-file] :as video}]
   (trace-message "Creating video page for '" id "'")
@@ -513,7 +623,8 @@
 
 
 (defn create-video-pages
-  "Creates one page for every video."
+  "**TASK** - Creates one page for every video
+  including the word clouds and the word include files."
   [job]
   (trace-block
    "Creating video pages"
@@ -521,13 +632,6 @@
     ((map-fn job)
      #(create-video-page job %)
      (:videos job))))
-  nil)
-
-
-(defn save-result-as-xml
-  [{:keys [output-dir result-file] :as job}]
-  (let [path (combine-path output-dir result-file)]
-    (xr/save-result path job))
   nil)
 
 
@@ -547,4 +651,3 @@
       .toUri
       .toString
       browse-url))
-

@@ -27,5 +27,3 @@
         stats (vec (map-indexed (fn [id x] [id x (/ (rand-int 101) 100.0) (rand)]) words))
         cloud (time (cloud/create-cloud stats))]
     (show-image (:image cloud))))
-
-

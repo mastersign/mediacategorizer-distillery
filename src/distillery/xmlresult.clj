@@ -1,6 +1,5 @@
 (ns distillery.xmlresult
-  (:import [java.util.Locale])
-  (:import [java.io.FileWriter])
+  (:import [java.util Locale])
   (:require [clojure.java.io :refer (writer)])
   (:require [clojure.data.xml :as xml]))
 
@@ -11,7 +10,7 @@
 
 (defn- format-invariant
   [fmt & args]
-  (String/format java.util.Locale/US fmt (to-array args)))
+  (String/format Locale/US fmt (to-array args)))
 
 (defn- category-resource-tag
   [job category resource]
@@ -97,8 +96,3 @@
   (let [tags (job-result-tags job)]
     (with-open [w (writer path)]
       (xml/indent tags w))))
-
-
-
-
-

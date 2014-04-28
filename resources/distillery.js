@@ -183,4 +183,3 @@ function get_query_variable(variable) {
   }
   return null;
 }
-

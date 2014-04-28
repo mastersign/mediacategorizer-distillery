@@ -1,25 +1,27 @@
 (ns distillery.view.cloud
   (:require [clojure.string :as string])
-  (:require [distillery.config :as cfg])
-  (:require [distillery.view.html :refer :all])
   (:require [mastersign.drawing :as mdr])
-  (:require [mastersign.wordcloud :as mwc]))
+  (:require [mastersign.wordcloud :as mwc])
+  (:require [mastersign.html :refer :all])
+  (:require [distillery.config :as cfg])
+  (:require [distillery.view.html :refer :all]))
 
 (defn build-cloud-word-data
   "Transforms the word meta-data from an index
   into the input format for the cloud generator."
-  [index]
+  [index config cloud-key]
   (let [max-occurrence (double (dec (apply max (cons 0 (map #(count (:occurrences %)) (vals index))))))]
     (vec
      (map
       (fn [w]
         (let [occurrence (dec (count (:occurrences w)))
-              confidence (/ (- (:mean-confidence w) (cfg/value :min-confidence)) (- 1 (cfg/value :min-confidence)))]
+              confidence (/ (- (:mean-confidence w) (cfg/value :min-confidence config))
+                            (- 1 (cfg/value :min-confidence config)))]
           [(:id w)
            (:lexical-form w)
-           (/ occurrence max-occurrence)
+           (if (> max-occurrence 0) (/ occurrence max-occurrence) 0.5)
            (* confidence confidence)]))
-      (filter #(> (count (:occurrences %)) 1) (vals index))))))
+      (filter #(>= (count (:occurrences %)) (cfg/value [cloud-key :min-occurrence] config)) (vals index))))))
 
 (defn build-cloud-ui-data
   "Transforms the result data from the cloud generator
@@ -29,7 +31,7 @@
        (->> word-infos
             (sort-by :v1)
             (map (fn
-                   [{:keys [id rect]}]
+                   [{:keys [id ^java.awt.geom.Rectangle2D$Float rect]}]
                    (str "{id:'" id "',r:{x:"(.x rect)",y:"(.y rect)",w:"(.width rect)",h:"(.height rect)"}}")))
             (string/join ","))
        "]"))

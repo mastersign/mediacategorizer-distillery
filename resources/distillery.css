@@ -24,6 +24,14 @@ figure {
   border: none;
 }
 
+.explanation {
+    color: #999;
+    font-size: 0.9em;
+    /*padding: 0 0.75em;
+    border-left: 3px solid #BBB;*/
+    margin: 1em 0;
+}
+
 video#main_video {
   margin-left: auto;
   margin-right: auto;
@@ -83,6 +91,10 @@ ul.glossary li {
   margin-left: 0.75em;
 }
 
+.word_headline {
+  color: #F00;
+}
+
 span.pronunciation {
   margin-left: 0.5em;
   font-style: italic;
@@ -131,12 +143,14 @@ ul.main_statistic li, ul.video_statistic li, ul.word_statistic li {
 }
 
 .hitlist_text {
-  float: left;
+  width: 65%;
   text-align: left;
+  white-space: nowrap;
 }
 
 .hitlist_stats {
-  float: right;
+  width: 35%;
+  white-space: nowrap;
   text-align: right;
 }
 
@@ -205,7 +219,3 @@ table.match-matrix tbody td a {
 .todo:before {
   content: "\23E9  ";
 }
-
-
-
-

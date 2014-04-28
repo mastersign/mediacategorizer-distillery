@@ -20,6 +20,7 @@
       :height 300
       :precision :medium
       :order-priority 0.6
+      :min-occurrence 1
       :font-family "Segoe UI"
       :font-style [:bold]
       :min-font-size 13
@@ -33,6 +34,7 @@
       :height 200
       :precision :medium
       :order-priority 0.6
+      :min-occurrence 1
       :font-family "Segoe UI"
       :font-style [:bold]
       :min-font-size 13
@@ -46,6 +48,7 @@
       :height 200
       :precision :low
       :order-priority 0.6
+      :min-occurrence 1
       :font-family "Segoe UI"
       :font-style [:bold]
       :min-font-size 13
@@ -54,5 +57,3 @@
       :background-color [0.0 0.0 0.0 0.0]
     }
 }
-
-
