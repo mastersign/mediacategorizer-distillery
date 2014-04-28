@@ -3028,7 +3028,7 @@ net.brehaut.ClojureTools = (function (SH) {
     build_tree: build_tree
   };
 })(SyntaxHighlighter);
-</script><title>distillery -- Marginalia</title></head><body><table><tr><td class="docs"><div class="header"><h1 class="project-name">distillery</h1><h2 class="project-version">0.4.0-SNAPSHOT</h2><br /><p>A Clojure application to filter the most relevant words from speech recognition results.</p>
+</script><title>distillery -- Marginalia</title></head><body><table><tr><td class="docs"><div class="header"><h1 class="project-name">distillery</h1><h2 class="project-version">0.4.0</h2><br /><p>A Clojure application to filter the most relevant words from speech recognition results.</p>
 </div><div class="dependencies"><h3>dependencies</h3><table><tr><td class="dep-name">org.clojure/clojure</td><td class="dotted"><hr /></td><td class="dep-version">1.5.1</td></tr><tr><td class="dep-name">org.clojure/data.xml</td><td class="dotted"><hr /></td><td class="dep-version">0.0.7</td></tr><tr><td class="dep-name">enlive</td><td class="dotted"><hr /></td><td class="dep-version">1.1.1</td></tr></table></div></td><td class="codes" style="text-align: center; vertical-align: middle;color: #666;padding-right:20px"><br /><br /><br />(this space intentionally left almost blank)</td></tr><tr><td class="docs"><div class="toc"><a name="toc"><h3>namespaces</h3></a><ul><li><a href="#distillery.blacklist">distillery.blacklist</a></li><li><a href="#distillery.config">distillery.config</a></li><li><a href="#distillery.core">distillery.core</a></li><li><a href="#distillery.data">distillery.data</a></li><li><a href="#distillery.processing">distillery.processing</a></li><li><a href="#distillery.tasks">distillery.tasks</a></li><li><a href="#distillery.text">distillery.text</a></li><li><a href="#distillery.txtresult">distillery.txtresult</a></li><li><a href="#distillery.view.base">distillery.view.base</a></li><li><a href="#distillery.view.category">distillery.view.category</a></li><li><a href="#distillery.view.cloud">distillery.view.cloud</a></li><li><a href="#distillery.view.defaults">distillery.view.defaults</a></li><li><a href="#distillery.view.dependencies">distillery.view.dependencies</a></li><li><a href="#distillery.view.glossary">distillery.view.glossary</a></li><li><a href="#distillery.view.hitlist">distillery.view.hitlist</a></li><li><a href="#distillery.view.html">distillery.view.html</a></li><li><a href="#distillery.view.index">distillery.view.index</a></li><li><a href="#distillery.view.match">distillery.view.match</a></li><li><a href="#distillery.view.medium">distillery.view.medium</a></li><li><a href="#distillery.view.transcript">distillery.view.transcript</a></li><li><a href="#distillery.view.word">distillery.view.word</a></li><li><a href="#distillery.xmlresult">distillery.xmlresult</a></li><li><a href="#mastersign.drawing">mastersign.drawing</a></li><li><a href="#mastersign.files">mastersign.files</a></li><li><a href="#mastersign.geom">mastersign.geom</a></li><li><a href="#mastersign.html">mastersign.html</a></li><li><a href="#mastersign.imaging">mastersign.imaging</a></li><li><a href="#mastersign.trace">mastersign.trace</a></li><li><a href="#mastersign.wordcloud">mastersign.wordcloud</a></li></ul></div></td><td class="codes">&nbsp;</td></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#distillery.blacklist" name="distillery.blacklist"><h1 class="project-name">distillery.blacklist</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs"><h1>Blacklist</h1>
 
 <p>This namespace contains functions for using the blacklist
@@ -4008,7 +4008,7 @@ reside in <a href="#distillery.data">distillery.data</a>.</p></li>
     ((map-fn job)
      #(create-category-page job %)
      (:categories job))))
-  nil)</pre></td></tr><tr><td class="docs"><h4>Medium Pages</h4>
+  nil)</pre></td></tr><tr><td class="docs"><h4>Media Pages</h4>
 </td><td class="codes"></td></tr><tr><td class="docs"><p>Creates the include file for a word in the context of a medium.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn- create-medium-word-include
   [{:keys [output-dir] :as job} medium {:keys [path] :as word}]
@@ -4040,7 +4040,7 @@ reside in <a href="#distillery.data">distillery.data</a>.</p></li>
                                         configuration
                                         :medium-cloud)))))</pre></td></tr><tr><td class="docs"><p>Create the main page for a certain medium.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn- create-medium-page
-  [{:keys [output-dir configuration] :as job} {:keys [id index medium-file] :as medium}]
+  [{:keys [output-dir configuration] :as job} {:keys [id index encoded-media-files] :as medium}]
   (trace-message &quot;Creating medium page for '&quot; id &quot;'&quot;)
   (let [medium-path (combine-path &quot;media&quot; id)]
     (create-dir (combine-path output-dir medium-path))
@@ -4049,13 +4049,17 @@ reside in <a href="#distillery.data">distillery.data</a>.</p></li>
           medium* (assoc medium* :cloud cloud)
           pindex (proc/partition-index index)
           medium* (assoc medium* :pindex pindex)
+          encoded-media-files* (map #(assoc % :ext (file-name-ext (:path %))) encoded-media-files)
+          medium* (assoc medium* :encoded-media-files encoded-media-files*)
           args (assoc job :medium medium*)]
       (if (cfg/value :skip-media-copy configuration)
         (trace-message &quot;Skipping copy mediafile for medium '&quot; id &quot;'&quot;)
-        (let [medium-target-file (combine-path output-dir medium-path (str id &quot;.mp4&quot;))]
-          (trace-message &quot;Copy mediafile for medium '&quot; id &quot;'&quot;)
-          (when (not (file-exists? medium-target-file))
-            (copy-file (get-path medium-file) (get-path medium-target-file)))))
+        (do
+          (trace-message &quot;Copy media files for medium '&quot; id &quot;'&quot;)
+          (doseq [{:keys [path ext]} encoded-media-files*]
+            (let [medium-target-file (combine-path output-dir medium-path (str id ext))]
+              (when (not (file-exists? medium-target-file))
+                (copy-file (get-path path) (get-path medium-target-file)))))))
       (create-page
        (combine-path medium-path &quot;index.html&quot;)
        v-medium/render-medium-page
@@ -4749,23 +4753,41 @@ reside in <a href="#distillery.data">distillery.data</a>.</p></li>
   (:require [distillery.view.hitlist :as hitlist]))</pre></td></tr><tr><td class="docs"><p>Creates the headline for the medium page.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn- render-headline
   [{:keys [medium]}]
-  (headline 2 (:name medium)))</pre></td></tr><tr><td class="docs"><p>Creates the HTML for the video display box.</p>
+  (headline 2 (:name medium)))</pre></td></tr><tr><td class="docs"><p>Creates the source element for an audio or video player.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn- render-media-source
+  [{:keys [id] :as medium} {:keys [ext mime-type] :as emf}]
+  {:tag :source
+   :attrs {:src (str (:id medium) ext)
+           :type mime-type}})</pre></td></tr><tr><td class="docs"><p>Creates the HTML for the video display box.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn- render-video
   [{:keys [medium]}]
-  {:tag :figure
-   :attrs {:class &quot;video-box&quot;}
-   :content
-   [{:tag :video
-     :attrs {:id &quot;main_video&quot;
-             :class &quot;video-js vjs-default-skin&quot;
-             :controls &quot;controls&quot;
-             :preload &quot;auto&quot;
-             :width &quot;540&quot;
-             :height &quot;360&quot; }
-     :content [{:tag :source
-                :attrs
-                {:src (str (:id medium) &quot;.mp4&quot;)
-                 :type &quot;video/mp4&quot; }}]}]})</pre></td></tr><tr><td class="docs">
+  (let [sources (map
+                 (partial render-media-source medium)
+                 (:encoded-media-files medium))]
+    {:tag :figure
+     :attrs {:class &quot;video-box&quot;}
+     :content
+     [{:tag :video
+       :attrs {:id &quot;main_video&quot;
+               :controls &quot;controls&quot;
+               :preload &quot;auto&quot;
+               :width &quot;540&quot;
+               :height &quot;360&quot; }
+       :content (vec sources)}]}))</pre></td></tr><tr><td class="docs"><p>Creates the HTML for the audio player.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn- render-audio
+  [{:keys [medium]}]
+  (let [sources (map
+                 (partial render-media-source medium)
+                 (:encoded-media-files medium))]
+    {:tag :figure
+     :attrs {:class &quot;audio_box&quot;}
+     :content
+     [{:tag :audio
+       :attrs {:id &quot;main_audio&quot;
+               :controls &quot;controls&quot;
+               :preload &quot;auto&quot;
+               :style (str &quot;width: &quot; 540 &quot;px;&quot;)}
+       :content (vec sources)}]}))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn- render-hitlist
   [{:keys [configuration] :as job} {:keys [id index] :as medium}]
   (hitlist/render-occurrence-hitlist
@@ -4774,16 +4796,39 @@ reside in <a href="#distillery.data">distillery.data</a>.</p></li>
    configuration
    :medium-cloud))</pre></td></tr><tr><td class="docs"><p>Creates the HTML for the waveform.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn- render-waveform
-  [{:keys [output-dir] :as job} {:keys [id waveform-file] :as medium}]
+  [{:keys [output-dir configuration] :as job} {:keys [id] :as medium}]
   (copy-file
-   (get-path waveform-file)
+   (get-path (:waveform-file medium))
    (get-path output-dir &quot;media&quot; id &quot;waveform.png&quot;))
-  (div &quot;medium_waveform&quot;
-       {:tag :img
-        :attrs { :class &quot;waveform_img&quot;
-                 :alt (txt :medium-overview-waveform)
-                 :src &quot;waveform.png&quot; }
-        :content []}))</pre></td></tr><tr><td class="docs"><p>Creates the HTML for the overview page.</p>
+  (copy-file
+   (get-path (:waveform-file-bg medium))
+   (get-path output-dir &quot;media&quot; id &quot;waveform2.png&quot;))
+  {:tag :figure
+   :attrs {:class &quot;waveform_box&quot;}
+   :content [{:tag :div
+              :attrs {:id &quot;main_waveform&quot;
+                      :class &quot;waveform&quot;
+                      :style (str
+                              &quot;width: &quot;
+                              (cfg/value [:waveform :width] configuration)
+                              &quot;px; height: &quot;
+                              (cfg/value [:waveform :height] configuration)
+                              &quot;px;&quot;)
+                      :data-duration (:duration medium)}
+              :content [{:tag :div
+                         :attrs {:class &quot;waveform_bg&quot;
+                                 :style (str &quot;background-image: url('waveform2.png'); width: &quot;
+                                             (cfg/value [:waveform :width] configuration)
+                                             &quot;px; height: &quot;
+                                             (cfg/value [:waveform :height] configuration)
+                                             &quot;px;&quot;)}}
+                        {:tag :div
+                         :attrs {:class &quot;waveform_img&quot;
+                                 :style (str &quot;background-image: url('waveform.png'); width: &quot;
+                                             0
+                                             &quot;px; height: &quot;
+                                             (cfg/value [:waveform :height] configuration)
+                                             &quot;px;&quot;) }}]}]})</pre></td></tr><tr><td class="docs"><p>Creates the HTML for the overview page.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn- render-overview
   [{:keys [medium] :as job}]
   (innerpage &quot;overview&quot; (txt :medium-overview-h) true
@@ -4840,7 +4885,11 @@ reside in <a href="#distillery.data">distillery.data</a>.</p></li>
                     [(txt :medium-menu-glossary) (jshref &quot;innerpage('glossary')&quot;)]]
    :page
    [(render-headline args)
-    (render-video args)
+    (when (not (cfg/value :skip-media-copy configuration))
+      (case (:medium-type medium)
+        :video (render-video args)
+        :audio (render-audio args)
+        nil))
     (render-overview args)
     (render-medium-transcript args)
     (render-medium-glossary args)
@@ -5297,7 +5346,13 @@ reside in <a href="#distillery.data">distillery.data</a>.</p></li>
 <p>  Uses the same interface like <code>get-path</code>.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn file-name
   ^String [path &amp; parts]
-  (.toString ^Path (.getFileName ^Path (apply get-path (cons path parts)))))</pre></td></tr><tr><td class="docs"><p>Copies a file from a given <code>source</code> path to the <code>target</code> path.</p>
+  (.toString ^Path (.getFileName ^Path (apply get-path (cons path parts)))))</pre></td></tr><tr><td class="docs"><p>Returns the extension of the given file name or nil if the name has no extension.</p>
+
+<p>  Uses the same interface like <code>get-path</code>.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn file-name-ext
+  ^String [path &amp; parts]
+  (let [n (apply file-name path parts)]
+    (re-find #&quot;\.[^\.]+$&quot; n)))</pre></td></tr><tr><td class="docs"><p>Copies a file from a given <code>source</code> path to the <code>target</code> path.</p>
 
 <p>  The source and target path need to be <code>java.nio.file.Path</code> objects.</p>
 </td><td class="codes"><pre class="brush: clojure">(defn copy-file
