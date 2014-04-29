@@ -46,33 +46,40 @@
                   (map render-match-matrix-head-cell categories)))})
 
 (defn- render-match-matrix-row
-  [matrix max-score category-ids {:keys [id name] :as medium}]
-  {:tag :tr
-   :content
-   (vec (cons {:tag :th
-               :content [{:tag :a
-                          :attrs {:href (str "media/" id "/index.html")
-                                  :title name}
-                          :content name}]}
-              (map
-               (fn [category-id]
-                 (let [match (get-in matrix [category-id id])
-                       score (:score match)
-                       medium-max-score (:max-score medium)
-                       normalized-score (if (> max-score 0) (/ score max-score) 0)
-                       medium-normalized-score (if (> medium-max-score 0) (/ score medium-max-score) 0)]
-                   (if match
-                     {:tag :td
-                      :attrs {:data-medium-id id
-                              :data-category-id category-id
-                              :style (str "background-color: rgba(234,30,106," medium-normalized-score ")")}
-                      :content [(link (str "categories/" category-id "/index.html?match=" id)
-                                      (format "%.1f%%" (* 100 normalized-score)))]}
-                     {:tag :td :content []})))
-               category-ids)))})
+  [configuration matrix max-score category-ids {:keys [id name] :as medium}]
+  (let [[r g b a] (get-in configuration [:matrix :color])
+        cell-color (fn [v] (java.lang.String/format nil
+                                                    "rgba(%d, %d, %d, %.3f)"
+                                                    (to-array [(int (* 255 r))
+                                                               (int (* 255 g))
+                                                               (int (* 255 b))
+                                                               v])))]
+    {:tag :tr
+     :content
+     (vec (cons {:tag :th
+                 :content [{:tag :a
+                            :attrs {:href (str "media/" id "/index.html")
+                                    :title name}
+                            :content name}]}
+                (map
+                 (fn [category-id]
+                   (let [match (get-in matrix [category-id id])
+                         score (:score match)
+                         medium-max-score (:max-score medium)
+                         normalized-score (if (> max-score 0) (/ score max-score) 0)
+                         medium-normalized-score (if (> medium-max-score 0) (/ score medium-max-score) 0)]
+                     (if match
+                       {:tag :td
+                        :attrs {:data-medium-id id
+                                :data-category-id category-id
+                                :style (str "background-color: " (cell-color medium-normalized-score))}
+                        :content [(link (str "categories/" category-id "/index.html?match=" id)
+                                        (format "%.1f%%" (* 100 normalized-score)))]}
+                       {:tag :td :content []})))
+                 category-ids)))}))
 
 (defn render-match-matrix
-  [{:keys [media categories max-score] :as args}]
+  [{:keys [media categories max-score configuration] :as args}]
   (let [matrix (->> categories
                     (map
                      (fn [category]
@@ -100,4 +107,4 @@
          [(render-match-matrix-head-row categories)]}
         {:tag :tbody
          :content
-         (vec (map (partial render-match-matrix-row matrix max-score category-ids) media))}]}]}))
+         (vec (map (partial render-match-matrix-row configuration matrix max-score category-ids) media))}]}]}))
