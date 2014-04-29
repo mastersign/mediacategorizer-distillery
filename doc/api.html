@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html><head><meta charset="utf-8" content="text/html" http-equiv="Content-Type" /><meta content="A Clojure application to filter the most relevant words from speech recognition results." name="description" /><style type="text/css">/**
+<html><head><meta charset="utf-8" content="text/html" http-equiv="Content-Type" /><meta content="A Clojure application to filter the most relevant words from speech recognition results, to cross-match the results with category terms, and to visualize the outcome." name="description" /><style type="text/css">/**
  * SyntaxHighlighter
  * http://alexgorbatchev.com/SyntaxHighlighter
  *
@@ -3028,7 +3028,7 @@ net.brehaut.ClojureTools = (function (SH) {
     build_tree: build_tree
   };
 })(SyntaxHighlighter);
-</script><title>distillery -- Marginalia</title></head><body><table><tr><td class="docs"><div class="header"><h1 class="project-name">distillery</h1><h2 class="project-version">0.4.0</h2><br /><p>A Clojure application to filter the most relevant words from speech recognition results.</p>
+</script><title>distillery -- Marginalia</title></head><body><table><tr><td class="docs"><div class="header"><h1 class="project-name">distillery</h1><h2 class="project-version">0.6.0</h2><br /><p>A Clojure application to filter the most relevant words from speech recognition results, to cross-match the results with category terms, and to visualize the outcome.</p>
 </div><div class="dependencies"><h3>dependencies</h3><table><tr><td class="dep-name">org.clojure/clojure</td><td class="dotted"><hr /></td><td class="dep-version">1.5.1</td></tr><tr><td class="dep-name">org.clojure/data.xml</td><td class="dotted"><hr /></td><td class="dep-version">0.0.7</td></tr><tr><td class="dep-name">enlive</td><td class="dotted"><hr /></td><td class="dep-version">1.1.1</td></tr></table></div></td><td class="codes" style="text-align: center; vertical-align: middle;color: #666;padding-right:20px"><br /><br /><br />(this space intentionally left almost blank)</td></tr><tr><td class="docs"><div class="toc"><a name="toc"><h3>namespaces</h3></a><ul><li><a href="#distillery.blacklist">distillery.blacklist</a></li><li><a href="#distillery.config">distillery.config</a></li><li><a href="#distillery.core">distillery.core</a></li><li><a href="#distillery.data">distillery.data</a></li><li><a href="#distillery.processing">distillery.processing</a></li><li><a href="#distillery.tasks">distillery.tasks</a></li><li><a href="#distillery.text">distillery.text</a></li><li><a href="#distillery.txtresult">distillery.txtresult</a></li><li><a href="#distillery.view.base">distillery.view.base</a></li><li><a href="#distillery.view.category">distillery.view.category</a></li><li><a href="#distillery.view.cloud">distillery.view.cloud</a></li><li><a href="#distillery.view.defaults">distillery.view.defaults</a></li><li><a href="#distillery.view.dependencies">distillery.view.dependencies</a></li><li><a href="#distillery.view.glossary">distillery.view.glossary</a></li><li><a href="#distillery.view.hitlist">distillery.view.hitlist</a></li><li><a href="#distillery.view.html">distillery.view.html</a></li><li><a href="#distillery.view.index">distillery.view.index</a></li><li><a href="#distillery.view.match">distillery.view.match</a></li><li><a href="#distillery.view.medium">distillery.view.medium</a></li><li><a href="#distillery.view.transcript">distillery.view.transcript</a></li><li><a href="#distillery.view.word">distillery.view.word</a></li><li><a href="#distillery.xmlresult">distillery.xmlresult</a></li><li><a href="#mastersign.drawing">mastersign.drawing</a></li><li><a href="#mastersign.files">mastersign.files</a></li><li><a href="#mastersign.geom">mastersign.geom</a></li><li><a href="#mastersign.html">mastersign.html</a></li><li><a href="#mastersign.imaging">mastersign.imaging</a></li><li><a href="#mastersign.trace">mastersign.trace</a></li><li><a href="#mastersign.wordcloud">mastersign.wordcloud</a></li></ul></div></td><td class="codes">&nbsp;</td></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#distillery.blacklist" name="distillery.blacklist"><h1 class="project-name">distillery.blacklist</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs"><h1>Blacklist</h1>
 
 <p>This namespace contains functions for using the blacklist
@@ -4685,32 +4685,39 @@ reside in <a href="#distillery.data">distillery.data</a>.</p></li>
                   {:tag :td :content }
                   (map render-match-matrix-head-cell categories)))})</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn- render-match-matrix-row
-  [matrix max-score category-ids {:keys [id name] :as medium}]
-  {:tag :tr
-   :content
-   (vec (cons {:tag :th
-               :content [{:tag :a
-                          :attrs {:href (str &quot;media/&quot; id &quot;/index.html&quot;)
-                                  :title name}
-                          :content name}]}
-              (map
-               (fn [category-id]
-                 (let [match (get-in matrix [category-id id])
-                       score (:score match)
-                       medium-max-score (:max-score medium)
-                       normalized-score (if (&gt; max-score 0) (/ score max-score) 0)
-                       medium-normalized-score (if (&gt; medium-max-score 0) (/ score medium-max-score) 0)]
-                   (if match
-                     {:tag :td
-                      :attrs {:data-medium-id id
-                              :data-category-id category-id
-                              :style (str &quot;background-color: rgba(234,30,106,&quot; medium-normalized-score &quot;)&quot;)}
-                      :content [(link (str &quot;categories/&quot; category-id &quot;/index.html?match=&quot; id)
-                                      (format &quot;%.1f%%&quot; (* 100 normalized-score)))]}
-                     {:tag :td :content []})))
-               category-ids)))})</pre></td></tr><tr><td class="docs">
+  [configuration matrix max-score category-ids {:keys [id name] :as medium}]
+  (let [[r g b a] (get-in configuration [:matrix :color])
+        cell-color (fn [v] (java.lang.String/format nil
+                                                    &quot;rgba(%d, %d, %d, %.3f)&quot;
+                                                    (to-array [(int (* 255 r))
+                                                               (int (* 255 g))
+                                                               (int (* 255 b))
+                                                               v])))]
+    {:tag :tr
+     :content
+     (vec (cons {:tag :th
+                 :content [{:tag :a
+                            :attrs {:href (str &quot;media/&quot; id &quot;/index.html&quot;)
+                                    :title name}
+                            :content name}]}
+                (map
+                 (fn [category-id]
+                   (let [match (get-in matrix [category-id id])
+                         score (:score match)
+                         medium-max-score (:max-score medium)
+                         normalized-score (if (&gt; max-score 0) (/ score max-score) 0)
+                         medium-normalized-score (if (&gt; medium-max-score 0) (/ score medium-max-score) 0)]
+                     (if match
+                       {:tag :td
+                        :attrs {:data-medium-id id
+                                :data-category-id category-id
+                                :style (str &quot;background-color: &quot; (cell-color medium-normalized-score))}
+                        :content [(link (str &quot;categories/&quot; category-id &quot;/index.html?match=&quot; id)
+                                        (format &quot;%.1f%%&quot; (* 100 normalized-score)))]}
+                       {:tag :td :content []})))
+                 category-ids)))}))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn render-match-matrix
-  [{:keys [media categories max-score] :as args}]
+  [{:keys [media categories max-score configuration] :as args}]
   (let [matrix (-&gt;&gt; categories
                     (map
                      (fn [category]
@@ -4738,7 +4745,7 @@ reside in <a href="#distillery.data">distillery.data</a>.</p></li>
          [(render-match-matrix-head-row categories)]}
         {:tag :tbody
          :content
-         (vec (map (partial render-match-matrix-row matrix max-score category-ids) media))}]}]}))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#distillery.view.medium" name="distillery.view.medium"><h1 class="project-name">distillery.view.medium</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+         (vec (map (partial render-match-matrix-row configuration matrix max-score category-ids) media))}]}]}))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#distillery.view.medium" name="distillery.view.medium"><h1 class="project-name">distillery.view.medium</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns distillery.view.medium
   (:require [clojure.string :as string])
   (:require [net.cgrand.enlive-html :as eh])

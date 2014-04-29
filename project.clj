@@ -1,5 +1,5 @@
-(defproject distillery "0.5.0"
-  :description "A Clojure application to filter the most relevant words from speech recognition results."
+(defproject distillery "0.6.0"
+  :description "A Clojure application to filter the most relevant words from speech recognition results, to cross-match the results with category terms, and to visualize the outcome."
   :url "http://mastersign.github.io/mediacategorizer/"
   :license {:name "The MIT License"
             :url "http://opensource.org/licenses/MIT"}
